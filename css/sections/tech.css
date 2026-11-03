@@ -1,26 +1,41 @@
 /* ==========================================================================
    tech.css - SECTION: technology ticker band
-   Wraps the reusable .ticker (components/ticker.css) with the band's own
-   hairlines and centred label.
+   --------------------------------------------------------------------------
+   A hairline band that sits tight under the hero: a centred mono label, then
+   the marquee. js/sections/tech.js pauses the track while the band is
+   off-screen by toggling .is-paused on .ticker__track.
+
+   home.css zeroes this section's padding so the band reads as part of the
+   hero moment - the spacing below lives on the inner elements.
    ========================================================================== */
 
 .tech {
-  padding-block: clamp(2rem, 4vw, 3rem);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background-color: color-mix(in oklab, var(--muted) 45%, var(--background));
+  position: relative;
+  background-color: var(--panel);
+  border-block: 1px solid var(--hair);
 }
+
+.tech .container { padding-block: 1.5rem 0; }
 
 .tech__label {
+  margin: 0;
   text-align: center;
   font-family: var(--font-ui-mono);
-  font-size: .6875rem;
-  font-weight: 500;
-  letter-spacing: .18em;
+  font-size: var(--label-size);
   text-transform: uppercase;
+  letter-spacing: var(--label-track);
   color: var(--muted-foreground);
-  margin-bottom: 1.5rem;
 }
 
-/* pause the marquee while it's off-screen (perf) - toggled by tech.js */
+/* the marquee gets its own rule above so the label never crowds it */
+.tech .ticker {
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--hair);
+}
+
 .tech .ticker__track.is-paused { animation-play-state: paused; }
+
+@media (max-width: 575.98px) {
+  .tech .container { padding-block: 1.125rem 0; }
+  .tech .ticker { padding-block: 1rem; }
+}

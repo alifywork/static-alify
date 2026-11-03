@@ -1,62 +1,115 @@
 /* ==========================================================================
-   services.css - SECTION: services slider (reuses components/slider.css)
+   services.css - SECTION: services slider
+   --------------------------------------------------------------------------
+   Sharp hairline panels rather than soft cards: a mono icon box that inverts
+   on hover, a tight title, a hairline-ruled capability list, and a mono link
+   pinned to the bottom so every panel lines up regardless of copy length.
    ========================================================================== */
 
-.services__head { margin-bottom: 2.5rem; }
+.services__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
 
 .service-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.125rem;
   height: 100%;
-  padding: 1.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  background-color: var(--card);
-  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
-}
-.service-card:hover {
-  border-color: color-mix(in oklab, var(--foreground) 35%, var(--border));
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--hair);
+  background-color: transparent;
+  transition: border-color .35s ease, background-color .35s ease;
 }
 
+.service-card:hover,
+.service-card:focus-within {
+  border-color: var(--hair-strong);
+  background-color: var(--panel);
+}
+
+/* ---- icon: square, hairline, inverts on hover -------------------------- */
 .service-card__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem; height: 2.75rem;
-  border-radius: var(--radius-lg);
-  background-color: var(--foreground);
-  color: var(--background);
-  font-size: 1.125rem;
-  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--hair-strong);
+  font-size: 1rem;
+  color: var(--foreground);
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
 }
 
-.service-card__title { font-size: 1.125rem; font-weight: 600; letter-spacing: -.02em; }
-.service-card__desc { font-size: .9375rem; line-height: 1.65; color: var(--muted-foreground); }
+.service-card:hover .service-card__icon,
+.service-card:focus-within .service-card__icon {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--on-invert);
+}
+
+/* ---- copy --------------------------------------------------------------- */
+.service-card__title {
+  font-size: var(--t-h3);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+
+.service-card__desc {
+  font-size: .9375rem;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
 
 .service-card__list {
-  list-style: none;
-  margin: 0; padding: 0;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: .625rem;
+  margin: 0;
+  padding: 1.125rem 0 0;
+  border-top: 1px solid var(--hair);
+  list-style: none;
+}
+
+.service-card__list > li {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
   font-size: .875rem;
   color: var(--muted-foreground);
 }
-.service-card__list li { display: flex; align-items: center; gap: .5rem; }
-.service-card__list i { font-size: .625rem; color: var(--foreground); }
 
+/* the fa-circle glyph becomes a hard 4px square to match the sharp language */
+.service-card__list > li > i {
+  display: inline-block;
+  flex: none;
+  width: 4px;
+  height: 4px;
+  font-size: 0;
+  background-color: var(--hair-strong);
+}
+
+/* ---- link pinned to the foot ------------------------------------------- */
 .service-card__link {
-  margin-top: auto;
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  font-size: .875rem;
-  font-weight: 500;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .16em;
   color: var(--foreground);
-  width: fit-content;
+  text-decoration: none;
 }
-.service-card__link i { transition: transform .25s cubic-bezier(.22,1,.36,1); font-size: .75rem; }
-.service-card__link:hover i { transform: translateX(4px); }
+
+.service-card__link > i {
+  font-size: .6875rem;
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1);
+}
+
+.service-card__link:hover > i { transform: translateX(4px); }
+
+@media (max-width: 575.98px) {
+  .service-card { padding: 1.375rem; }
+}

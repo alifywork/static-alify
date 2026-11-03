@@ -29,7 +29,12 @@
 
   // "system" is stored as-is so the page keeps following the OS on later loads.
   var mode = readStored();
-  if (mode !== "light" && mode !== "dark" && mode !== "system") { mode = "system"; }
+  if (mode !== "light" && mode !== "dark" && mode !== "system") {
+    // A page may declare its own starting theme, e.g. <html data-ui-theme-default="dark">.
+    // Only honoured while the visitor has no stored choice of their own.
+    var declared = root.getAttribute("data-ui-theme-default");
+    mode = (declared === "light" || declared === "dark") ? declared : "system";
+  }
 
   function resolve(m) {
     if (m === "light" || m === "dark") { return m; }

@@ -1,32 +1,45 @@
 /* ==========================================================================
    home.css - PAGE: home
-   Page-level composition only - anything that belongs to a single section
-   lives in css/sections/*.css, and shared components in css/components/*.css.
+   --------------------------------------------------------------------------
+   Page-level concerns only: the full-height hero, horizontal overflow guards,
+   and the seam between bands. Every visual detail lives in the section,
+   component and global files - this sheet just tunes them for this page.
+
+   Its JS partner (js/pages/home.js) defines the shared window.Reveal helper,
+   so it must be loaded BEFORE the section scripts.
    ========================================================================== */
 
-/* hero fills the first viewport on desktop so the fold lands after the stats */
+/* Nothing on this page may cause sideways scroll (sliders, ticker, panels) */
+.home { overflow-x: clip; }
+
+.home main { position: relative; }
+
+/* ---- hero: a full viewport on desktop, content-led on small screens ----- */
 @media (min-width: 992px) {
   .home .hero {
     min-height: 100svh;
     display: flex;
     align-items: center;
   }
-  .home .hero > .container { width: 100%; }
 }
 
-/* rhythm: tighten the gap when a tinted band follows a plain one so the
-   colour change itself reads as the separator */
-.home .section--tint { margin-top: 0; }
+.home .hero > .container { width: 100%; }
+
+.home .hero {
+  padding-top: calc(var(--header-h) + clamp(2.5rem, 7vw, 5.5rem));
+  padding-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* ---- band rhythm -------------------------------------------------------- */
+/* The tech ticker sits tight under the hero so the two read as one moment. */
+.home .tech { padding-block: 0; }
+
+/* Tighten the gap when a tinted band follows another bordered section */
 .home .section--tint + .section { padding-top: var(--section-gap); }
 
-/* give the sticky intro columns a consistent offset under the header */
-.home .why-us__intro,
-.home .faqs__intro { gap: 1.5rem; }
+/* Give the last section a little more air before the footer */
+.home .contact { padding-bottom: calc(var(--section-gap) * 1.05); }
 
-/* the projects row needs extra breathing room above/below on desktop */
-@media (min-width: 992px) {
-  .home .projects .projects__grid { margin-top: .5rem; }
+@media (prefers-reduced-motion: reduce) {
+  .home .hero { min-height: 0; }
 }
-
-/* keep long pages from showing a horizontal scrollbar if a float overhangs */
-.home { overflow-x: clip; }

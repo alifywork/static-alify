@@ -1,113 +1,185 @@
 /* ==========================================================================
-   about.css - SECTION: about us (media + narrative + counters)
+   about.css - SECTION: about us
+   --------------------------------------------------------------------------
+   Studio shot in a sharp frame with an offset hairline outline behind it and
+   a stat badge pinned to the corner; opposite it the lead copy, a hairline
+   list of checks, three big mono counters and the founder sign-off.
+
+   js/sections/about.js counts the [data-count] spans up once they scroll in.
    ========================================================================== */
 
 .about__media { position: relative; }
 
-/* offset hairline frame behind the photo for depth */
-.about__media::before {
+/* the offset outline: a hairline box shifted down-right behind the photo */
+.about__media::after {
   content: "";
   position: absolute;
-  inset: 1.5rem -1.25rem -1.25rem 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
+  inset: clamp(.875rem, 2vw, 1.5rem) calc(clamp(.875rem, 2vw, 1.5rem) * -1)
+          calc(clamp(.875rem, 2vw, 1.5rem) * -1) clamp(.875rem, 2vw, 1.5rem);
+  border: 1px solid var(--hair-strong);
   pointer-events: none;
 }
 
 .about__img {
   position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--hair-strong);
+  filter: grayscale(1) contrast(1.05) brightness(.92);
+  transition: filter .7s ease;
 }
 
-/* floating "years of experience" chip on the photo */
+.about__media:hover .about__img { filter: grayscale(.2) contrast(1.02) brightness(1); }
+
+/* corner badge: sharp panel, mono figure */
 .about__badge {
   position: absolute;
-  left: -1rem; bottom: -1.25rem;
+  z-index: 2;
+  right: clamp(-.5rem, -1vw, 0rem);
+  bottom: clamp(1.25rem, 4vw, 2.5rem);
   display: flex;
-  align-items: center;
-  gap: .875rem;
-  padding: .875rem 1.125rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background-color: var(--card);
-  box-shadow: var(--shadow-lg);
+  flex-direction: column;
+  gap: .25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--hair-strong);
+  background-color: rgba(10, 10, 10, .82);
+  background-color: color-mix(in oklab, var(--background) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+
 .about__badge-value {
-  font-size: 1.875rem;
-  font-weight: 700;
-  letter-spacing: -.03em;
+  font-family: var(--font-ui-mono);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
   line-height: 1;
+  letter-spacing: -.04em;
   font-variant-numeric: tabular-nums;
 }
-.about__badge-label { font-size: .75rem; color: var(--muted-foreground); line-height: 1.3; max-width: 9ch; }
 
-.about__content { display: flex; flex-direction: column; gap: 1.5rem; }
-.about__lead { font-size: 1.0625rem; line-height: 1.7; color: var(--muted-foreground); }
+.about__badge-label {
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* ---- copy column -------------------------------------------------------- */
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.about__lead {
+  font-size: var(--t-lead);
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+
 .about__lead strong { color: var(--foreground); font-weight: 600; }
 
-/* two-column capability checklist */
+/* ---- checks: hairline rows in two columns ------------------------------ */
 .about__checks {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: .75rem 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  margin: 0; padding: 0;
+  border-top: 1px solid var(--hair);
 }
-@media (min-width: 576px) { .about__checks { grid-template-columns: 1fr 1fr; } }
+
 .about__check {
   display: flex;
-  align-items: flex-start;
-  gap: .625rem;
-  font-size: .9375rem;
-  font-weight: 500;
-}
-.about__check > i {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 1.25rem; height: 1.25rem;
-  margin-top: .125rem;
-  border-radius: var(--radius-full);
-  background-color: var(--foreground);
-  color: var(--background);
-  font-size: .625rem;
-  flex-shrink: 0;
+  gap: .75rem;
+  padding: .875rem .5rem .875rem 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: .9375rem;
+  color: var(--foreground);
 }
 
-/* counter strip */
-.about__stats {
+.about__check > i {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
+  place-items: center;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--hair-strong);
+  font-size: .5625rem;
+  color: var(--foreground);
 }
+
+/* ---- counters ---------------------------------------------------------- */
+.about__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--hair);
+}
+
 .about__stat-value {
-  font-size: 1.625rem;
-  font-weight: 700;
-  letter-spacing: -.03em;
-  line-height: 1.1;
+  margin: 0;
+  font-family: var(--font-ui-mono);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.05em;
   font-variant-numeric: tabular-nums;
 }
-.about__stat-label { font-size: .8125rem; color: var(--muted-foreground); margin-top: .125rem; }
 
-/* founder signature row */
+.about__stat-label {
+  margin: .625rem 0 0;
+  max-width: 18ch;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* ---- founder sign-off -------------------------------------------------- */
 .about__sign {
   display: flex;
   align-items: center;
   gap: .875rem;
-  padding-top: .25rem;
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--hair);
 }
-.about__sign-name { font-size: .9375rem; font-weight: 600; line-height: 1.2; }
-.about__sign-role { font-size: .8125rem; color: var(--muted-foreground); line-height: 1.2; }
 
+.about__sign .avatar { border: 1px solid var(--hair-strong); }
+
+.about__sign-name {
+  font-size: .9375rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.about__sign-role {
+  display: block;
+  margin-top: .25rem;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* ---- responsive -------------------------------------------------------- */
 @media (max-width: 991.98px) {
-  .about__media { margin-bottom: 2.5rem; }
-  .about__badge { left: 0; }
+  .about__media { margin-bottom: clamp(2rem, 6vw, 3rem); }
+  .about__badge { right: 0; }
+}
+
+@media (max-width: 575.98px) {
+  .about__checks { grid-template-columns: 1fr; }
+  .about__stats { gap: 1.5rem; }
+  .about__stats > div { flex: 1 1 40%; }
+  .about__media::after { display: none; }
 }

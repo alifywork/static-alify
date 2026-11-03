@@ -1,20 +1,28 @@
 /* ==========================================================================
-   ticker.css - REUSABLE infinite marquee (technology strip, logos, etc.)
+   ticker.css - REUSABLE infinite marquee (the technology band)
    --------------------------------------------------------------------------
-   The track holds one .ticker__group; ticker.js clones it until the track is
-   at least 2x the viewport, then a pure CSS keyframe slides it -50% forever.
-   Because the track is exactly N identical groups, -50% lands on a seamless
-   seam. Speed comes from data-ticker speed (px per second), set as an
-   animation-duration by JS - so it stays constant regardless of content size.
+   Markup:
+     <div class="ticker" data-ticker='{"speed":80}'>
+       <div class="ticker__track">
+         <div class="ticker__group">
+           <span class="ticker__item">React</span>
+           ...
+         </div>
+       </div>
+     </div>
+
+   js/components/ticker.js duplicates .ticker__group until the track covers
+   twice the viewport - always an EVEN number of groups - and writes
+   --ticker-duration so the px/sec speed is constant at any content width.
+   The CSS loop therefore translates exactly -50% and lands on a seam.
    ========================================================================== */
 
 .ticker {
   position: relative;
-  width: 100%;
   overflow: hidden;
-  /* fade the two ends so items dissolve instead of hard-clipping */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  /* fade the band out at both edges instead of hard-clipping the text */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 
 .ticker__track {
@@ -22,48 +30,58 @@
   width: max-content;
   animation: ticker-slide var(--ticker-duration, 40s) linear infinite;
 }
+
+/* pause on hover, on keyboard focus, and when a section marks it off-screen */
 .ticker:hover .ticker__track,
-.ticker:focus-within .ticker__track { animation-play-state: paused; }
+.ticker:focus-within .ticker__track,
+.ticker__track.is-paused {
+  animation-play-state: paused;
+}
 
 .ticker--reverse .ticker__track { animation-direction: reverse; }
 
 .ticker__group {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+  flex: none;
 }
 
+/* ---- items: mono micro-labels separated by a hard little square --------- */
 .ticker__item {
   display: inline-flex;
   align-items: center;
-  gap: .625rem;
-  padding-inline: 1.75rem;
-  white-space: nowrap;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -.01em;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-inline: clamp(.75rem, 2vw, 1.5rem);
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
   color: var(--muted-foreground);
+  white-space: nowrap;
   transition: color .2s ease;
 }
-.ticker__item > i { font-size: 1.25rem; opacity: .8; }
-.ticker__item:hover { color: var(--foreground); }
 
-/* separator dot between items */
 .ticker__item::after {
   content: "";
-  width: .25rem; height: .25rem;
-  margin-left: 1.75rem;
-  border-radius: var(--radius-full);
-  background-color: var(--border);
-  flex-shrink: 0;
+  flex: none;
+  width: 4px;
+  height: 4px;
+  background-color: var(--hair-strong);
 }
 
-/* larger display variant (e.g. a client-logo band) */
-.ticker--lg .ticker__item { font-size: 1.375rem; font-weight: 600; letter-spacing: -.02em; }
+.ticker__item:hover { color: var(--foreground); }
+
+/* larger variant for a statement band */
+.ticker--lg .ticker__item {
+  font-size: clamp(.9375rem, 1.6vw, 1.25rem);
+  letter-spacing: .06em;
+  color: var(--foreground);
+}
+
+.ticker--lg .ticker__item::after { width: 5px; height: 5px; }
 
 @keyframes ticker-slide {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,81 +1,246 @@
 /* ==========================================================================
-   base.css - GLOBAL site layer
+   base.css - GLOBAL foundation: site tokens, type scale, rhythm, texture
    --------------------------------------------------------------------------
-   Loads AFTER assets/ui/ui.css and css/global/grid.css. Holds site-level
-   tokens and rules that apply to every page: rhythm, scroll behaviour,
-   section bands, skip link. Component and section styles live in their own
-   files; this file must stay small and page-agnostic.
+   Loads right after assets/ui/ui.css and css/global/grid.css, so it retunes
+   the design system for this site without editing ui.css:
+
+     . sharp corners - the whole radius scale collapses to 0
+     . a much larger, tighter display type scale
+     . Geist Mono (--font-ui-mono) for eyebrows, counters and meta text
+     . hairline rules + layered panels instead of drop shadows
+     . invert-on-hover interactions (foreground fill, background text)
+     . a fixed film-grain overlay for depth
+
+   Colour still comes from the shadcn neutral tokens, so the light theme that
+   the header toggle offers keeps working. Dark is simply this site's default
+   (index.html declares data-ui-theme-default="dark").
    ========================================================================== */
 
 :root {
-  /* sticky header height - used for scroll-padding and hero offset */
-  --header-h: 4.25rem;
-  /* vertical rhythm between sections; breathes with the viewport */
-  --section-gap: clamp(4.5rem, 9vw, 8rem);
+  /* ---- sharp edges: collapse the radius scale, keep --radius-full for dots -- */
+  --radius: 0px;
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
 
-  /* z-index scale, kept in one place so layers never fight */
-  --z-header: 40;
-  --z-drawer: 60;
-  --z-overlay: 70;
-  --z-toast: 100;
+  /* ---- hairlines and layered panels (plain fallback, then color-mix) ------- */
+  --hair: rgba(128, 128, 128, .24);
+  --hair: color-mix(in oklab, var(--foreground) 14%, transparent);
+  --hair-strong: rgba(128, 128, 128, .45);
+  --hair-strong: color-mix(in oklab, var(--foreground) 30%, transparent);
+  --panel: rgba(128, 128, 128, .045);
+  --panel: color-mix(in oklab, var(--foreground) 4%, var(--background));
+  --panel-2: rgba(128, 128, 128, .08);
+  --panel-2: color-mix(in oklab, var(--foreground) 8%, var(--background));
+  --on-invert: var(--background);      /* text on a foreground-filled surface */
+
+  /* ---- display type ------------------------------------------------------- */
+  --t-display: clamp(2.9rem, 8.4vw, 7rem);
+  --t-h2: clamp(1.95rem, 4.4vw, 3.5rem);
+  --t-h3: clamp(1.0625rem, 1.35vw, 1.3125rem);
+  --t-lead: clamp(1.0625rem, 1.2vw, 1.25rem);
+  --track-tight: -.04em;
+
+  /* ---- mono micro-labels -------------------------------------------------- */
+  --label-size: .6875rem;
+  --label-track: .2em;
+
+  /* ---- rhythm and layers -------------------------------------------------- */
+  --header-h: 4.5rem;
+  --section-gap: clamp(4.5rem, 9.5vw, 8.5rem);
+  --z-header: 60;
+  --z-drawer: 80;
+  --z-grain: 9999;
 }
 
+@media (max-width: 991.98px) {
+  :root {
+    --header-h: 3.75rem;
+    --section-gap: clamp(3.5rem, 12vw, 5.5rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Page surface
+   ----------------------------------------------------------------------- */
 html {
-  scroll-behavior: smooth;
-  /* anchors land below the sticky header instead of under it */
-  scroll-padding-top: calc(var(--header-h) + 1.25rem);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  scrollbar-width: thin;
+  scrollbar-color: var(--hair-strong) transparent;
 }
 
 body {
+  background-color: var(--background);
+  color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: clip;              /* sliders/parallax must never cause h-scroll */
 }
 
-img { -webkit-user-drag: none; user-select: none; }
+::selection {
+  background: var(--foreground);
+  color: var(--on-invert);
+}
 
-/* ---- section rhythm ----
-   `.section` is defined in ui.css with a fixed padding; here we swap it for
-   the responsive site rhythm so every band stays consistent. */
-.section { padding-block: var(--section-gap); }
-.section--tight { padding-block: calc(var(--section-gap) * .55); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb {
+  background: var(--hair-strong);
+  border: 2px solid var(--background);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--foreground); }
+
+/* Film grain: a fixed, click-through texture so flat black never looks flat. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: .04;
+  mix-blend-mode: overlay;
+  background-size: 180px 180px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="light"] body::after {
+  opacity: .05;
+  mix-blend-mode: multiply;
+}
+
+/* --------------------------------------------------------------------------
+   Type
+   ----------------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: var(--track-tight);
+  text-wrap: balance;
+}
+
+p { margin: 0; text-wrap: pretty; }
+
+/* Reusable mono micro-label (eyebrows, meta, counters) */
+.u-label {
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* --------------------------------------------------------------------------
+   Focus, container, sections
+   ----------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* Generous edge padding reads more premium than Bootstrap's fixed 12px gutter */
+.container { padding-inline: clamp(1.125rem, 4vw, 3rem); }
+
+@media (min-width: 1400px) {
+  .container { max-width: 1400px; }
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-gap);
+}
+
+.section--tint {
+  background-color: var(--panel);
+  border-block: 1px solid var(--hair);
+}
+
+.section--border { border-top: 1px solid var(--hair); }
+.section--tight { padding-block: calc(var(--section-gap) * .6); }
+.section--edge { padding-inline: 0; }
 .section--flush-top { padding-top: 0; }
 .section--flush-bottom { padding-bottom: 0; }
 
-/* alternating tinted band, e.g. services / testimonials */
-.section--tint { background-color: var(--muted); }
-.section--border { border-top: 1px solid var(--border); }
+/* --------------------------------------------------------------------------
+   Controls: sharp, hairline, invert on hover
+   ----------------------------------------------------------------------- */
+.btn {
+  border-radius: 0;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
 
-/* full-bleed band that still keeps content in the grid */
-.section--edge { padding-inline: 0; }
+.btn > i { transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+.btn:hover > .fa-arrow-right,
+.btn:hover > .fa-paper-plane { transform: translate(4px, -2px); }
+.btn:hover > .fa-arrow-left { transform: translateX(-4px); }
+.btn:hover > .fa-arrow-up { transform: translateY(-3px); }
 
-/* ---- skip link (a11y) ---- */
+.btn-outline {
+  border-color: var(--hair-strong);
+  color: var(--foreground);
+}
+
+.btn-outline:hover {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--on-invert);
+}
+
+.btn-lg { padding-block: .95rem; }
+
+.input, .select, .textarea {
+  border-radius: 0;
+  border-color: var(--hair-strong);
+  background-color: transparent;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--foreground);
+  box-shadow: none;
+}
+
+/* Square avatars: editorial rather than app-like. Dots keep --radius-full. */
+.avatar { border-radius: 0; }
+
+/* --------------------------------------------------------------------------
+   Skip link + reveal hook
+   ----------------------------------------------------------------------- */
 .skip-link {
   position: fixed;
-  top: -4rem; left: 1rem;
-  z-index: 200;
-  padding: .5rem 1rem;
-  border-radius: var(--radius-md);
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-  font-size: .875rem;
-  font-weight: 500;
-  transition: top .15s ease;
+  top: 0;
+  left: 0;
+  z-index: calc(var(--z-grain) - 1);
+  transform: translateY(-110%);
+  padding: .875rem 1.25rem;
+  background-color: var(--foreground);
+  color: var(--on-invert);
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  text-decoration: none;
+  transition: transform .2s ease;
 }
-.skip-link:focus-visible { top: 1rem; }
 
-/* ---- generic reveal hook ----
-   GSAP animates [data-reveal] elements; without JS they stay fully visible,
-   so this rule only reserves the starting transform when a `.js` class is on
-   <html> (added by home.js) - no-JS users never see hidden content. */
+.skip-link:focus-visible {
+  transform: none;
+  outline-offset: -4px;
+}
+
+/* home.js reveals these; hiding is gated behind .js so a script failure can
+   never leave the page blank. */
 .js [data-reveal] { opacity: 0; }
 
-/* ---- misc ---- */
-::selection { background-color: color-mix(in oklab, var(--foreground) 85%, transparent); color: var(--background); }
-
-/* keep long unbroken strings (emails, urls) inside their columns */
-.break-any { overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

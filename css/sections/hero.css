@@ -1,194 +1,275 @@
 /* ==========================================================================
-   hero.css - SECTION: opening hero (copy + product frame + floats)
+   hero.css - SECTION: hero
+   --------------------------------------------------------------------------
+   Giant tight-tracked display type, an outlined accent line, a hairline
+   column grid behind it, and the product shot in a sharp frame with a
+   mono chrome bar.
+
+   NOTE: js/sections/hero.js writes inline transforms on .hero__bg,
+   .hero__frame and .hero__float (entrance + scrubbed parallax). Nothing here
+   may animate `transform` on those three, or the two fight each other.
    ========================================================================== */
 
 .hero {
   position: relative;
-  padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 6.5rem));
-  padding-bottom: clamp(3.5rem, 8vw, 7rem);
-  overflow: hidden;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(3rem, 8vw, 6rem) clamp(3rem, 7vw, 5.5rem);
 }
 
-/* layered backdrop: hairline grid + a soft top glow, both masked to fade out */
+/* ---- backdrop ----------------------------------------------------------- */
+/* Tall on purpose: GSAP shifts it 12% and the edges must never show. */
 .hero__bg {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--border) 60%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--border) 60%, transparent) 1px, transparent 1px);
-  background-size: 4.5rem 4.5rem;
-  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 78%);
-  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 78%);
-}
-.hero__glow {
-  position: absolute;
-  top: -20rem; left: 50%;
-  translate: -50% 0;
-  width: 60rem; height: 40rem;
-  pointer-events: none;
-  background: radial-gradient(closest-side, color-mix(in oklab, var(--foreground) 9%, transparent), transparent 70%);
-  filter: blur(10px);
+  inset: -14% 0;
+  z-index: -2;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--hair) 0 1px,
+    transparent 1px var(--hero-col, clamp(80px, 9vw, 140px))
+  );
+  opacity: .55;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 72%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 72%, transparent);
 }
 
-.hero__copy { position: relative; display: flex; flex-direction: column; gap: 1.75rem; }
+.hero__glow {
+  position: absolute;
+  inset: -20% 0 auto;
+  z-index: -1;
+  height: 70vh;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 60% at 50% 0%,
+    color-mix(in oklab, var(--foreground) 9%, transparent),
+    transparent 70%
+  );
+  opacity: .8;
+}
+
+/* ---- copy --------------------------------------------------------------- */
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+}
 
 .hero__badge {
   display: inline-flex;
   align-items: center;
-  gap: .5rem;
-  width: fit-content;
-  padding: .375rem .875rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background-color: color-mix(in oklab, var(--background) 60%, transparent);
-  font-size: .75rem;
-  font-weight: 500;
-  letter-spacing: .02em;
+  gap: .625rem;
+  padding: .5rem .75rem;
+  border: 1px solid var(--hair-strong);
+  background-color: var(--panel);
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
   color: var(--muted-foreground);
 }
+
+/* pulses on opacity only - transform belongs to GSAP on the parent */
 .hero__badge-dot {
-  width: .375rem; height: .375rem;
-  border-radius: var(--radius-full);
+  flex: none;
+  width: 6px;
+  height: 6px;
   background-color: var(--foreground);
-  animation: hero-pulse 2.4s ease-in-out infinite;
+  animation: hero-dot 2.6s ease-in-out infinite;
 }
-@keyframes hero-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--foreground) 40%, transparent); }
-  50%      { box-shadow: 0 0 0 .375rem transparent; }
+
+@keyframes hero-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .25; }
 }
 
 .hero__title {
-  font-size: clamp(2.625rem, 6.2vw, 4.75rem);
-  line-height: 1.02;
+  font-size: var(--t-display);
   font-weight: 700;
-  letter-spacing: -.045em;
-  text-wrap: balance;
+  line-height: .92;
+  letter-spacing: -.05em;
 }
-/* the hollow word: monochrome accent that reads in both themes */
-.hero__accent {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--foreground);
-  text-stroke: 1.5px var(--foreground);
+
+/* the accent line renders as an outline - guarded so browsers without
+   text-stroke keep solid text instead of invisible text */
+.hero__accent { display: block; }
+
+@supports (-webkit-text-stroke: 1px black) {
+  .hero__accent {
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--foreground) 62%, transparent);
+  }
 }
 
 .hero__lead {
-  font-size: clamp(1rem, 1.6vw, 1.1875rem);
-  line-height: 1.7;
+  max-width: 46ch;
+  font-size: var(--t-lead);
+  line-height: 1.65;
   color: var(--muted-foreground);
-  max-width: 34rem;
-  text-wrap: pretty;
 }
 
-.hero__ctas { display: flex; flex-wrap: wrap; gap: .75rem; }
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: .25rem;
+}
 
+/* ---- stats: mono figures on a hairline rule ----------------------------- */
 .hero__stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 0;
-  margin-top: .5rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  width: 100%;
+  margin-top: clamp(1rem, 3vw, 2rem);
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--hair);
 }
-.hero__stat { padding-inline: 1.75rem; border-left: 1px solid var(--border); }
+
+.hero__stat {
+  flex: 1 1 8rem;
+  padding-left: clamp(1.25rem, 3vw, 2rem);
+  border-left: 1px solid var(--hair);
+}
+
 .hero__stat:first-child { padding-left: 0; border-left: 0; }
+
 .hero__stat-value {
-  font-size: 1.75rem;
-  font-weight: 700;
+  margin: 0;
+  font-family: var(--font-ui-mono);
+  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  font-weight: 500;
+  line-height: 1;
   letter-spacing: -.03em;
-  line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
-.hero__stat-label { font-size: .8125rem; color: var(--muted-foreground); margin-top: .125rem; }
 
-/* ---- visual: dashboard in a browser frame with floating chips ---- */
+.hero__stat-label {
+  margin: .5rem 0 0;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* ---- visual ------------------------------------------------------------- */
 .hero__visual { position: relative; }
 
 .hero__frame {
   position: relative;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  background-color: var(--card);
-  box-shadow: var(--shadow-xl);
   overflow: hidden;
+  border: 1px solid var(--hair-strong);
+  background-color: var(--panel);
+  box-shadow: 0 2.5rem 6rem -2rem rgba(0, 0, 0, .65);
 }
+
 .hero__frame-bar {
   display: flex;
   align-items: center;
   gap: .75rem;
   padding: .625rem .875rem;
-  border-bottom: 1px solid var(--border);
-  background-color: color-mix(in oklab, var(--muted) 60%, var(--card));
+  border-bottom: 1px solid var(--hair);
+  background-color: var(--panel-2);
 }
-.hero__frame-dots { display: flex; gap: .375rem; }
-.hero__frame-dots span { width: .625rem; height: .625rem; border-radius: var(--radius-full); background-color: var(--border); }
+
+.hero__frame-dots { display: inline-flex; flex: none; gap: 4px; }
+
+.hero__frame-dots > span {
+  width: 5px;
+  height: 5px;
+  background-color: var(--hair-strong);
+}
+
+.hero__frame-dots > span:first-child { background-color: var(--foreground); }
+
 .hero__frame-url {
-  flex: 1;
-  max-width: 16rem;
-  padding: .25rem .75rem;
-  border-radius: var(--radius-full);
-  background-color: var(--muted);
-  font-family: var(--font-ui-mono);
-  font-size: .6875rem;
-  color: var(--muted-foreground);
-  white-space: nowrap;
   overflow: hidden;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  letter-spacing: .1em;
+  color: var(--muted-foreground);
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .hero__img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  object-position: top center;
+  height: auto;
+  filter: grayscale(1) contrast(1.06) brightness(.94);
+  transition: filter .7s ease;
 }
 
+.hero__frame:hover .hero__img { filter: grayscale(.15) contrast(1.02) brightness(1); }
+
+/* ---- floating proof points --------------------------------------------- */
 .hero__float {
   position: absolute;
   display: flex;
   align-items: center;
   gap: .625rem;
-  padding: .625rem .875rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background-color: color-mix(in oklab, var(--card) 88%, transparent);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: var(--shadow-lg);
-  animation: hero-float 6s ease-in-out infinite alternate;
+  padding: .75rem .875rem;
+  border: 1px solid var(--hair-strong);
+  background-color: rgba(10, 10, 10, .78);
+  background-color: color-mix(in oklab, var(--background) 82%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1.5rem 3rem -1.25rem rgba(0, 0, 0, .6);
 }
-.hero__float--a { top: 12%; left: -1.5rem; }
-.hero__float--b { bottom: 10%; right: -1.25rem; animation-delay: -3s; }
+
+.hero__float--a { left: -1.25rem; top: 16%; }
+.hero__float--b { right: -1.25rem; bottom: 12%; }
+
 .hero__float-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem; height: 2rem;
-  border-radius: var(--radius-md);
-  background-color: var(--foreground);
-  color: var(--background);
-  flex-shrink: 0;
-}
-.hero__float-label { font-size: .6875rem; color: var(--muted-foreground); line-height: 1.2; }
-.hero__float-value { font-size: .875rem; font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
-
-@keyframes hero-float {
-  from { transform: translateY(-.375rem); }
-  to   { transform: translateY(.375rem); }
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--hair);
+  font-size: .75rem;
+  color: var(--foreground);
 }
 
-/* ---- responsive ---- */
-@media (max-width: 991.98px) {
+.hero__float-label {
+  display: block;
+  font-family: var(--font-ui-mono);
+  font-size: .625rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--muted-foreground);
+}
+
+.hero__float-value {
+  display: block;
+  margin-top: .25rem;
+  font-size: .9375rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- responsive --------------------------------------------------------- */
+@media (max-width: 1199.98px) {
   .hero__float--a { left: -.5rem; }
   .hero__float--b { right: -.5rem; }
-  .hero__stat { padding-inline: 1.25rem; }
 }
+
+@media (max-width: 991.98px) {
+  .hero__visual { margin-top: clamp(2.5rem, 8vw, 4rem); }
+  .hero__stat { flex: 1 1 7rem; }
+}
+
 @media (max-width: 575.98px) {
-  .hero__stats { gap: 1rem 0; }
-  .hero__stat { flex: 1 1 40%; border-left: 0; padding-left: 0; }
-  .hero__float { display: none; }   /* too cramped on small screens */
+  .hero__float { display: none; }   /* too cramped on phones */
+  .hero__stats { gap: 1.25rem 0; }
+  .hero__stat { flex: 1 1 45%; padding-left: 1rem; }
+  .hero__stat:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .hero__ctas .btn { width: 100%; justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__float, .hero__badge-dot { animation: none; }
+  .hero__badge-dot { animation: none; }
+  .hero__img { transition: none; }
 }

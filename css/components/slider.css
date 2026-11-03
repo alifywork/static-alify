@@ -1,44 +1,62 @@
 /* ==========================================================================
-   slider.css - REUSABLE horizontal slider / carousel
+   slider.css - REUSABLE carousel (services, industries, testimonials)
    --------------------------------------------------------------------------
-   Sizing is CSS-driven: JS writes --slider-per (slides per view) and
-   --slider-gap, and each slide's width is a calc() off those, so the layout
-   stays correct on resize without JS re-measuring widths. JS only moves the
-   track with a translate and manages state, autoplay and drag.
+   Markup:
+     <div class="slider" data-slider='{"perView":{"base":1.1,"md":2,"lg":3},
+                                      "gap":24,"loop":true,"autoplay":6000}'>
+       <div class="slider__viewport">
+         <ul class="slider__track"><li class="slider__slide">...</li></ul>
+       </div>
+       <div class="slider__foot">
+         <div class="slider__nav">
+           <button class="slider__btn" data-slider-prev>...</button>
+           <button class="slider__btn" data-slider-next>...</button>
+         </div>
+         <div class="slider__meter"><span class="slider__meter-fill"></span></div>
+         <span class="slider__count"><b data-slider-current>1</b><span data-slider-total>6</span></span>
+       </div>
+     </div>
+
+   js/components/slider.js writes --slider-per and --slider-gap onto .slider
+   and drives .slider__track's transform, so the slide-width formula below is
+   a hard contract with the JS - don't restate it differently. It also sets the
+   meter fill's width and translateX inline.
    ========================================================================== */
 
 .slider {
-  --slider-per: 1;
-  --slider-gap: 1.5rem;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  --slider-per: 1;
+  --slider-gap: 24px;
 }
 
+/* ---- viewport + track --------------------------------------------------- */
 .slider__viewport {
   overflow: hidden;
-  /* let focus rings / shadows of edge slides breathe instead of clipping */
+  /* let focus outlines on edge slides breathe instead of clipping them */
   padding-block: .25rem;
   margin-block: -.25rem;
-  outline: none;
   cursor: grab;
 }
+
 .slider__viewport.is-dragging { cursor: grabbing; }
+
+.slider__viewport.is-dragging * { user-select: none; }
+
 .slider__viewport:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent);
-  border-radius: var(--radius-lg);
+  outline: 2px solid var(--foreground);
+  outline-offset: 6px;
 }
 
 .slider__track {
   display: flex;
   gap: var(--slider-gap);
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
+  transition: transform .65s cubic-bezier(.22, .8, .2, 1);
   will-change: transform;
-  transition: transform .55s cubic-bezier(.22, 1, .36, 1);
 }
+
 .slider__track.is-instant { transition: none; }   /* used during resize / drag */
 
 .slider__slide {
@@ -46,58 +64,88 @@
   width: calc((100% - (var(--slider-per) - 1) * var(--slider-gap)) / var(--slider-per));
   min-width: 0;
 }
-/* equal-height slides so cards line up */
+
 .slider__slide > * { height: 100%; }
 
-/* ---- footer: arrows, progress meter, counter ---- */
+/* ---- foot: square arrow buttons, hairline meter, mono counter ----------- */
 .slider__foot {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: clamp(.75rem, 2vw, 1.5rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--hair);
 }
-.slider__nav { display: flex; gap: .5rem; }
+
+.slider__nav { display: flex; flex: none; gap: .5rem; }
 
 .slider__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem; height: 2.5rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background-color: var(--background);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--hair-strong);
+  background-color: transparent;
   color: var(--foreground);
   cursor: pointer;
-  transition: background-color .15s ease, color .15s ease, border-color .15s ease, opacity .15s ease;
+  transition: background-color .25s ease, color .25s ease,
+              border-color .25s ease, opacity .25s ease;
 }
-.slider__btn:hover:not(:disabled) { background-color: var(--foreground); color: var(--background); border-color: var(--foreground); }
-.slider__btn:disabled { opacity: .35; cursor: not-allowed; }
 
-/* thin progress meter showing position in the deck */
+.slider__btn > i { font-size: .8125rem; transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
+
+.slider__btn:hover:not(:disabled) {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--on-invert);
+}
+
+.slider__btn[data-slider-prev]:hover:not(:disabled) > i { transform: translateX(-3px); }
+.slider__btn[data-slider-next]:hover:not(:disabled) > i { transform: translateX(3px); }
+
+.slider__btn:disabled { opacity: .25; cursor: not-allowed; }
+
+/* The fill's width and translateX are set inline by the JS. */
 .slider__meter {
   position: relative;
-  flex: 1;
-  height: 2px;
-  border-radius: var(--radius-full);
-  background-color: var(--border);
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 2rem;
   overflow: hidden;
+  background-color: var(--hair-strong);
 }
+
 .slider__meter-fill {
   position: absolute;
-  inset: 0 auto 0 0;
-  width: 20%;
+  inset-block: 0;
+  left: 0;
+  width: 100%;
   background-color: var(--foreground);
-  border-radius: var(--radius-full);
-  transition: width .55s cubic-bezier(.22, 1, .36, 1), transform .55s cubic-bezier(.22, 1, .36, 1);
+  transition: transform .65s cubic-bezier(.22, .8, .2, 1), width .3s ease;
 }
 
 .slider__count {
+  flex: none;
   font-family: var(--font-ui-mono);
-  font-size: .75rem;
+  font-size: var(--label-size);
+  letter-spacing: .14em;
   color: var(--muted-foreground);
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.slider__count b { color: var(--foreground); font-weight: 500; }
+
+.slider__count > b { font-weight: 500; color: var(--foreground); }
+
+.slider__count > b + span::before {
+  content: "/";
+  margin-inline: .375rem;
+  opacity: .5;
+}
+
+@media (max-width: 575.98px) {
+  .slider__btn { width: 2.5rem; height: 2.5rem; }
+  .slider__meter { display: none; }
+  .slider__foot { justify-content: space-between; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .slider__track, .slider__meter-fill { transition-duration: .01ms !important; }
