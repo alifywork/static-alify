@@ -198,7 +198,25 @@ p { margin: 0; text-wrap: pretty; }
   transition: border-color .2s ease, background-color .2s ease;
 }
 
-.input:focus, .select:focus, .textarea:focus {
+/* ---- state parity -------------------------------------------------------
+   The design system ships its own hover/focus treatments, and some of them
+   out-specify the resting rules above (e.g. ui.css sets .input:hover at
+   0,2,0). Left alone, the two design languages mix mid-interaction, so the
+   interactive states are restated here in this site's language.
+   ----------------------------------------------------------------------- */
+
+/* ui.css underlines accordion questions on hover - not this site's language */
+.accordion-trigger:hover { text-decoration: none; }
+
+/* fields: hover steps the hairline up, focus goes full foreground, no rings */
+.input:hover, .select:hover, .textarea:hover {
+  border-color: rgba(128, 128, 128, .55);
+  border-color: color-mix(in oklab, var(--foreground) 55%, transparent);
+}
+
+.input:focus, .input:focus-visible,
+.select:focus, .select:focus-visible,
+.textarea:focus, .textarea:focus-visible {
   border-color: var(--foreground);
   box-shadow: none;
 }
