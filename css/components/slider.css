@@ -1,0 +1,104 @@
+/* ==========================================================================
+   slider.css - REUSABLE horizontal slider / carousel
+   --------------------------------------------------------------------------
+   Sizing is CSS-driven: JS writes --slider-per (slides per view) and
+   --slider-gap, and each slide's width is a calc() off those, so the layout
+   stays correct on resize without JS re-measuring widths. JS only moves the
+   track with a translate and manages state, autoplay and drag.
+   ========================================================================== */
+
+.slider {
+  --slider-per: 1;
+  --slider-gap: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.slider__viewport {
+  overflow: hidden;
+  /* let focus rings / shadows of edge slides breathe instead of clipping */
+  padding-block: .25rem;
+  margin-block: -.25rem;
+  outline: none;
+  cursor: grab;
+}
+.slider__viewport.is-dragging { cursor: grabbing; }
+.slider__viewport:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent);
+  border-radius: var(--radius-lg);
+}
+
+.slider__track {
+  display: flex;
+  gap: var(--slider-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  will-change: transform;
+  transition: transform .55s cubic-bezier(.22, 1, .36, 1);
+}
+.slider__track.is-instant { transition: none; }   /* used during resize / drag */
+
+.slider__slide {
+  flex: 0 0 auto;
+  width: calc((100% - (var(--slider-per) - 1) * var(--slider-gap)) / var(--slider-per));
+  min-width: 0;
+}
+/* equal-height slides so cards line up */
+.slider__slide > * { height: 100%; }
+
+/* ---- footer: arrows, progress meter, counter ---- */
+.slider__foot {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.slider__nav { display: flex; gap: .5rem; }
+
+.slider__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background-color: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.slider__btn:hover:not(:disabled) { background-color: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.slider__btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* thin progress meter showing position in the deck */
+.slider__meter {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background-color: var(--border);
+  overflow: hidden;
+}
+.slider__meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 20%;
+  background-color: var(--foreground);
+  border-radius: var(--radius-full);
+  transition: width .55s cubic-bezier(.22, 1, .36, 1), transform .55s cubic-bezier(.22, 1, .36, 1);
+}
+
+.slider__count {
+  font-family: var(--font-ui-mono);
+  font-size: .75rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.slider__count b { color: var(--foreground); font-weight: 500; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slider__track, .slider__meter-fill { transition-duration: .01ms !important; }
+}

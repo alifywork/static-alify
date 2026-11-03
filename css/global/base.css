@@ -1,0 +1,81 @@
+/* ==========================================================================
+   base.css - GLOBAL site layer
+   --------------------------------------------------------------------------
+   Loads AFTER assets/ui/ui.css and css/global/grid.css. Holds site-level
+   tokens and rules that apply to every page: rhythm, scroll behaviour,
+   section bands, skip link. Component and section styles live in their own
+   files; this file must stay small and page-agnostic.
+   ========================================================================== */
+
+:root {
+  /* sticky header height - used for scroll-padding and hero offset */
+  --header-h: 4.25rem;
+  /* vertical rhythm between sections; breathes with the viewport */
+  --section-gap: clamp(4.5rem, 9vw, 8rem);
+
+  /* z-index scale, kept in one place so layers never fight */
+  --z-header: 40;
+  --z-drawer: 60;
+  --z-overlay: 70;
+  --z-toast: 100;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* anchors land below the sticky header instead of under it */
+  scroll-padding-top: calc(var(--header-h) + 1.25rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;              /* sliders/parallax must never cause h-scroll */
+}
+
+img { -webkit-user-drag: none; user-select: none; }
+
+/* ---- section rhythm ----
+   `.section` is defined in ui.css with a fixed padding; here we swap it for
+   the responsive site rhythm so every band stays consistent. */
+.section { padding-block: var(--section-gap); }
+.section--tight { padding-block: calc(var(--section-gap) * .55); }
+.section--flush-top { padding-top: 0; }
+.section--flush-bottom { padding-bottom: 0; }
+
+/* alternating tinted band, e.g. services / testimonials */
+.section--tint { background-color: var(--muted); }
+.section--border { border-top: 1px solid var(--border); }
+
+/* full-bleed band that still keeps content in the grid */
+.section--edge { padding-inline: 0; }
+
+/* ---- skip link (a11y) ---- */
+.skip-link {
+  position: fixed;
+  top: -4rem; left: 1rem;
+  z-index: 200;
+  padding: .5rem 1rem;
+  border-radius: var(--radius-md);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-size: .875rem;
+  font-weight: 500;
+  transition: top .15s ease;
+}
+.skip-link:focus-visible { top: 1rem; }
+
+/* ---- generic reveal hook ----
+   GSAP animates [data-reveal] elements; without JS they stay fully visible,
+   so this rule only reserves the starting transform when a `.js` class is on
+   <html> (added by home.js) - no-JS users never see hidden content. */
+.js [data-reveal] { opacity: 0; }
+
+/* ---- misc ---- */
+::selection { background-color: color-mix(in oklab, var(--foreground) 85%, transparent); color: var(--background); }
+
+/* keep long unbroken strings (emails, urls) inside their columns */
+.break-any { overflow-wrap: anywhere; }

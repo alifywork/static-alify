@@ -1,0 +1,60 @@
+/* ==========================================================================
+   testimonials.css - SECTION: testimonials slider (reuses slider component)
+   ========================================================================== */
+
+.testimonials { position: relative; overflow: hidden; }
+
+/* faint oversized quotation mark behind the deck */
+.testimonials::before {
+  content: "\201C";
+  position: absolute;
+  top: 1rem; left: 50%;
+  translate: -50% 0;
+  font-size: clamp(12rem, 30vw, 22rem);
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: color-mix(in oklab, var(--foreground) 5%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background-color: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.testimonial-card__stars { display: flex; gap: .1875rem; color: var(--foreground); font-size: .75rem; }
+
+.testimonial-card__quote {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  text-wrap: pretty;
+  flex: 1;
+}
+.testimonial-card__quote strong { font-weight: 600; }
+
+.testimonial-card__who {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+  padding-top: 1.125rem;
+  border-top: 1px solid var(--border);
+}
+.testimonial-card__name { font-size: .9375rem; font-weight: 600; line-height: 1.2; }
+.testimonial-card__role { font-size: .8125rem; color: var(--muted-foreground); line-height: 1.2; }
+
+.testimonial-card__metric {
+  margin-left: auto;
+  text-align: right;
+  flex-shrink: 0;
+}
+.testimonial-card__metric-value { font-size: 1.125rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.testimonial-card__metric-label { font-size: .6875rem; color: var(--muted-foreground); }

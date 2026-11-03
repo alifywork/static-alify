@@ -1,0 +1,26 @@
+/* ==========================================================================
+   tech.css - SECTION: technology ticker band
+   Wraps the reusable .ticker (components/ticker.css) with the band's own
+   hairlines and centred label.
+   ========================================================================== */
+
+.tech {
+  padding-block: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background-color: color-mix(in oklab, var(--muted) 45%, var(--background));
+}
+
+.tech__label {
+  text-align: center;
+  font-family: var(--font-ui-mono);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+}
+
+/* pause the marquee while it's off-screen (perf) - toggled by tech.js */
+.tech .ticker__track.is-paused { animation-play-state: paused; }

@@ -1,0 +1,122 @@
+/* ==========================================================================
+   drawer.css - REUSABLE off-canvas panel, slides in from the left
+   --------------------------------------------------------------------------
+   Used by the mobile navigation and the "About" panel in the header.
+   Pure transform + visibility so it animates both ways with no JS timing:
+   visibility:hidden takes it out of the tab order while closed, and the
+   delayed visibility transition lets the slide-out finish before it hides.
+   ========================================================================== */
+
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer);
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear .4s;   /* wait for slide-out, then hide */
+}
+.drawer[data-open] {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;                   /* show immediately on open */
+}
+
+.drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: oklch(0 0 0 / 55%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.drawer[data-open] .drawer__backdrop { opacity: 1; }
+
+.drawer__panel {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(22rem, 88vw);
+  background-color: var(--background);
+  color: var(--foreground);
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow-xl);
+  transform: translateX(-102%);
+  transition: transform .4s cubic-bezier(.16, 1, .3, 1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.drawer[data-open] .drawer__panel { transform: translateX(0); }
+
+/* right-side variant, kept for future use (e.g. a cart or filters) */
+.drawer--right .drawer__panel {
+  left: auto; right: 0;
+  border-right: 0;
+  border-left: 1px solid var(--border);
+  transform: translateX(102%);
+}
+.drawer--right[data-open] .drawer__panel { transform: translateX(0); }
+
+/* ---- inner structure ---- */
+.drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.drawer__body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem; flex: 1; }
+.drawer__foot {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* nav list inside a drawer */
+.drawer-nav { display: flex; flex-direction: column; gap: .25rem; }
+.drawer-nav__label {
+  font-family: var(--font-ui-mono);
+  font-size: .6875rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  padding: 0 .5rem .375rem;
+}
+.drawer-nav__link {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .625rem .5rem;
+  border-radius: var(--radius-md);
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: background-color .15s ease;
+}
+.drawer-nav__link > i { width: 1.125rem; text-align: center; color: var(--muted-foreground); }
+.drawer-nav__link:hover { background-color: var(--accent); }
+.drawer-nav__link[aria-current="page"] { background-color: var(--accent); font-weight: 600; }
+.drawer-nav__link[aria-current="page"] > i { color: var(--foreground); }
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer, .drawer__panel, .drawer__backdrop { transition-duration: .01ms !important; }
+}
+
+/* a drawer-nav row can also be a <button> (e.g. opening a stacked drawer) */
+button.drawer-nav__link {
+  width: 100%;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.drawer-nav__link-arrow {
+  margin-left: auto;
+  font-size: .75rem;
+  opacity: .5;
+}

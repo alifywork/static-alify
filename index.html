@@ -1,238 +1,134 @@
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>static-alify &middot; local assets check</title>
-  <meta name="description" content="Verification page for the locally vendored Bootstrap, GSAP, Font Awesome and Geist assets.">
+  <meta name="color-scheme" content="light dark">
+  <title>Alify — Software that scales with your ambition</title>
+  <meta name="description" content="Alify is a product studio building web, mobile, cloud and AI software end-to-end. Discovery to production, under one roof.">
 
-  <!-- ===== LOCAL ASSETS ONLY - no CDNs anywhere in this file ===== -->
+  <!-- mark JS availability before paint so [data-reveal] never flashes -->
+  <script>document.documentElement.classList.add("js");</script>
+  <!-- theme before stylesheets: no flash of the wrong theme -->
+  <script src="assets/ui/theme.js"></script>
 
-  <!-- Bootstrap 5.3.8 -->
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-
-  <!-- Font Awesome Free 7.3.1 (webfonts resolved from assets/fontawesome/webfonts/) -->
+  <!-- design system + grid + site globals -->
+  <link rel="stylesheet" href="assets/geist/geist.css">
+  <link rel="stylesheet" href="assets/ui/ui.css">
+  <link rel="stylesheet" href="css/global/grid.css">
+  <link rel="stylesheet" href="css/global/base.css">
   <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
 
-  <!-- Geist Font 1.9.0 - variable build (100-900). Swap for assets/geist/geist-static.css if you prefer one file per weight. -->
-  <link rel="stylesheet" href="assets/geist/geist.css">
+  <!-- reusable components -->
+  <link rel="stylesheet" href="css/components/drawer.css">
+  <link rel="stylesheet" href="css/components/slider.css">
+  <link rel="stylesheet" href="css/components/ticker.css">
+  <link rel="stylesheet" href="css/components/section-head.css">
 
-  <style>
-    :root {
-      --page-bg: #0b0d10;
-      --panel-bg: #12161b;
-      --line: #232a32;
-      --accent: #22c55e;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-geist-sans);
-      background-color: var(--page-bg);
-      -webkit-font-smoothing: antialiased;
-    }
-    .font-mono, code, pre, kbd { font-family: var(--font-geist-mono); }
+  <!-- globals -->
+  <link rel="stylesheet" href="css/global/header.css">
+  <link rel="stylesheet" href="css/global/footer.css">
 
-    .navbar { border-bottom: 1px solid var(--line); background: rgba(11,13,16,.85); backdrop-filter: blur(10px); }
-    .brand-dot { color: var(--accent); }
+  <!-- sections -->
+  <link rel="stylesheet" href="css/sections/hero.css">
+  <link rel="stylesheet" href="css/sections/tech.css">
+  <link rel="stylesheet" href="css/sections/about.css">
+  <link rel="stylesheet" href="css/sections/services.css">
+  <link rel="stylesheet" href="css/sections/why-us.css">
+  <link rel="stylesheet" href="css/sections/projects.css">
+  <link rel="stylesheet" href="css/sections/industries.css">
+  <link rel="stylesheet" href="css/sections/faqs.css">
+  <link rel="stylesheet" href="css/sections/testimonials.css">
+  <link rel="stylesheet" href="css/sections/contact.css">
 
-    .hero { padding: 6rem 0 4rem; }
-    .hero h1 {
-      font-weight: 700;
-      letter-spacing: -.03em;
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      line-height: 1.05;
-    }
-    .eyebrow {
-      font-family: var(--font-geist-mono);
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .lead { color: #9aa7b4; font-weight: 300; max-width: 60ch; }
-
-    .panel {
-      background: var(--panel-bg);
-      border: 1px solid var(--line);
-      border-radius: .75rem;
-      height: 100%;
-    }
-    .panel .card-title { font-weight: 600; letter-spacing: -.01em; }
-    .status-icon { font-size: 1.5rem; }
-    .ok   { color: var(--accent); }
-    .fail { color: #ef4444; }
-
-    section { padding: 3.5rem 0; }
-    .section-title { font-weight: 600; letter-spacing: -.02em; }
-
-    .weight-demo span {
-      display: block;
-      font-family: var(--font-geist-sans);
-      border-bottom: 1px dashed var(--line);
-      padding: .35rem 0;
-    }
-    pre.snippet {
-      background: #0d1116;
-      border: 1px solid var(--line);
-      border-radius: .5rem;
-      padding: 1rem;
-      font-size: .82rem;
-      overflow-x: auto;
-      color: #cdd9e5;
-    }
-    footer { border-top: 1px solid var(--line); padding: 2rem 0; color: #7d8b99; font-size: .85rem; }
-    /* NOTE: .reveal is intentionally visible by default - GSAP animates it in
-       with fromTo(), so content never disappears if JS/GSAP is unavailable. */
-  </style>
+  <!-- page -->
+  <link rel="stylesheet" href="css/pages/home.css">
 </head>
-<body>
 
-<nav class="navbar navbar-expand-lg sticky-top">
+<body class="home">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============================== HEADER ============================== -->
+<header class="site-header" id="site-header">
   <div class="container">
-    <a class="navbar-brand fw-semibold" href="#">
-      <i class="fa-solid fa-bolt brand-dot me-1"></i> static-alify
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-            aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-        <li class="nav-item"><a class="nav-link" href="#assets"><i class="fa-solid fa-box-open me-1"></i>Assets</a></li>
-        <li class="nav-item"><a class="nav-link" href="#type"><i class="fa-solid fa-font me-1"></i>Type</a></li>
-        <li class="nav-item"><a class="nav-link" href="#motion"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>Motion</a></li>
-        <li class="nav-item">
-          <button type="button" class="btn btn-sm btn-success ms-lg-2" data-bs-toggle="modal" data-bs-target="#howto">
-            <i class="fa-solid fa-code me-1"></i> How to include
-          </button>
-        </li>
-      </ul>
+    <div class="site-header__inner">
+      <a class="site-logo" href="#top" aria-label="Alify — home">
+        <img class="site-logo__img site-logo__img--dark" src="img/logo-dark.png" alt="Alify" width="469" height="125">
+        <img class="site-logo__img site-logo__img--light" src="img/logo-light.png" alt="" width="469" height="125">
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="#services">Services</a></li>
+          <li><a class="site-nav__link" href="#projects">Projects</a></li>
+          <li><a class="site-nav__link" href="#industries">Industries</a></li>
+          <li><a class="site-nav__link" href="#about">About</a></li>
+          <li><a class="site-nav__link" href="#faqs">FAQs</a></li>
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        <button type="button" class="btn btn-ghost btn-icon theme-toggle" data-ui-theme-toggle aria-label="Toggle theme">
+          <span class="icon-sun"><i class="fa-solid fa-sun"></i></span>
+          <span class="icon-moon"><i class="fa-solid fa-moon"></i></span>
+        </button>
+        <button type="button" class="btn btn-ghost site-header__about" data-drawer-open="about-drawer" aria-expanded="false" aria-controls="about-drawer">
+          <i class="fa-regular fa-address-card" aria-hidden="true"></i> About us
+        </button>
+        <a class="btn site-header__cta" href="#contact">
+          <i class="fa-solid fa-arrow-right"></i><span class="site-header__cta-label">Start a project</span>
+        </a>
+        <button type="button" class="btn btn-ghost btn-icon site-header__burger" data-drawer-open="nav-drawer" aria-label="Open menu" aria-controls="nav-drawer" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
     </div>
   </div>
-</nav>
-
-<header class="hero">
-  <div class="container">
-    <p class="eyebrow mb-3">Local-first &middot; zero CDN requests</p>
-    <h1 class="reveal">Bootstrap, GSAP, Font&nbsp;Awesome<br>and Geist &mdash; all served from <span class="text-success">/assets</span>.</h1>
-    <p class="lead mt-4 reveal">
-      Every library on this page is vendored into the repository, so the site keeps working with no
-      internet connection and no third-party requests. Scroll down &mdash; the cards animate with GSAP
-      ScrollTrigger, the icons are Font Awesome webfonts, and the text is set in Geist variable.
-    </p>
-    <div class="d-flex flex-wrap gap-2 mt-4 reveal">
-      <a href="#assets" class="btn btn-success"><i class="fa-solid fa-circle-check me-1"></i> Run the checks</a>
-      <a href="assets/" class="btn btn-outline-light"><i class="fa-solid fa-folder-tree me-1"></i> Browse assets</a>
-    </div>
-  </div>
+  <div class="site-header__progress" aria-hidden="true"><span class="site-header__progress-fill"></span></div>
 </header>
 
-<main>
-  <section id="assets">
-    <div class="container">
-      <h2 class="section-title mb-1">Self-check</h2>
-      <p class="lead mb-4">
-        Detected live in your browser &mdash; each card reports whether the local asset actually loaded.
-      </p>
-      <div class="row g-3" id="checks">
-        <div class="col-md-6 col-lg-3">
-          <div class="panel p-3 h-100">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h3 class="card-title h6 mb-1">Bootstrap</h3>
-                <code class="small text-secondary" data-role="ver">5.3.8</code>
-              </div>
-              <i class="fa-solid fa-spinner fa-spin status-icon text-secondary" data-role="icon"></i>
-            </div>
-            <p class="small text-secondary mt-3 mb-0" data-role="detail">checking&hellip;</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="panel p-3 h-100">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h3 class="card-title h6 mb-1">GSAP</h3>
-                <code class="small text-secondary" data-role="ver">3.15.0</code>
-              </div>
-              <i class="fa-solid fa-spinner fa-spin status-icon text-secondary" data-role="icon"></i>
-            </div>
-            <p class="small text-secondary mt-3 mb-0" data-role="detail">checking&hellip;</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="panel p-3 h-100">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h3 class="card-title h6 mb-1">Font Awesome</h3>
-                <code class="small text-secondary" data-role="ver">7.3.1</code>
-              </div>
-              <i class="fa-solid fa-spinner fa-spin status-icon text-secondary" data-role="icon"></i>
-            </div>
-            <p class="small text-secondary mt-3 mb-0" data-role="detail">checking&hellip;</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="panel p-3 h-100">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h3 class="card-title h6 mb-1">Geist</h3>
-                <code class="small text-secondary" data-role="ver">1.9.0</code>
-              </div>
-              <i class="fa-solid fa-spinner fa-spin status-icon text-secondary" data-role="icon"></i>
-            </div>
-            <p class="small text-secondary mt-3 mb-0" data-role="detail">checking&hellip;</p>
-          </div>
-        </div>
-      </div>
+<main id="main">
 
-      <div class="alert alert-success d-none mt-4 mb-0" id="allok" role="alert">
-        <i class="fa-solid fa-circle-check me-1"></i>
-        <strong>All four libraries loaded from local assets.</strong>
-        No CDN was contacted.
-      </div>
-    </div>
-  </section>
+  <!-- ============================== HERO ============================== -->
+  <section class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__glow" aria-hidden="true"></div>
 
-  <section id="type">
     <div class="container">
-      <h2 class="section-title mb-4">Geist type scale</h2>
-      <div class="row g-4">
+      <div class="row g-5 items-center">
         <div class="col-lg-6">
-          <div class="panel p-4">
-            <h3 class="h6 text-secondary mb-3">Geist Sans &mdash; variable 100&rarr;900</h3>
-            <div class="weight-demo">
-              <span style="font-weight:100">100 Thin &mdash; The quick brown fox</span>
-              <span style="font-weight:300">300 Light &mdash; The quick brown fox</span>
-              <span style="font-weight:400">400 Regular &mdash; The quick brown fox</span>
-              <span style="font-weight:500">500 Medium &mdash; The quick brown fox</span>
-              <span style="font-weight:600">600 SemiBold &mdash; The quick brown fox</span>
-              <span style="font-weight:700">700 Bold &mdash; The quick brown fox</span>
-              <span style="font-weight:900">900 Black &mdash; The quick brown fox</span>
-              <span style="font-weight:400;font-style:italic">400 Italic &mdash; The quick brown fox</span>
+          <div class="hero__copy">
+            <p class="hero__badge"><span class="hero__badge-dot" aria-hidden="true"></span> Available for new projects — Q1 2026</p>
+            <h1 class="hero__title">We build software that <span class="hero__accent">scales</span> with your ambition.</h1>
+            <p class="hero__lead">Alify is a product studio for web, mobile, cloud and AI. From the first discovery sprint to production and beyond — one senior team, one accountable partner.</p>
+            <div class="hero__ctas">
+              <a class="btn btn-lg" href="#contact"><i class="fa-solid fa-arrow-right"></i> Start a project</a>
+              <a class="btn btn-lg btn-outline" href="#projects"><i class="fa-regular fa-folder-open"></i> See our work</a>
+            </div>
+            <div class="hero__stats">
+              <div class="hero__stat"><p class="hero__stat-value">120+</p><p class="hero__stat-label">Projects delivered</p></div>
+              <div class="hero__stat"><p class="hero__stat-value">9</p><p class="hero__stat-label">Years in business</p></div>
+              <div class="hero__stat"><p class="hero__stat-value">98%</p><p class="hero__stat-label">Clients return</p></div>
             </div>
           </div>
         </div>
+
         <div class="col-lg-6">
-          <div class="panel p-4">
-            <h3 class="h6 text-secondary mb-3">Geist Mono &mdash; variable 100&rarr;900</h3>
-            <div class="weight-demo font-mono">
-              <span style="font-weight:300">300 const site = 'static-alify';</span>
-              <span style="font-weight:400">400 const site = 'static-alify';</span>
-              <span style="font-weight:600">600 const site = 'static-alify';</span>
-              <span style="font-weight:700">700 const site = 'static-alify';</span>
+          <div class="hero__visual">
+            <div class="hero__frame">
+              <div class="hero__frame-bar" aria-hidden="true">
+                <span class="hero__frame-dots"><span></span><span></span><span></span></span>
+                <span class="hero__frame-url">app.alify.work/dashboard</span>
+              </div>
+              <img class="hero__img" src="img/hero-dashboard.jpg" alt="Alify analytics dashboard interface" width="1376" height="768" fetchpriority="high">
             </div>
-            <h3 class="h6 text-secondary mt-4 mb-3">Font Awesome icons (local webfonts)</h3>
-            <div class="d-flex flex-wrap gap-3 fs-4">
-              <i class="fa-solid fa-house ok" title="fa-solid"></i>
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <i class="fa-solid fa-bell"></i>
-              <i class="fa-regular fa-heart"></i>
-              <i class="fa-regular fa-comments"></i>
-              <i class="fa-brands fa-github"></i>
-              <i class="fa-brands fa-bootstrap"></i>
-              <i class="fa-brands fa-whatsapp"></i>
-              <i class="fa-solid fa-mobile-screen-button"></i>
-              <i class="fa-solid fa-envelope"></i>
+            <div class="hero__float hero__float--a" aria-hidden="true">
+              <span class="hero__float-icon"><i class="fa-solid fa-bolt"></i></span>
+              <span><span class="hero__float-label">Platform uptime</span><br><span class="hero__float-value">99.98%</span></span>
+            </div>
+            <div class="hero__float hero__float--b" aria-hidden="true">
+              <span class="hero__float-icon"><i class="fa-solid fa-code-branch"></i></span>
+              <span><span class="hero__float-label">Deploys / week</span><br><span class="hero__float-value">34</span></span>
             </div>
           </div>
         </div>
@@ -240,173 +136,871 @@
     </div>
   </section>
 
-  <section id="motion">
+  <!-- ========================= TECHNOLOGY TICKER ========================= -->
+  <section class="tech" aria-label="Technologies we work with">
     <div class="container">
-      <h2 class="section-title mb-1">GSAP ScrollTrigger</h2>
-      <p class="lead mb-4">These cards are pinned to scroll position by <code>ScrollTrigger.min.js</code> from <code>assets/gsap/js/</code>.</p>
-      <div class="row g-3" id="motionCards">
-        <div class="col-md-4"><div class="panel p-4 h-100"><i class="fa-solid fa-layer-group ok fs-3 mb-3"></i><h3 class="h6">Stagger reveal</h3><p class="small text-secondary mb-0">Each card enters with a 0.1s offset as it crosses the viewport.</p></div></div>
-        <div class="col-md-4"><div class="panel p-4 h-100"><i class="fa-solid fa-arrows-up-down ok fs-3 mb-3"></i><h3 class="h6">Scrub progress</h3><p class="small text-secondary mb-0">The bar below is tied to scroll position, not to time.</p></div></div>
-        <div class="col-md-4"><div class="panel p-4 h-100"><i class="fa-solid fa-plug ok fs-3 mb-3"></i><h3 class="h6">Plugins vendored</h3><p class="small text-secondary mb-0">ScrollTrigger, Observer, Flip and ScrollToPlugin are all local.</p></div></div>
-      </div>
-      <div class="mt-4">
-        <div class="d-flex justify-content-between small text-secondary mb-1">
-          <span>page scroll progress</span><span class="font-mono" id="pct">0%</span>
+      <p class="tech__label" data-reveal>The stack we ship with, every day</p>
+    </div>
+    <div class="ticker" data-ticker='{"speed":80}'>
+      <div class="ticker__track">
+        <div class="ticker__group">
+          <span class="ticker__item">React</span>
+          <span class="ticker__item">Next.js</span>
+          <span class="ticker__item">TypeScript</span>
+          <span class="ticker__item">Node.js</span>
+          <span class="ticker__item">Laravel</span>
+          <span class="ticker__item">Python</span>
+          <span class="ticker__item">Flutter</span>
+          <span class="ticker__item">Swift</span>
+          <span class="ticker__item">Kotlin</span>
+          <span class="ticker__item">AWS</span>
+          <span class="ticker__item">Docker</span>
+          <span class="ticker__item">Kubernetes</span>
+          <span class="ticker__item">PostgreSQL</span>
+          <span class="ticker__item">MongoDB</span>
+          <span class="ticker__item">Redis</span>
+          <span class="ticker__item">GraphQL</span>
+          <span class="ticker__item">Terraform</span>
+          <span class="ticker__item">Figma</span>
         </div>
-        <div class="progress" role="progressbar" aria-label="Scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height:8px">
-          <div class="progress-bar bg-success" id="bar" style="width:0%"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== ABOUT ============================== -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="row g-5 items-center">
+        <div class="col-lg-6">
+          <div class="about__media" data-reveal>
+            <img class="about__img" src="img/about-studio.jpg" alt="The Alify team reviewing wireframes in the studio" width="1200" height="896" loading="lazy" decoding="async">
+            <div class="about__badge">
+              <span class="about__badge-value">9+</span>
+              <span class="about__badge-label">years shipping product</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="about__content">
+            <div class="section-head" style="margin-bottom:0">
+              <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> About Alify</p>
+              <h2 class="section-head__title">A studio built around outcomes, not output.</h2>
+            </div>
+            <p class="about__lead" data-reveal>We started Alify in 2017 with one rule: <strong>senior people do the work</strong>. No bait-and-switch, no hand-off to a junior bench after the contract is signed. The team you meet in discovery is the team that ships.</p>
+            <ul class="about__checks" data-reveal>
+              <li class="about__check"><i class="fa-solid fa-check" aria-hidden="true"></i> Product discovery &amp; strategy</li>
+              <li class="about__check"><i class="fa-solid fa-check" aria-hidden="true"></i> UX &amp; UI design systems</li>
+              <li class="about__check"><i class="fa-solid fa-check" aria-hidden="true"></i> Web engineering</li>
+              <li class="about__check"><i class="fa-solid fa-check" aria-hidden="true"></i> iOS &amp; Android apps</li>
+              <li class="about__check"><i class="fa-solid fa-check" aria-hidden="true"></i> Cloud &amp; DevOps</li>
+              <li class="about__check"><i class="fa-solid fa-check" aria-hidden="true"></i> AI &amp; data integration</li>
+            </ul>
+            <div class="about__stats" data-reveal>
+              <div><p class="about__stat-value"><span data-count="120" data-count-suffix="+">0</span></p><p class="about__stat-label">Projects delivered</p></div>
+              <div><p class="about__stat-value"><span data-count="40" data-count-suffix="+">0</span></p><p class="about__stat-label">Specialists on staff</p></div>
+              <div><p class="about__stat-value"><span data-count="18">0</span></p><p class="about__stat-label">Countries served</p></div>
+            </div>
+            <div class="about__sign" data-reveal>
+              <span class="avatar avatar-lg"><span class="avatar-fallback">AL</span></span>
+              <span>
+                <span class="about__sign-name">Areeba Liaquat</span><br>
+                <span class="about__sign-role">Founder &amp; CEO, Alify</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SERVICES ============================= -->
+  <section class="section section--tint services" id="services">
+    <div class="container">
+      <div class="section-head section-head__row services__head">
+        <div class="section-head">
+          <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> Services</p>
+          <h2 class="section-head__title">Everything a product needs, under one roof.</h2>
+          <p class="section-head__desc">Pick a single workstream or hand us the whole roadmap — either way you get one team, one backlog and one number to call.</p>
+        </div>
+        <a class="btn btn-outline" href="#contact">Discuss your roadmap <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="slider" data-slider='{"perView":{"base":1.1,"md":2,"lg":3},"gap":24,"loop":true}'>
+        <div class="slider__viewport">
+          <ul class="slider__track">
+            <li class="slider__slide">
+              <article class="service-card">
+                <span class="service-card__icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+                <h3 class="service-card__title">Web Engineering</h3>
+                <p class="service-card__desc">Fast, accessible web applications and marketing sites that stay maintainable long after launch.</p>
+                <ul class="service-card__list">
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Next.js &amp; React</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Laravel &amp; Node.js</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Headless CMS</li>
+                </ul>
+                <a class="service-card__link" href="#contact">Explore service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </article>
+            </li>
+            <li class="slider__slide">
+              <article class="service-card">
+                <span class="service-card__icon"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span>
+                <h3 class="service-card__title">Mobile Apps</h3>
+                <p class="service-card__desc">Native-feel iOS and Android apps from a single codebase, built to work offline and sync gracefully.</p>
+                <ul class="service-card__list">
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Flutter &amp; React Native</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> App Store delivery</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Offline-first architecture</li>
+                </ul>
+                <a class="service-card__link" href="#contact">Explore service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </article>
+            </li>
+            <li class="slider__slide">
+              <article class="service-card">
+                <span class="service-card__icon"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i></span>
+                <h3 class="service-card__title">Product &amp; UX Design</h3>
+                <p class="service-card__desc">Research-led design that turns fuzzy requirements into flows people actually finish.</p>
+                <ul class="service-card__list">
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Discovery sprints</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Design systems</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i>Clickable prototypes</li>
+                </ul>
+                <a class="service-card__link" href="#contact">Explore service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </article>
+            </li>
+            <li class="slider__slide">
+              <article class="service-card">
+                <span class="service-card__icon"><i class="fa-solid fa-cloud" aria-hidden="true"></i></span>
+                <h3 class="service-card__title">Cloud &amp; DevOps</h3>
+                <p class="service-card__desc">Infrastructure as code, pipelines and observability so releases are boring — in the best way.</p>
+                <ul class="service-card__list">
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> AWS &amp; GCP</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> CI/CD pipelines</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Cost &amp; load optimisation</li>
+                </ul>
+                <a class="service-card__link" href="#contact">Explore service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </article>
+            </li>
+            <li class="slider__slide">
+              <article class="service-card">
+                <span class="service-card__icon"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span>
+                <h3 class="service-card__title">AI &amp; Data</h3>
+                <p class="service-card__desc">Practical AI: retrieval over your own data, copilots in your workflows, and the pipelines to feed them.</p>
+                <ul class="service-card__list">
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> LLM integration &amp; RAG</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Data pipelines</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Analytics &amp; dashboards</li>
+                </ul>
+                <a class="service-card__link" href="#contact">Explore service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </article>
+            </li>
+            <li class="slider__slide">
+              <article class="service-card">
+                <span class="service-card__icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span>
+                <h3 class="service-card__title">E-Commerce</h3>
+                <p class="service-card__desc">Storefronts that convert: fast checkout, real inventory, and payments that reconcile themselves.</p>
+                <ul class="service-card__list">
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Headless storefronts</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> Payments &amp; subscriptions</li>
+                  <li><i class="fa-solid fa-circle" aria-hidden="true"></i> ERP &amp; inventory sync</li>
+                </ul>
+                <a class="service-card__link" href="#contact">Explore service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </article>
+            </li>
+          </ul>
+        </div>
+        <div class="slider__foot">
+          <div class="slider__nav">
+            <button class="slider__btn" data-slider-prev aria-label="Previous services"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="slider__btn" data-slider-next aria-label="Next services"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="slider__meter" aria-hidden="true"><span class="slider__meter-fill"></span></div>
+          <span class="slider__count"><b data-slider-current>1</b>/<span data-slider-total>6</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ WHY CHOOSE US ============================ -->
+  <section class="section why-us" id="why">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-5">
+          <div class="why-us__intro">
+            <div class="section-head" style="margin-bottom:0">
+              <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> Why Alify</p>
+              <h2 class="section-head__title">The reasons clients stay for years.</h2>
+              <p class="section-head__desc">We optimise for the second project, not the first invoice. These are the commitments we actually keep.</p>
+            </div>
+            <div class="why-us__highlight">
+              <span class="why-us__highlight-value">98%</span>
+              <span class="why-us__highlight-label">of our clients come back for a second engagement — most within six months.</span>
+            </div>
+            <a class="btn btn-outline" href="#testimonials" style="align-self:flex-start">Read client stories <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="why-us__grid">
+            <article class="reason">
+              <span class="reason__num" aria-hidden="true">01</span>
+              <span class="reason__icon"><i class="fa-solid fa-medal" aria-hidden="true"></i></span>
+              <h3 class="reason__title">Senior team, only</h3>
+              <p class="reason__desc">Average eight years' experience. The people in your kickoff are the people in your commits.</p>
+            </article>
+            <article class="reason">
+              <span class="reason__num" aria-hidden="true">02</span>
+              <span class="reason__icon"><i class="fa-solid fa-file-signature" aria-hidden="true"></i></span>
+              <h3 class="reason__title">Fixed scope, fixed price</h3>
+              <p class="reason__desc">We price against a written scope after discovery. Change requests are quoted, never sprung.</p>
+            </article>
+            <article class="reason">
+              <span class="reason__num" aria-hidden="true">03</span>
+              <span class="reason__icon"><i class="fa-solid fa-rocket" aria-hidden="true"></i></span>
+              <h3 class="reason__title">Ship in weeks, not quarters</h3>
+              <p class="reason__desc">Two-week cadences with a demo at the end of every one. You see working software early and often.</p>
+            </article>
+            <article class="reason">
+              <span class="reason__num" aria-hidden="true">04</span>
+              <span class="reason__icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+              <h3 class="reason__title">Secure by default</h3>
+              <p class="reason__desc">Threat modelling, dependency scanning and least-privilege infra are in every project, not an add-on.</p>
+            </article>
+            <article class="reason">
+              <span class="reason__num" aria-hidden="true">05</span>
+              <span class="reason__icon"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i></span>
+              <h3 class="reason__title">One partner, end to end</h3>
+              <p class="reason__desc">Strategy, design, build and run under one roof — no agency relay race, no blame gaps.</p>
+            </article>
+            <article class="reason">
+              <span class="reason__num" aria-hidden="true">06</span>
+              <span class="reason__icon"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
+              <h3 class="reason__title">Transparent by design</h3>
+              <p class="reason__desc">Open board, shared Slack, weekly written updates. You always know what's done and what's next.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== PROJECTS ============================== -->
+  <section class="section section--border projects" id="projects">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> Selected work</p>
+        <h2 class="section-head__title">Projects that moved a number.</h2>
+        <p class="section-head__desc">Hover or tap a panel to open the story. Every engagement below is still in production today.</p>
+      </div>
+
+      <div class="projects__grid">
+        <article class="project">
+          <img class="project__img" src="img/project-fintech.jpg" alt="Nova Bank mobile banking interface" width="1200" height="670" loading="lazy" decoding="async">
+          <span class="project__shade" aria-hidden="true"></span>
+          <span class="project__num">01</span>
+          <h3 class="project__vtitle">Nova Bank</h3>
+          <div class="project__body">
+            <span class="project__tag">Fintech</span>
+            <h3 class="project__title">Nova Bank</h3>
+            <p class="project__desc">A digital-first banking app with instant onboarding and biometric KYC. Onboarding completion went from 41% to 78% in one quarter.</p>
+            <a class="project__link" href="#contact">View case study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project">
+          <img class="project__img" src="img/project-ecommerce.jpg" alt="Cartly e-commerce storefront interface" width="1200" height="670" loading="lazy" decoding="async">
+          <span class="project__shade" aria-hidden="true"></span>
+          <span class="project__num">02</span>
+          <h3 class="project__vtitle">Cartly</h3>
+          <div class="project__body">
+            <span class="project__tag">E-Commerce</span>
+            <h3 class="project__title">Cartly</h3>
+            <p class="project__desc">Headless storefront with sub-second page loads and one-page checkout. Conversion up 34%, bounce down by half.</p>
+            <a class="project__link" href="#contact">View case study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project">
+          <img class="project__img" src="img/project-health.jpg" alt="MedSync telemedicine interface" width="1200" height="670" loading="lazy" decoding="async">
+          <span class="project__shade" aria-hidden="true"></span>
+          <span class="project__num">03</span>
+          <h3 class="project__vtitle">MedSync</h3>
+          <div class="project__body">
+            <span class="project__tag">Healthcare</span>
+            <h3 class="project__title">MedSync</h3>
+            <p class="project__desc">Telemedicine platform with HIPAA-aligned records and video consults, now serving 60,000 patients a month.</p>
+            <a class="project__link" href="#contact">View case study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project">
+          <img class="project__img" src="img/project-ai.jpg" alt="InsightAI analytics dashboard" width="1200" height="670" loading="lazy" decoding="async">
+          <span class="project__shade" aria-hidden="true"></span>
+          <span class="project__num">04</span>
+          <h3 class="project__vtitle">InsightAI</h3>
+          <div class="project__body">
+            <span class="project__tag">AI &amp; Data</span>
+            <h3 class="project__title">InsightAI</h3>
+            <p class="project__desc">Retrieval-augmented copilot over ten years of internal documents. Support deflection hit 52% within eight weeks.</p>
+            <a class="project__link" href="#contact">View case study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project">
+          <img class="project__img" src="img/project-logistics.jpg" alt="FleetIQ logistics tracking dashboard" width="1200" height="670" loading="lazy" decoding="async">
+          <span class="project__shade" aria-hidden="true"></span>
+          <span class="project__num">05</span>
+          <h3 class="project__vtitle">FleetIQ</h3>
+          <div class="project__body">
+            <span class="project__tag">Logistics</span>
+            <h3 class="project__title">FleetIQ</h3>
+            <p class="project__desc">Real-time fleet tracking across 1,400 vehicles with offline-tolerant drivers' app. Idle time down 22%.</p>
+            <a class="project__link" href="#contact">View case study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+
+        <article class="project">
+          <img class="project__img" src="img/project-education.jpg" alt="LearnLoop online learning platform" width="1200" height="670" loading="lazy" decoding="async">
+          <span class="project__shade" aria-hidden="true"></span>
+          <span class="project__num">06</span>
+          <h3 class="project__vtitle">LearnLoop</h3>
+          <div class="project__body">
+            <span class="project__tag">Education</span>
+            <h3 class="project__title">LearnLoop</h3>
+            <p class="project__desc">Cohort-based learning platform with live rooms and progress analytics. Course completion doubled to 68%.</p>
+            <a class="project__link" href="#contact">View case study <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= INDUSTRIES ============================= -->
+  <section class="section section--tint industries" id="industries">
+    <div class="container">
+      <div class="section-head section-head__row">
+        <div class="section-head">
+          <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> Industries</p>
+          <h2 class="section-head__title">Domain depth, not just delivery.</h2>
+          <p class="section-head__desc">We've shipped regulated, high-volume and safety-critical software. We speak your compliance team's language.</p>
+        </div>
+        <a class="btn btn-outline" href="#contact">Find your industry <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="slider" data-slider='{"perView":{"base":1.15,"sm":2,"md":3,"lg":4},"gap":20,"loop":true}'>
+        <div class="slider__viewport">
+          <ul class="slider__track">
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></span><span class="industry-card__count">24 projects</span></div>
+              <h3 class="industry-card__title">Fintech &amp; Banking</h3>
+              <p class="industry-card__desc">Core banking, payments, lending and KYC flows built to audit standard.</p>
+              <div class="industry-card__tags"><span>PCI-DSS</span><span>Open banking</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i></span><span class="industry-card__count">18 projects</span></div>
+              <h3 class="industry-card__title">Healthcare</h3>
+              <p class="industry-card__desc">Telemedicine, EHR integrations and patient portals with privacy first.</p>
+              <div class="industry-card__tags"><span>HIPAA</span><span>HL7 / FHIR</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></span><span class="industry-card__count">21 projects</span></div>
+              <h3 class="industry-card__title">Retail &amp; E-Commerce</h3>
+              <p class="industry-card__desc">Headless commerce, OMS and loyalty programs that survive peak season.</p>
+              <div class="industry-card__tags"><span>Headless</span><span>Subscriptions</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-truck-fast" aria-hidden="true"></i></span><span class="industry-card__count">14 projects</span></div>
+              <h3 class="industry-card__title">Logistics</h3>
+              <p class="industry-card__desc">Fleet telemetry, route optimisation and last-mile driver tooling.</p>
+              <div class="industry-card__tags"><span>IoT</span><span>Offline-first</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span><span class="industry-card__count">12 projects</span></div>
+              <h3 class="industry-card__title">Education</h3>
+              <p class="industry-card__desc">LMS platforms, live cohorts and assessment engines at scale.</p>
+              <div class="industry-card__tags"><span>LMS</span><span>Proctoring</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-cubes" aria-hidden="true"></i></span><span class="industry-card__count">19 projects</span></div>
+              <h3 class="industry-card__title">SaaS &amp; B2B</h3>
+              <p class="industry-card__desc">Multi-tenant platforms, billing and the admin consoles buyers judge you by.</p>
+              <div class="industry-card__tags"><span>Multi-tenant</span><span>Billing</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-building" aria-hidden="true"></i></span><span class="industry-card__count">9 projects</span></div>
+              <h3 class="industry-card__title">Real Estate</h3>
+              <p class="industry-card__desc">Listings, virtual tours and CRM workflows for agencies and developers.</p>
+              <div class="industry-card__tags"><span>Portals</span><span>CRM</span></div>
+            </article></li>
+            <li class="slider__slide"><article class="industry-card">
+              <div class="industry-card__top"><span class="industry-card__icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span><span class="industry-card__count">7 projects</span></div>
+              <h3 class="industry-card__title">Energy &amp; Utilities</h3>
+              <p class="industry-card__desc">Metering dashboards, field-service apps and grid analytics.</p>
+              <div class="industry-card__tags"><span>SCADA</span><span>Telemetry</span></div>
+            </article></li>
+          </ul>
+        </div>
+        <div class="slider__foot">
+          <div class="slider__nav">
+            <button class="slider__btn" data-slider-prev aria-label="Previous industries"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="slider__btn" data-slider-next aria-label="Next industries"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="slider__meter" aria-hidden="true"><span class="slider__meter-fill"></span></div>
+          <span class="slider__count"><b data-slider-current>1</b>/<span data-slider-total>8</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================ FAQS ================================ -->
+  <section class="section faqs" id="faqs">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-5">
+          <div class="faqs__intro">
+            <div class="section-head" style="margin-bottom:0">
+              <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> FAQs</p>
+              <h2 class="section-head__title">Questions we get before every kickoff.</h2>
+              <p class="section-head__desc">If yours isn't here, ask us directly — we answer in plain language, not sales-speak.</p>
+            </div>
+            <div class="faqs__support">
+              <span class="avatar avatar-lg"><span class="avatar-fallback"><i class="fa-regular fa-comment-dots"></i></span></span>
+              <span class="faqs__support-body">
+                <span class="faqs__support-title">Still have questions?</span>
+                <span class="faqs__support-desc">Book a 20-minute call — no deck, no pitch.</span>
+              </span>
+              <a class="btn btn-outline btn-sm" href="#contact" style="margin-left:auto">Talk to us</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div data-ui-accordion="single" class="accordion">
+            <div data-ui-accordion-item class="accordion-item">
+              <button class="accordion-trigger" id="faq-1-t" data-ui-accordion-trigger aria-expanded="true" aria-controls="faq-1-c">
+                How quickly can we start?
+                <span class="accordion-chevron"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              </button>
+              <div class="accordion-content" id="faq-1-c" data-ui-accordion-content>
+                <div class="accordion-inner"><p>Most engagements kick off within two to three weeks of signing. The first week is always a paid discovery sprint so we agree scope against reality, not assumptions — after that, build starts the following Monday.</p></div>
+              </div>
+            </div>
+            <div data-ui-accordion-item class="accordion-item">
+              <button class="accordion-trigger" id="faq-2-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="faq-2-c">
+                How do you price projects?
+                <span class="accordion-chevron"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              </button>
+              <div class="accordion-content" id="faq-2-c" data-ui-accordion-content hidden>
+                <div class="accordion-inner"><p>Fixed price against a written scope for defined projects; a monthly retained team for open-ended product work. Discovery is priced separately and credited against the build if you continue. You'll never see an unquoted line item.</p></div>
+              </div>
+            </div>
+            <div data-ui-accordion-item class="accordion-item">
+              <button class="accordion-trigger" id="faq-3-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="faq-3-c">
+                Who owns the code and the IP?
+                <span class="accordion-chevron"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              </button>
+              <div class="accordion-content" id="faq-3-c" data-ui-accordion-content hidden>
+                <div class="accordion-inner"><p>You do — fully, from day one. Repositories live in your organisation, credentials are yours, and the contract assigns all work product to you on payment. We keep nothing hostage, including design source files.</p></div>
+              </div>
+            </div>
+            <div data-ui-accordion-item class="accordion-item">
+              <button class="accordion-trigger" id="faq-4-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="faq-4-c">
+                Do you work alongside our in-house team?
+                <span class="accordion-chevron"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              </button>
+              <div class="accordion-content" id="faq-4-c" data-ui-accordion-content hidden>
+                <div class="accordion-inner"><p>Often, yes. We embed into your rituals, your board and your review process, and we pair with your engineers so knowledge transfers as we go. Roughly a third of our work is augmentation rather than greenfield.</p></div>
+              </div>
+            </div>
+            <div data-ui-accordion-item class="accordion-item">
+              <button class="accordion-trigger" id="faq-5-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="faq-5-c">
+                What happens after launch?
+                <span class="accordion-chevron"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              </button>
+              <div class="accordion-content" id="faq-5-c" data-ui-accordion-content hidden>
+                <div class="accordion-inner"><p>Every build includes 30 days of defect cover. Beyond that, most clients move onto a support-and-evolve retainer: monitoring, security patching, and a steady stream of improvements shipped on the same two-week cadence.</p></div>
+              </div>
+            </div>
+            <div data-ui-accordion-item class="accordion-item">
+              <button class="accordion-trigger" id="faq-6-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="faq-6-c">
+                Can you rescue an in-flight project?
+                <span class="accordion-chevron"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              </button>
+              <div class="accordion-content" id="faq-6-c" data-ui-accordion-content hidden>
+                <div class="accordion-inner"><p>Yes. We start with a one-week technical audit — architecture, code health, delivery risk — then give you an honest go/no-go and a recovery plan. If the honest answer is "restart", we'll say so and show you the maths.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TESTIMONIALS ============================ -->
+  <section class="section section--tint testimonials" id="testimonials">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> Testimonials</p>
+        <h2 class="section-head__title">What clients say when we're not in the room.</h2>
+      </div>
+
+      <div class="slider" data-slider='{"perView":{"base":1.05,"md":2,"lg":3},"gap":24,"loop":true,"autoplay":6000}'>
+        <div class="slider__viewport">
+          <ul class="slider__track">
+            <li class="slider__slide"><article class="testimonial-card">
+              <div class="testimonial-card__stars" aria-label="Rated 5 out of 5"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              <p class="testimonial-card__quote">"Alify rebuilt our onboarding in nine weeks and it <strong>paid for itself in a quarter</strong>. They're the first agency that argued us out of features instead of into them."</p>
+              <div class="testimonial-card__who">
+                <span class="avatar"><span class="avatar-fallback">SM</span></span>
+                <span><span class="testimonial-card__name">Sara Malik</span><br><span class="testimonial-card__role">CPO, Nova Bank</span></span>
+                <span class="testimonial-card__metric"><span class="testimonial-card__metric-value">+37%</span><br><span class="testimonial-card__metric-label">onboarding</span></span>
+              </div>
+            </article></li>
+            <li class="slider__slide"><article class="testimonial-card">
+              <div class="testimonial-card__stars" aria-label="Rated 5 out of 5"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              <p class="testimonial-card__quote">"Weekly demos, written updates, zero surprises. Our board now sees <strong>working software every fortnight</strong> instead of a status slide."</p>
+              <div class="testimonial-card__who">
+                <span class="avatar"><span class="avatar-fallback">JO</span></span>
+                <span><span class="testimonial-card__name">James Okafor</span><br><span class="testimonial-card__role">CEO, Cartly</span></span>
+                <span class="testimonial-card__metric"><span class="testimonial-card__metric-value">+34%</span><br><span class="testimonial-card__metric-label">conversion</span></span>
+              </div>
+            </article></li>
+            <li class="slider__slide"><article class="testimonial-card">
+              <div class="testimonial-card__stars" aria-label="Rated 5 out of 5"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              <p class="testimonial-card__quote">"They handled our compliance review like it was routine. Our auditors asked who wrote our security documentation — <strong>it was Alify</strong>."</p>
+              <div class="testimonial-card__who">
+                <span class="avatar"><span class="avatar-fallback">DR</span></span>
+                <span><span class="testimonial-card__name">Dr. Ayesha Raza</span><br><span class="testimonial-card__role">COO, MedSync</span></span>
+                <span class="testimonial-card__metric"><span class="testimonial-card__metric-value">60k</span><br><span class="testimonial-card__metric-label">patients/mo</span></span>
+              </div>
+            </article></li>
+            <li class="slider__slide"><article class="testimonial-card">
+              <div class="testimonial-card__stars" aria-label="Rated 5 out of 5"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              <p class="testimonial-card__quote">"We came for a dashboard and left with a data platform our whole company uses. The copilot they built <strong>deflects half our support tickets</strong>."</p>
+              <div class="testimonial-card__who">
+                <span class="avatar"><span class="avatar-fallback">TK</span></span>
+                <span><span class="testimonial-card__name">Tom Kessler</span><br><span class="testimonial-card__role">VP Engineering, InsightAI</span></span>
+                <span class="testimonial-card__metric"><span class="testimonial-card__metric-value">52%</span><br><span class="testimonial-card__metric-label">deflection</span></span>
+              </div>
+            </article></li>
+            <li class="slider__slide"><article class="testimonial-card">
+              <div class="testimonial-card__stars" aria-label="Rated 5 out of 5"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              <p class="testimonial-card__quote">"Fourteen hundred vehicles, spotty connectivity, zero drama. The drivers' app works in tunnels and <strong>syncs when it can</strong> — exactly as promised."</p>
+              <div class="testimonial-card__who">
+                <span class="avatar"><span class="avatar-fallback">HB</span></span>
+                <span><span class="testimonial-card__name">Hassan Bajwa</span><br><span class="testimonial-card__role">Director, FleetIQ</span></span>
+                <span class="testimonial-card__metric"><span class="testimonial-card__metric-value">-22%</span><br><span class="testimonial-card__metric-label">idle time</span></span>
+              </div>
+            </article></li>
+          </ul>
+        </div>
+        <div class="slider__foot">
+          <div class="slider__nav">
+            <button class="slider__btn" data-slider-prev aria-label="Previous testimonials"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+            <button class="slider__btn" data-slider-next aria-label="Next testimonials"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="slider__meter" aria-hidden="true"><span class="slider__meter-fill"></span></div>
+          <span class="slider__count"><b data-slider-current>1</b>/<span data-slider-total>5</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== CONTACT ============================== -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-5">
+          <div class="contact__info">
+            <div class="section-head" style="margin-bottom:0">
+              <p class="section-head__eyebrow"><span class="section-head__dot" aria-hidden="true"></span> Contact</p>
+              <h2 class="section-head__title">Tell us what you're building.</h2>
+              <p class="section-head__desc">One form, one reply within a business day, and a straight answer about whether we're the right team.</p>
+            </div>
+
+            <ul class="contact__channels">
+              <li class="contact__channel">
+                <span class="contact__channel-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
+                <span><span class="contact__channel-label">Email</span><br><a class="contact__channel-value break-any" href="mailto:hello@alify.work">hello@alify.work</a></span>
+              </li>
+              <li class="contact__channel">
+                <span class="contact__channel-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></span>
+                <span><span class="contact__channel-label">Phone</span><br><a class="contact__channel-value" href="tel:+9221111000000">+92 21 111 000 000</a></span>
+              </li>
+              <li class="contact__channel">
+                <span class="contact__channel-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+                <span><span class="contact__channel-label">Studio</span><br><span class="contact__channel-value">Level 4, Ocean Tower, Karachi</span></span>
+              </li>
+              <li class="contact__channel">
+                <span class="contact__channel-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+                <span><span class="contact__channel-label">Hours</span><br><span class="contact__channel-value">Mon–Fri, 9:00–18:00 PKT</span></span>
+              </li>
+            </ul>
+
+            <div class="contact__socials">
+              <a class="contact__social" href="#contact" aria-label="Alify on GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+              <a class="contact__social" href="#contact" aria-label="Alify on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+              <a class="contact__social" href="#contact" aria-label="Alify on X"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+              <a class="contact__social" href="#contact" aria-label="Alify on Dribbble"><i class="fa-brands fa-dribbble" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="contact__form-card">
+            <h3 class="contact__form-title">Start a conversation</h3>
+            <p class="contact__form-desc">Fields marked * are required. We read every message ourselves.</p>
+
+            <form class="contact__form" data-contact-form novalidate>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="field">
+                    <label class="label label-required" for="c-name">Your name</label>
+                    <input class="input" id="c-name" name="name" autocomplete="name" placeholder="Areeba Liaquat">
+                    <p class="field-message" data-msg="name"></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="field">
+                    <label class="label label-required" for="c-email">Work email</label>
+                    <input class="input" id="c-email" name="email" type="email" autocomplete="email" placeholder="you@company.com">
+                    <p class="field-message" data-msg="email"></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="field">
+                    <label class="label label-required" for="c-company">Company / project</label>
+                    <input class="input" id="c-company" name="company" autocomplete="organization" placeholder="Acme Inc.">
+                    <p class="field-message" data-msg="company"></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="field">
+                    <label class="label label-required" for="c-service">What do you need?</label>
+                    <select class="select" id="c-service" name="service">
+                      <option value="" selected>Select a service…</option>
+                      <option>Web engineering</option>
+                      <option>Mobile app</option>
+                      <option>Product &amp; UX design</option>
+                      <option>Cloud &amp; DevOps</option>
+                      <option>AI &amp; data</option>
+                      <option>E-commerce</option>
+                      <option>Not sure yet</option>
+                    </select>
+                    <p class="field-message" data-msg="service"></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="field">
+                    <label class="label" for="c-budget">Indicative budget</label>
+                    <select class="select" id="c-budget" name="budget">
+                      <option selected>Prefer not to say</option>
+                      <option>Under $25k</option>
+                      <option>$25k – $75k</option>
+                      <option>$75k – $150k</option>
+                      <option>$150k+</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="field">
+                    <label class="label" for="c-when">Target start</label>
+                    <select class="select" id="c-when" name="when">
+                      <option selected>As soon as possible</option>
+                      <option>Within 1–3 months</option>
+                      <option>3–6 months</option>
+                      <option>Exploring only</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="field">
+                    <label class="label label-required" for="c-message">Project details</label>
+                    <textarea class="textarea" id="c-message" name="message" rows="4" placeholder="What are you building, who is it for, and what does success look like?"></textarea>
+                    <p class="field-message" data-msg="message"></p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label class="check-row">
+                    <input class="checkbox" type="checkbox" name="consent">
+                    <span class="contact__consent">Keep me updated on Alify's work. One email a month, unsubscribe anytime.</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="contact__submit-row">
+                <span class="contact__note"><i class="fa-solid fa-lock" aria-hidden="true"></i> No spam, no sharing, no sales sequence.</span>
+                <button class="btn btn-lg" type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send message</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="container d-flex flex-wrap justify-content-between gap-2">
-    <span><i class="fa-solid fa-database me-1"></i> All assets served from this repo &mdash; no external requests.</span>
-    <span class="font-mono">Bootstrap 5.3.8 &middot; GSAP 3.15.0 &middot; FA Free 7.3.1 &middot; Geist 1.9.0</span>
-  </div>
-</footer>
-
-<!-- Modal (Bootstrap JS) -->
-<div class="modal fade" id="howto" tabindex="-1" aria-labelledby="howtoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="howtoLabel">Copy these tags into your page</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- ============================== FOOTER ============================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-5 site-footer__grid">
+      <div class="col-lg-4">
+        <div class="site-footer__brand">
+          <img class="site-footer__logo site-footer__logo--dark" src="img/logo-dark.png" alt="Alify" width="469" height="125">
+          <img class="site-footer__logo site-footer__logo--light" src="img/logo-light.png" alt="" width="469" height="125">
+          <p class="site-footer__blurb">A product studio building web, mobile, cloud and AI software — from discovery to production, under one roof.</p>
+          <div class="site-footer__socials">
+            <a class="site-footer__social" href="#contact" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            <a class="site-footer__social" href="#contact" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+            <a class="site-footer__social" href="#contact" aria-label="X"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+            <a class="site-footer__social" href="#contact" aria-label="Dribbble"><i class="fa-brands fa-dribbble" aria-hidden="true"></i></a>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-<pre class="snippet mb-0">&lt;!-- head --&gt;
-&lt;link rel="stylesheet" href="assets/geist/geist.css"&gt;
-&lt;link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"&gt;
-&lt;link rel="stylesheet" href="assets/fontawesome/css/all.min.css"&gt;
 
-&lt;!-- before &lt;/body&gt; --&gt;
-&lt;script src="assets/gsap/js/gsap.min.js"&gt;&lt;/script&gt;
-&lt;script src="assets/gsap/js/ScrollTrigger.min.js"&gt;&lt;/script&gt;
-&lt;script src="assets/bootstrap/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+      <div class="col-6 col-md-3 col-lg-2">
+        <p class="site-footer__col-title">Company</p>
+        <ul class="site-footer__links">
+          <li><a class="site-footer__link" href="#about">About</a></li>
+          <li><a class="site-footer__link" href="#services">Services</a></li>
+          <li><a class="site-footer__link" href="#projects">Projects</a></li>
+          <li><a class="site-footer__link" href="#industries">Industries</a></li>
+          <li><a class="site-footer__link" href="#contact">Careers</a></li>
+        </ul>
+      </div>
 
-&lt;style&gt;
-  body { font-family: var(--font-geist-sans); }
-&lt;/style&gt;</pre>
+      <div class="col-6 col-md-3 col-lg-2">
+        <p class="site-footer__col-title">Resources</p>
+        <ul class="site-footer__links">
+          <li><a class="site-footer__link" href="#faqs">FAQs</a></li>
+          <li><a class="site-footer__link" href="#testimonials">Client stories</a></li>
+          <li><a class="site-footer__link" href="ui.html">Design system</a></li>
+          <li><a class="site-footer__link" href="asset-check.html">Asset check</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-4">
+        <p class="site-footer__news-title">The Alify Dispatch</p>
+        <p class="site-footer__news-desc">One email a month: what we shipped, what we learned, no fluff.</p>
+        <form class="site-footer__news-form" data-footer-news novalidate>
+          <label class="sr-only" for="f-news">Email address</label>
+          <input class="input" id="f-news" type="email" placeholder="you@company.com" autocomplete="email">
+          <button class="btn" type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+        </form>
+      </div>
+    </div>
+
+    <div class="site-footer__bar">
+      <p>&copy; <span data-footer-year>2026</span> Alify. All rights reserved.</p>
+      <div class="site-footer__legal">
+        <a href="#contact">Privacy</a>
+        <a href="#contact">Terms</a>
+        <a class="site-footer__top" href="#top" data-footer-top><i class="fa-solid fa-arrow-up" aria-hidden="true"></i> Back to top</a>
       </div>
     </div>
   </div>
+</footer>
+
+<!-- ============================== DRAWERS ============================== -->
+<!-- Mobile navigation -->
+<div class="drawer" id="nav-drawer" data-drawer aria-hidden="true">
+  <div class="drawer__backdrop" data-drawer-close></div>
+  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="Site menu">
+    <div class="drawer__head">
+      <img class="site-logo__img site-logo__img--dark" src="img/logo-dark.png" alt="Alify" width="469" height="125" style="height:1.375rem">
+      <img class="site-logo__img site-logo__img--light" src="img/logo-light.png" alt="" width="469" height="125" style="height:1.375rem">
+      <button class="btn btn-ghost btn-icon" data-drawer-close aria-label="Close menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="drawer__body">
+      <nav class="drawer-nav" aria-label="Mobile">
+        <p class="drawer-nav__label">Menu</p>
+        <a class="drawer-nav__link" href="#top"><i class="fa-solid fa-house" aria-hidden="true"></i> Home</a>
+        <a class="drawer-nav__link" href="#services"><i class="fa-solid fa-cubes" aria-hidden="true"></i> Services</a>
+        <a class="drawer-nav__link" href="#projects"><i class="fa-regular fa-folder-open" aria-hidden="true"></i> Projects</a>
+        <a class="drawer-nav__link" href="#industries"><i class="fa-solid fa-industry" aria-hidden="true"></i> Industries</a>
+        <a class="drawer-nav__link" href="#about"><i class="fa-regular fa-address-card" aria-hidden="true"></i> About</a>
+        <a class="drawer-nav__link" href="#faqs"><i class="fa-regular fa-circle-question" aria-hidden="true"></i> FAQs</a>
+        <a class="drawer-nav__link" href="#testimonials"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> Testimonials</a>
+        <a class="drawer-nav__link" href="#contact"><i class="fa-regular fa-envelope" aria-hidden="true"></i> Contact</a>
+
+        <p class="drawer-nav__label">Studio</p>
+        <button type="button" class="drawer-nav__link" data-drawer-open="about-drawer" aria-expanded="false" aria-controls="about-drawer">
+          <i class="fa-regular fa-address-card" aria-hidden="true"></i> About us
+          <i class="fa-solid fa-arrow-right drawer-nav__link-arrow" aria-hidden="true"></i>
+        </button>
+      </nav>
+      <div class="stack" style="gap:.5rem">
+        <a class="btn btn-block" href="#contact"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Start a project</a>
+        <button class="btn btn-outline btn-block" data-ui-theme-toggle>
+          <span class="icon-sun"><i class="fa-solid fa-sun"></i></span>
+          <span class="icon-moon"><i class="fa-solid fa-moon"></i></span>
+          <span data-ui-theme-label>Light</span> theme
+        </button>
+      </div>
+    </div>
+    <div class="drawer__foot">
+      <p class="text-xs text-muted-foreground">Karachi · Remote-first · <span data-footer-year>2026</span></p>
+    </div>
+  </aside>
 </div>
 
-<!-- JS: all local -->
+<!-- About panel -->
+<div class="drawer" id="about-drawer" data-drawer aria-hidden="true">
+  <div class="drawer__backdrop" data-drawer-close></div>
+  <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="About Alify">
+    <div class="drawer__head">
+      <span class="text-sm font-semibold">About Alify</span>
+      <button class="btn btn-ghost btn-icon" data-drawer-close aria-label="Close about panel"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="drawer__body">
+      <p class="text-sm" style="line-height:1.7; color: var(--muted-foreground)">
+        Alify is a Karachi-born, remote-first product studio. Since 2017 we've helped startups and
+        enterprises design, build and run software that carries real revenue — banking apps,
+        telemedicine, fleets and storefronts.
+      </p>
+      <div class="stack" style="gap:.75rem">
+        <div class="flex items-center between"><span class="text-sm text-muted-foreground">Founded</span><span class="text-sm font-semibold">2017</span></div>
+        <div class="flex items-center between"><span class="text-sm text-muted-foreground">Team</span><span class="text-sm font-semibold">40+ specialists</span></div>
+        <div class="flex items-center between"><span class="text-sm text-muted-foreground">Projects shipped</span><span class="text-sm font-semibold">120+</span></div>
+        <div class="flex items-center between"><span class="text-sm text-muted-foreground">Client retention</span><span class="text-sm font-semibold">98%</span></div>
+      </div>
+      <div class="separator"></div>
+      <div class="stack" style="gap:.5rem">
+        <p class="drawer-nav__label" style="padding:0">What we do</p>
+        <p class="text-sm" style="line-height:1.7; color: var(--muted-foreground)">Discovery &amp; strategy · UX/UI design · Web &amp; mobile engineering · Cloud &amp; DevOps · AI &amp; data.</p>
+      </div>
+      <div class="stack" style="gap:.5rem; margin-top:auto">
+        <a class="btn btn-block" href="#about"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Read the full story</a>
+        <a class="btn btn-outline btn-block" href="#contact">Work with us</a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============================== SCRIPTS ============================== -->
+<!-- libs -->
 <script src="assets/gsap/js/gsap.min.js"></script>
 <script src="assets/gsap/js/ScrollTrigger.min.js"></script>
-<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<script>
-(function () {
-  "use strict";
-
-  /* ---------- asset self-checks (no network calls, pure DOM/font detection) ---------- */
-  var cards = document.querySelectorAll('#checks .panel');
-  var results = [];
-
-  function paint(i, ok, detail, version) {
-    var card = cards[i];
-    var icon = card.querySelector('[data-role="icon"]');
-    var det  = card.querySelector('[data-role="detail"]');
-    var ver  = card.querySelector('[data-role="ver"]');
-    icon.className = 'status-icon fa-solid ' + (ok ? 'fa-circle-check ok' : 'fa-circle-xmark fail');
-    det.textContent = detail;
-    det.classList.toggle('text-secondary', !ok);
-    det.classList.toggle('text-success', ok);
-    if (version) { ver.textContent = version; ver.classList.add('text-success'); }
-    results.push(ok);
-    if (results.length === cards.length && results.every(Boolean)) {
-      document.getElementById('allok').classList.remove('d-none');
-    }
-  }
-
-  // 1. Bootstrap
-  var bs = window.bootstrap;
-  paint(0, !!(bs && bs.Tooltip),
-        bs && bs.Tooltip ? 'JS bundle live - Tooltip/Modal/Popover registered.' : 'bootstrap.bundle.min.js did not load.',
-        bs && bs.Tooltip && bs.Tooltip.VERSION ? 'v' + bs.Tooltip.VERSION : null);
-
-  // 2. GSAP
-  var g = window.gsap;
-  paint(1, !!(g && window.ScrollTrigger),
-        g ? 'gsap ' + g.version + ' + ScrollTrigger ' + (window.ScrollTrigger ? window.ScrollTrigger.version : '?') + ' registered.'
-          : 'gsap.min.js did not load.',
-        g ? 'v' + g.version : null);
-
-  /* 3 + 4. Font-based checks.
-     We use document.fonts.load(), which resolves with the FontFace objects it
-     actually matched. An empty array means the family was never declared or the
-     webfont file 404'd. (Measuring a rendered .fa-solid element does NOT work:
-     Font Awesome 7 pins icon width to var(--fa-width, 1.25em), so the box is the
-     same width whether or not the webfont loaded.) */
-  function facesLoaded(spec, text) {
-    if (!document.fonts || !document.fonts.load) { return Promise.resolve(null); }
-    return document.fonts.load(spec, text || 'A').then(function (f) { return f.length > 0; },
-                                                       function () { return false; });
-  }
-
-  Promise.all([
-    facesLoaded('900 16px "Font Awesome 7 Free"', '\uf015'),   // fa-house (solid)
-    facesLoaded('400 16px "Font Awesome 7 Free"', '\uf111'),   // fa-circle (regular)
-    facesLoaded('400 16px "Font Awesome 7 Brands"', '\uf09b')  // fa-github (brands)
-  ]).then(function (r) {
-    var names = ['solid', 'regular', 'brands'];
-    var got = r.filter(Boolean).length;
-    paint(2, got === 3,
-          got === 3 ? 'Solid, regular and brands webfonts all resolved from assets/fontawesome/webfonts/.'
-                    : 'Only ' + got + '/3 styles resolved (' + names.filter(function (_, i) { return r[i]; }).join(', ') + ').',
-          got === 3 ? '7.3.1' : null);
-  });
-
-  Promise.all([
-    facesLoaded('400 16px Geist'),
-    facesLoaded('700 16px Geist'),
-    facesLoaded('400 16px "Geist Mono"')
-  ]).then(function (r) {
-    var ok = r[0] && r[1] && r[2];
-    paint(3, ok,
-          ok ? 'Geist Sans + Geist Mono variable faces resolved (400 and 700 from one file).'
-             : 'Geist faces did not resolve - check assets/geist/geist.css paths.',
-          ok ? '1.9.0' : null);
-  });
-
-  /* ---------- GSAP motion ---------- */
-  if (window.gsap) {
-    gsap.registerPlugin(window.ScrollTrigger);
-
-    gsap.fromTo('.hero .reveal',
-      { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12, delay: 0.1 }
-    );
-
-    if (window.ScrollTrigger) {
-      gsap.utils.toArray('#motionCards .col-md-4').forEach(function (card, i) {
-        gsap.fromTo(card,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: i * 0.1,
-            scrollTrigger: { trigger: card, start: 'top 88%' }
-          });
-      });
-
-      gsap.to('#bar', {
-        width: '100%', ease: 'none',
-        scrollTrigger: {
-          trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3,
-          onUpdate: function (self) {
-            var p = Math.round(self.progress * 100);
-            document.getElementById('pct').textContent = p + '%';
-            document.querySelector('.progress').setAttribute('aria-valuenow', p);
-          }
-        }
-      });
-    }
-  }
-})();
-</script>
+<script src="assets/ui/ui.js"></script>
+<!-- reusable components -->
+<script src="js/components/drawer.js"></script>
+<script src="js/components/slider.js"></script>
+<script src="js/components/ticker.js"></script>
+<!-- globals -->
+<script src="js/global/header.js"></script>
+<script src="js/global/footer.js"></script>
+<!-- page (defines Reveal, used by every section below) -->
+<script src="js/pages/home.js"></script>
+<!-- sections -->
+<script src="js/sections/hero.js"></script>
+<script src="js/sections/tech.js"></script>
+<script src="js/sections/about.js"></script>
+<script src="js/sections/services.js"></script>
+<script src="js/sections/why-us.js"></script>
+<script src="js/sections/projects.js"></script>
+<script src="js/sections/industries.js"></script>
+<script src="js/sections/faqs.js"></script>
+<script src="js/sections/testimonials.js"></script>
+<script src="js/sections/contact.js"></script>
 </body>
 </html>

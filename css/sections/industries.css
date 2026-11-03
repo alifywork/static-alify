@@ -1,0 +1,52 @@
+/* ==========================================================================
+   industries.css - SECTION: industries slider (reuses components/slider.css)
+   ========================================================================== */
+
+.industry-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background-color: var(--card);
+  transition: border-color .25s ease, background-color .25s ease, transform .25s ease;
+}
+.industry-card:hover {
+  border-color: color-mix(in oklab, var(--foreground) 35%, var(--border));
+  transform: translateY(-3px);
+}
+
+.industry-card__top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.industry-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  color: var(--foreground);
+}
+.industry-card__count {
+  font-family: var(--font-ui-mono);
+  font-size: .6875rem;
+  color: var(--muted-foreground);
+  padding: .25rem .5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.industry-card__title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.02em; }
+.industry-card__desc { font-size: .875rem; line-height: 1.6; color: var(--muted-foreground); }
+
+.industry-card__tags { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: auto; }
+.industry-card__tags span {
+  font-size: .6875rem;
+  padding: .1875rem .5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}

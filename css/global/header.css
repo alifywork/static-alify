@@ -1,0 +1,128 @@
+/* ==========================================================================
+   header.css - GLOBAL sticky header: logo | menu | CTAs | about | burger
+   --------------------------------------------------------------------------
+   Transparent over the hero, then condenses to a solid blurred bar with a
+   hairline once scrolled (header.js adds .is-scrolled past 8px).
+   The wordmark swaps between the black and white logo files with the theme.
+   ========================================================================== */
+
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: var(--z-header);
+  background-color: transparent;
+  transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease;
+  border-bottom: 1px solid transparent;
+}
+.site-header.is-scrolled {
+  background-color: color-mix(in oklab, var(--background) 80%, transparent);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border-bottom-color: var(--border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: var(--header-h);
+}
+
+/* ---- logo ---- */
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 1.75rem;
+}
+.site-logo__img {
+  height: 1.5rem;
+  width: auto;
+  display: block;
+  transition: opacity .25s ease;
+}
+/* black wordmark on light theme, white wordmark on dark theme */
+.site-logo__img--light { display: none; }
+:root[data-theme="dark"] .site-logo__img--dark { display: none; }
+:root[data-theme="dark"] .site-logo__img--light { display: block; }
+
+/* ---- primary nav (desktop) ---- */
+.site-nav { margin-left: auto; }
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.site-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: .5rem .75rem;
+  border-radius: var(--radius-md);
+  font-size: .875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition: color .15s ease;
+}
+.site-nav__link:hover { color: var(--foreground); }
+/* animated underline that grows from the left */
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  left: .75rem; right: .75rem; bottom: .25rem;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s cubic-bezier(.22, 1, .36, 1);
+}
+.site-nav__link:hover::after,
+.site-nav__link[aria-current="true"]::after { transform: scaleX(1); }
+.site-nav__link[aria-current="true"] { color: var(--foreground); }
+
+/* ---- actions ---- */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-left: auto;
+}
+.site-nav + .site-header__actions { margin-left: 0; }
+
+/* the "About" control opens the left drawer (see drawer.css) */
+.site-header__about { display: inline-flex; }
+
+/* burger: mobile only */
+.site-header__burger { display: none; }
+
+/* thin scroll-progress hairline pinned to the header's bottom edge */
+.site-header__progress {
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background-color: transparent;
+  overflow: hidden;
+  pointer-events: none;
+}
+.site-header__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background-color: var(--foreground);
+  transform-origin: left;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 991.98px) {
+  .site-nav { display: none; }
+  .site-header__about { display: none; }   /* About lives in the drawer on mobile */
+  .site-header__burger { display: inline-flex; }
+  .site-header__cta-label { display: none; } /* icon-only CTA to save space */
+  .site-header__cta { padding-inline: .75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav__link::after { transition: none; }
+}

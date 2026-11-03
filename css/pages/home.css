@@ -1,0 +1,32 @@
+/* ==========================================================================
+   home.css - PAGE: home
+   Page-level composition only - anything that belongs to a single section
+   lives in css/sections/*.css, and shared components in css/components/*.css.
+   ========================================================================== */
+
+/* hero fills the first viewport on desktop so the fold lands after the stats */
+@media (min-width: 992px) {
+  .home .hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+  .home .hero > .container { width: 100%; }
+}
+
+/* rhythm: tighten the gap when a tinted band follows a plain one so the
+   colour change itself reads as the separator */
+.home .section--tint { margin-top: 0; }
+.home .section--tint + .section { padding-top: var(--section-gap); }
+
+/* give the sticky intro columns a consistent offset under the header */
+.home .why-us__intro,
+.home .faqs__intro { gap: 1.5rem; }
+
+/* the projects row needs extra breathing room above/below on desktop */
+@media (min-width: 992px) {
+  .home .projects .projects__grid { margin-top: .5rem; }
+}
+
+/* keep long pages from showing a horizontal scrollbar if a float overhangs */
+.home { overflow-x: clip; }

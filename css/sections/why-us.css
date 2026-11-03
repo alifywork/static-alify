@@ -1,0 +1,68 @@
+/* ==========================================================================
+   why-us.css - SECTION: why choose us (sticky intro + reason grid)
+   ========================================================================== */
+
+.why-us__intro { display: flex; flex-direction: column; gap: 1.5rem; }
+@media (min-width: 992px) {
+  .why-us__intro { position: sticky; top: calc(var(--header-h) + 2rem); }
+}
+
+.why-us__highlight {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--background);
+}
+.why-us__highlight-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.why-us__highlight-label { font-size: .875rem; color: var(--muted-foreground); line-height: 1.4; }
+
+.why-us__grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+@media (min-width: 768px) { .why-us__grid { grid-template-columns: 1fr 1fr; } }
+
+.reason {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background-color: var(--background);
+  overflow: hidden;
+  transition: border-color .25s ease, transform .25s ease;
+}
+.reason:hover { border-color: color-mix(in oklab, var(--foreground) 30%, var(--border)); transform: translateY(-3px); }
+
+/* oversized faint index in the corner */
+.reason__num {
+  position: absolute;
+  top: .75rem; right: 1.25rem;
+  font-family: var(--font-ui-mono);
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 1;
+  color: color-mix(in oklab, var(--foreground) 10%, transparent);
+  pointer-events: none;
+}
+
+.reason__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--foreground);
+  font-size: 1rem;
+}
+.reason__title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.02em; }
+.reason__desc { font-size: .9375rem; line-height: 1.65; color: var(--muted-foreground); }

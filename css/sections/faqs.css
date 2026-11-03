@@ -1,0 +1,27 @@
+/* ==========================================================================
+   faqs.css - SECTION: FAQs (left intro + right accordion)
+   The accordion itself is the design-system component (data-ui-accordion);
+   this file only lays the section out and styles the support card.
+   ========================================================================== */
+
+.faqs__intro { display: flex; flex-direction: column; gap: 1.5rem; }
+@media (min-width: 992px) {
+  .faqs__intro { position: sticky; top: calc(var(--header-h) + 2rem); }
+}
+
+.faqs__support {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--muted);
+}
+.faqs__support-body { display: flex; flex-direction: column; gap: .125rem; min-width: 0; }
+.faqs__support-title { font-size: .9375rem; font-weight: 600; }
+.faqs__support-desc { font-size: .8125rem; color: var(--muted-foreground); }
+
+/* slightly roomier accordion type for long questions */
+.faqs .accordion-trigger { font-size: .9375rem; padding-block: 1.125rem; }
+.faqs .accordion-inner { color: var(--muted-foreground); font-size: .9375rem; line-height: 1.7; }

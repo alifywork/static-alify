@@ -4,6 +4,60 @@ Static site with **all front-end libraries vendored locally** — nothing is pul
 from a CDN at runtime, so the site works offline and can't break when a CDN URL
 changes.
 
+## Pages
+
+| Page | What it is |
+|---|---|
+| [`index.html`](index.html) | The **Alify home page** — header, ten sections, footer, two drawers |
+| [`ui.html`](ui.html) | The UI kit showcase — app shell with sidebar, every component, live light/dark toggle |
+| [`asset-check.html`](asset-check.html) | Asset self-check — verifies all four vendored libraries actually load, with no CDN requests |
+
+## Site architecture
+
+Every reusable component, every global, every section and every page owns
+**exactly one CSS file and one JS file** — there is no monolithic site
+stylesheet or script.
+
+```
+css/
+  global/       grid.css  base.css  header.css  footer.css
+  components/   section-head.css  drawer.css  slider.css  ticker.css
+  sections/     hero.css  tech.css  about.css  services.css  why-us.css
+                projects.css  industries.css  faqs.css  testimonials.css  contact.css
+  pages/        home.css
+js/
+  global/       header.js  footer.js
+  components/   drawer.js  slider.js  ticker.js
+  sections/     hero.js  tech.js  about.js  services.js  why-us.js
+                projects.js  industries.js  faqs.js  testimonials.js  contact.js
+  pages/        home.js
+img/            logos + generated imagery
+```
+
+- **Bootstrap is used for `container` / `row` / `col` only.** [`css/global/grid.css`](css/global/grid.css)
+  is that grid extracted on its own, so nothing from Bootstrap's reboot,
+  `.btn`, forms or utilities can collide with the design system. Every other
+  piece of UI is built from [`assets/ui/ui.css`](assets/ui/ui.css).
+- **Load order matters.** `assets/ui/theme.js` runs synchronously in `<head>`
+  (no flash of the wrong theme); `js/pages/home.js` defines the shared
+  `window.Reveal` helper, so it must load *before* the section scripts.
+- **GSAP is a garnish, not the meal**: short fades/lifts on scroll, a gentle
+  hero parallax, count-ups. Everything is skipped under
+  `prefers-reduced-motion`, and content is visible by default — reveal-hiding is
+  gated behind a `.js` class so a script failure can never leave the page blank.
+- **Imagery** in `img/` is generated and committed, optimised for the web
+  (~670 KB total). `logo-dark.png` is the black wordmark (light theme),
+  `logo-light.png` the white one (dark theme); CSS swaps them with the theme.
+
+### Reusable behaviour
+
+| Global | Behaviour |
+|---|---|
+| `window.Drawer` | Off-canvas drawers sliding in from the left: focus trap, Escape, backdrop click, focus restore, body scroll lock, stacking (the nav drawer opens the About drawer on top), `aria-expanded` synced on every opener |
+| `window.Sliders` | Loop/autoplay carousels with drag, arrow keys, prev/next, a progress meter and a live count; autoplay stops on hover, focus and when the section scrolls off-screen |
+| `window.Tickers` | Seamless marquees — duplicates the group until it covers 2× the viewport, keeps the group count **even** so the `-50%` loop never jumps, marks the duplicates `aria-hidden`, and holds a constant px/sec speed at any width |
+| `window.Reveal` | `Reveal.items()`, `Reveal.single()`, `Reveal.auto()` — one-shot scroll reveals, plus a declarative `[data-reveal]` hook |
+
 ## Vendored libraries
 
 Everything lives in [`assets/`](assets/) and is committed to the repo:
@@ -36,47 +90,37 @@ Type comes from the vendored Geist font, icons from Font Awesome.
 
 Docs and markup conventions: [`assets/ui/README.md`](assets/ui/README.md).
 
-## Pages
-
-| Page | What it is |
-|---|---|
-| [`ui.html`](ui.html) | The UI kit showcase — app shell with sidebar, every component, live light/dark toggle |
-| [`index.html`](index.html) | Asset self-check — verifies all four vendored libraries actually load, with no CDN requests |
-
 ## Quick start
 
-shadcn-style UI (recommended for new pages):
+A page built on the design system:
 
 ```html
 <head>
+  <script>document.documentElement.classList.add("js");</script>
   <script src="assets/ui/theme.js"></script>          <!-- first, synchronous -->
   <link rel="stylesheet" href="assets/geist/geist.css">
   <link rel="stylesheet" href="assets/ui/ui.css">
+  <link rel="stylesheet" href="css/global/grid.css">  <!-- container/row/col only -->
+  <link rel="stylesheet" href="css/global/base.css">
   <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
   <meta name="color-scheme" content="light dark">
 </head>
 <body>
-  <button class="btn">Default</button>
-  <button class="btn btn-outline">Outline</button>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-6"><button class="btn">Default</button></div>
+      <div class="col-md-6"><button class="btn btn-outline">Outline</button></div>
+    </div>
+  </div>
+  <script src="assets/gsap/js/gsap.min.js"></script>
+  <script src="assets/gsap/js/ScrollTrigger.min.js"></script>
   <script src="assets/ui/ui.js"></script>
 </body>
 ```
 
-Bootstrap-based pages instead:
-
-```html
-<head>
-  <link rel="stylesheet" href="assets/geist/geist.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
-  <style>body { font-family: var(--font-geist-sans); }</style>
-</head>
-<body>
-  <script src="assets/gsap/js/gsap.min.js"></script>
-  <script src="assets/gsap/js/ScrollTrigger.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-```
+Adding a new section to a page: drop in `css/sections/<name>.css` and
+`js/sections/<name>.js`, link both from the page, and reveal content with
+`Reveal.items(".<name>", ".<name>__card", { stagger: .08 })`.
 
 ## Preview
 
@@ -86,4 +130,5 @@ Any static server works:
 python3 -m http.server 8080
 ```
 
-Then open `/ui.html` (UI kit) or `/index.html` (asset self-check).
+Then open `/` (home page), `/ui.html` (UI kit) or `/asset-check.html`
+(asset self-check).

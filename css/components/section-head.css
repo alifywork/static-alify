@@ -1,0 +1,67 @@
+/* ==========================================================================
+   section-head.css - REUSABLE eyebrow + title + description block
+   Presentational only (no JS): every section opens with this so headings,
+   eyebrows and lede copy stay identical site-wide.
+   ========================================================================== */
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.section-head--center {
+  margin-inline: auto;
+  align-items: center;
+  text-align: center;
+}
+.section-head--wide { max-width: 60rem; }
+
+.section-head__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-ui-mono);
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.section-head__dot {
+  width: .375rem; height: .375rem;
+  border-radius: var(--radius-full);
+  background-color: var(--foreground);
+  flex-shrink: 0;
+}
+.section-head--center .section-head__eyebrow { justify-content: center; }
+
+.section-head__title {
+  font-size: clamp(1.875rem, 4.2vw, 3rem);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.section-head__desc {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--muted-foreground);
+  max-width: 42rem;
+  text-wrap: pretty;
+}
+.section-head--center .section-head__desc { margin-inline: auto; }
+
+/* optional action row aligned right of the title on wide screens */
+.section-head__row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: none;
+}
+.section-head__row .section-head { margin-bottom: 0; max-width: none; }
