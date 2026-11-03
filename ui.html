@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>UI Kit &middot; static-alify</title>
+  <meta name="description" content="A standalone shadcn/ui-style design system built on the locally vendored Geist font, Font Awesome icons and GSAP. No Tailwind, no React, no build step.">
+
+  <!-- Theme BEFORE stylesheets: writes data-theme on <html> pre-paint, so
+       there is no flash of the wrong theme. Must stay synchronous. -->
+  <script src="assets/ui/theme.js"></script>
+
+  <!-- Local assets only - no CDN anywhere on this page -->
+  <link rel="stylesheet" href="assets/geist/geist.css">
+  <link rel="stylesheet" href="assets/ui/ui.css">
+  <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+
+  <style>
+    /* ------------------------------------------------------------------
+       Page-specific extras ONLY. Nothing here is part of the design
+       system - if you find yourself adding rules like these often, they
+       probably belong in assets/ui/ui.css instead.
+       ------------------------------------------------------------------ */
+    .spark { display: flex; align-items: flex-end; gap: 3px; height: 2rem; }
+    .spark span { width: 5px; border-radius: var(--radius-full); background-color: var(--chart-2); opacity: .85; }
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); gap: .5rem; }
+    .swatch { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+    .swatch-chip { height: 2.5rem; }
+    .swatch-meta { padding: .375rem .5rem; font-size: .6875rem; line-height: 1.1; }
+    .swatch-meta code { background: none; padding: 0; font-size: .6875rem; }
+    .demo-grid { display: grid; gap: 1.5rem; }
+    @media (min-width: 1024px) { .demo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .showcase { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+    .page-head { padding-block: 2rem 1rem; }
+    .section-label {
+      font-family: var(--font-ui-mono);
+      font-size: .6875rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted-foreground);
+    }
+    .anchor-nav { display: flex; flex-wrap: wrap; gap: .375rem; }
+    .stat-value { font-size: 1.875rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .delta-up { color: var(--chart-2); }
+    .delta-down { color: var(--destructive); }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside class="sidebar" id="sidebar-desktop">
+    <div class="sidebar-header">
+      <span class="avatar avatar-sm" style="background-color: var(--primary); color: var(--primary-foreground); border-radius: var(--radius-md);">
+        <i class="fa-solid fa-cube"></i>
+      </span>
+      <div class="stack" style="gap:.125rem">
+        <span class="text-sm font-semibold" style="line-height:1">static-alify</span>
+        <span class="text-xs text-muted-foreground">UI Kit</span>
+      </div>
+      <div class="grow"></div>
+      <button type="button" class="btn btn-ghost btn-icon btn-sm lg:hidden" data-ui-open="sidebar-sheet" aria-label="Close menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="sidebar-content">
+      <nav class="stack" style="gap:1.25rem">
+        <div>
+          <p class="sidebar-group-label">Overview</p>
+          <div class="sidebar-menu">
+            <a class="sidebar-item" href="#top" aria-current="page"><i class="fa-solid fa-house"></i> Dashboard</a>
+            <a class="sidebar-item" href="#tokens"><i class="fa-solid fa-palette"></i> Tokens</a>
+            <a class="sidebar-item" href="#typography"><i class="fa-solid fa-font"></i> Typography</a>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-group-label">Components</p>
+          <div class="sidebar-menu">
+            <a class="sidebar-item" href="#buttons"><i class="fa-solid fa-square"></i> Buttons</a>
+            <a class="sidebar-item" href="#forms"><i class="fa-solid fa-input-text"></i> Forms</a>
+            <a class="sidebar-item" href="#data"><i class="fa-solid fa-table"></i> Data table</a>
+            <a class="sidebar-item" href="#tabs"><i class="fa-solid fa-layer-group"></i> Tabs &amp; accordion</a>
+            <a class="sidebar-item" href="#overlays"><i class="fa-solid fa-clone"></i> Overlays</a>
+            <a class="sidebar-item" href="#feedback"><i class="fa-solid fa-bell"></i> Feedback</a>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-group-label">Resources</p>
+          <div class="sidebar-menu">
+            <a class="sidebar-item" href="#usage"><i class="fa-solid fa-code"></i> Usage</a>
+            <a class="sidebar-item" href="index.html"><i class="fa-solid fa-circle-check"></i> Asset self-check</a>
+            <a class="sidebar-item" href="assets/ui/README.md"><i class="fa-solid fa-book"></i> Docs</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="card" style="gap:.75rem; padding:1rem; border-radius: var(--radius-lg);">
+        <div class="row">
+          <span class="avatar"><span class="avatar-fallback">AW</span></span>
+          <div class="stack grow" style="gap:0; min-width:0">
+            <span class="text-sm font-medium truncate">Alify Work</span>
+            <span class="text-xs text-muted-foreground truncate">hello@alify.work</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm btn-block" data-ui-open="upgrade-dialog">
+          <i class="fa-solid fa-rocket"></i> Upgrade plan
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="shell-main">
+
+    <!-- ============================ TOPBAR ============================ -->
+    <header class="topbar">
+      <button type="button" class="btn btn-ghost btn-icon btn-sm lg:hidden" data-ui-open="sidebar-sheet" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav aria-label="Breadcrumb" class="breadcrumb">
+        <ol class="breadcrumb-list">
+          <li class="breadcrumb-item"><a class="breadcrumb-link" href="#top">Docs</a></li>
+          <li aria-hidden="true" class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size:.625rem"></i></li>
+          <li class="breadcrumb-item"><span class="breadcrumb-page" aria-current="page">UI Kit</span></li>
+        </ol>
+      </nav>
+
+      <div class="grow"></div>
+
+      <div class="input-group hidden lg:flex" style="width:16rem">
+        <span class="input-group-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input class="input" type="search" placeholder="Search components…" aria-label="Search components" style="padding-right:3.5rem">
+        <span class="input-group-action"><kbd>⌘</kbd><kbd>K</kbd></span>
+      </div>
+
+      <button type="button" class="btn btn-ghost btn-icon theme-toggle" data-ui-theme-toggle aria-label="Toggle theme">
+        <span class="icon-sun"><i class="fa-solid fa-sun"></i></span>
+        <span class="icon-moon"><i class="fa-solid fa-moon"></i></span>
+      </button>
+
+      <div data-ui-dropdown class="dropdown">
+        <button type="button" class="btn btn-ghost btn-icon" data-ui-dropdown-trigger aria-label="Notifications" style="position:relative">
+          <i class="fa-regular fa-bell"></i>
+          <span class="badge badge-destructive" style="position:absolute; top:.25rem; right:.25rem; width:.5rem; height:.5rem; padding:0; border-radius:var(--radius-full)"></span>
+        </button>
+        <div class="dropdown-content w-menu" data-ui-dropdown-content role="menu">
+          <p class="dropdown-label">Notifications</p>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" role="menuitem">
+            <i class="fa-solid fa-code-branch"></i>
+            <span class="stack grow" style="gap:0">
+              <span>PR #1 is ready for review</span>
+              <span class="text-xs text-muted-foreground">2 minutes ago</span>
+            </span>
+          </button>
+          <button class="dropdown-item" role="menuitem">
+            <i class="fa-solid fa-download"></i>
+            <span class="stack grow" style="gap:0">
+              <span>4 libraries vendored locally</span>
+              <span class="text-xs text-muted-foreground">1 hour ago</span>
+            </span>
+          </button>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" role="menuitem">
+            <i class="fa-solid fa-list-check"></i> Mark all as read
+          </button>
+        </div>
+      </div>
+
+      <div data-ui-dropdown class="dropdown">
+        <button type="button" class="btn btn-ghost btn-icon" data-ui-dropdown-trigger aria-label="Account menu" style="padding:0">
+          <span class="avatar avatar-sm"><span class="avatar-fallback">AW</span></span>
+        </button>
+        <div class="dropdown-content w-menu" data-ui-dropdown-content role="menu">
+          <p class="dropdown-sub-label">Signed in as</p>
+          <p class="dropdown-label" style="padding-bottom:.5rem">hello@alify.work</p>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-user"></i> Profile</button>
+          <button class="dropdown-item" role="menuitem"><i class="fa-solid fa-gear"></i> Settings <span class="dropdown-item-trailing">⌘S</span></button>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" role="menuitemcheckbox" aria-checked="true">
+            <span class="dropdown-indicator"><i class="fa-solid fa-check"></i></span> Dark mode follows system
+          </button>
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item dropdown-item-destructive" role="menuitem"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================= MAIN ============================= -->
+    <main class="container grow" id="top">
+
+      <div class="page-head stack" style="gap:.75rem">
+        <div class="row wrap between" style="gap:1rem">
+          <div class="stack" style="gap:.5rem">
+            <p class="section-label">Design system</p>
+            <h1 style="letter-spacing:-.03em">shadcn-style UI, no build step</h1>
+            <p class="lead" style="max-width:62ch">
+              Plain CSS on shadcn/ui's <strong>neutral</strong> tokens, set in Geist. Light and dark,
+              switched live by the toggle in the header. Everything on this page comes from
+              <code>assets/ui/</code> — no Tailwind, no React, no Bootstrap.
+            </p>
+          </div>
+          <div class="row wrap" style="gap:.5rem">
+            <button type="button" class="btn" id="hero-toast">
+              <i class="fa-solid fa-bell"></i> Show a toast
+            </button>
+            <button type="button" class="btn btn-outline" data-ui-copy="npm run nothing — this is a static site" data-ui-copy-target="">
+              <i class="fa-regular fa-copy"></i> <span data-ui-copy-label>Copy snippet</span>
+            </button>
+          </div>
+        </div>
+        <div class="anchor-nav">
+          <a class="badge badge-outline" href="#tokens">Tokens</a>
+          <a class="badge badge-outline" href="#typography">Type</a>
+          <a class="badge badge-outline" href="#buttons">Buttons</a>
+          <a class="badge badge-outline" href="#forms">Forms</a>
+          <a class="badge badge-outline" href="#data">Table</a>
+          <a class="badge badge-outline" href="#tabs">Tabs</a>
+          <a class="badge badge-outline" href="#overlays">Overlays</a>
+          <a class="badge badge-outline" href="#feedback">Feedback</a>
+        </div>
+      </div>
+
+      <!-- ---------------------------- STATS ---------------------------- -->
+      <section class="stack section" style="gap:1rem; padding-top:1.5rem">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style="gap:1rem" data-reveal-group>
+          <article class="card" style="gap:1rem">
+            <div class="card-header">
+              <div class="stack" style="gap:.25rem">
+                <p class="card-description">Vendored libraries</p>
+                <p class="stat-value">4</p>
+              </div>
+              <span class="card-action"><i class="fa-solid fa-box-open text-muted-foreground"></i></span>
+            </div>
+            <div class="card-content" style="padding-top:0">
+              <p class="text-xs text-muted-foreground"><span class="delta-up"><i class="fa-solid fa-arrow-trend-up"></i> all local</span> &middot; zero CDN requests</p>
+            </div>
+          </article>
+
+          <article class="card" style="gap:1rem">
+            <div class="card-header">
+              <div class="stack" style="gap:.25rem">
+                <p class="card-description">Components</p>
+                <p class="stat-value">24</p>
+              </div>
+              <span class="card-action"><i class="fa-solid fa-cubes text-muted-foreground"></i></span>
+            </div>
+            <div class="card-content" style="padding-top:0">
+              <div class="spark" aria-hidden="true">
+                <span style="height:40%"></span><span style="height:65%"></span><span style="height:50%"></span>
+                <span style="height:80%"></span><span style="height:60%"></span><span style="height:95%"></span>
+                <span style="height:75%"></span><span style="height:100%"></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" style="gap:1rem">
+            <div class="card-header">
+              <div class="stack" style="gap:.25rem">
+                <p class="card-description">Stylesheet</p>
+                <p class="stat-value">92 KB</p>
+              </div>
+              <span class="card-action"><i class="fa-solid fa-file-code text-muted-foreground"></i></span>
+            </div>
+            <div class="card-content" style="padding-top:0">
+              <div class="progress progress-sm" role="progressbar" aria-label="CSS budget used" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-indicator" style="transform: scaleX(.38)"></div>
+              </div>
+              <p class="text-xs text-muted-foreground mt-2">38% of a 240 KB budget</p>
+            </div>
+          </article>
+
+          <article class="card" style="gap:1rem">
+            <div class="card-header">
+              <div class="stack" style="gap:.25rem">
+                <p class="card-description">Accessibility</p>
+                <p class="stat-value">A11y</p>
+              </div>
+              <span class="card-action"><i class="fa-solid fa-universal-access text-muted-foreground"></i></span>
+            </div>
+            <div class="card-content" style="padding-top:0">
+              <p class="text-xs text-muted-foreground">Focus traps, roving tabindex, <kbd>Esc</kbd>, ARIA states</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ---------------------------- TOKENS --------------------------- -->
+      <section class="section stack" id="tokens" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">01</p>
+          <h2>Design tokens</h2>
+          <p class="muted">Copied verbatim from <code>shadcn-ui/ui &rarr; apps/v4/public/r/colors/neutral.json</code>. These are the same values a real shadcn app compiles to.</p>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <div class="swatch-grid">
+              <div class="swatch"><div class="swatch-chip bg-background"></div><div class="swatch-meta"><code>--background</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-foreground"></div><div class="swatch-meta"><code>--foreground</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-primary"></div><div class="swatch-meta"><code>--primary</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-secondary"></div><div class="swatch-meta"><code>--secondary</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-muted"></div><div class="swatch-meta"><code>--muted</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-accent"></div><div class="swatch-meta"><code>--accent</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-destructive"></div><div class="swatch-meta"><code>--destructive</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-border"></div><div class="swatch-meta"><code>--border</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-card"></div><div class="swatch-meta"><code>--card</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-popover"></div><div class="swatch-meta"><code>--popover</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-chart-1"></div><div class="swatch-meta"><code>--chart-1</code></div></div>
+              <div class="swatch"><div class="swatch-chip bg-chart-2"></div><div class="swatch-meta"><code>--chart-2</code></div></div>
+            </div>
+            <div class="separator my-6"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3" style="gap:1rem">
+              <div class="stack" style="gap:.375rem">
+                <p class="text-sm font-semibold">Radius</p>
+                <div class="row wrap">
+                  <span class="rounded-sm border p-3 text-xs bg-muted">sm</span>
+                  <span class="rounded-md border p-3 text-xs bg-muted">md</span>
+                  <span class="rounded-lg border p-3 text-xs bg-muted">lg</span>
+                  <span class="rounded-xl border p-3 text-xs bg-muted">xl</span>
+                </div>
+                <p class="text-xs text-muted-foreground">All derived from <code>--radius: 0.625rem</code> — change one value, every component follows.</p>
+              </div>
+              <div class="stack" style="gap:.375rem">
+                <p class="text-sm font-semibold">Shadow</p>
+                <div class="row wrap">
+                  <span class="rounded-md border p-3 text-xs bg-card shadow-xs">xs</span>
+                  <span class="rounded-md border p-3 text-xs bg-card shadow-sm">sm</span>
+                  <span class="rounded-md border p-3 text-xs bg-card shadow-md">md</span>
+                  <span class="rounded-md border p-3 text-xs bg-card shadow-lg">lg</span>
+                </div>
+                <p class="text-xs text-muted-foreground">Tailwind v4 scale, lifted slightly in dark mode where shadows barely read.</p>
+              </div>
+              <div class="stack" style="gap:.375rem">
+                <p class="text-sm font-semibold">Theme state</p>
+                <div class="row wrap">
+                  <span class="badge badge-outline">mode: <span data-ui-theme-label>Light</span></span>
+                  <span class="badge badge-secondary" id="token-mode">light</span>
+                </div>
+                <div class="row wrap" style="gap:.375rem">
+                  <button class="btn btn-outline btn-sm" data-ui-theme-set="light">Light</button>
+                  <button class="btn btn-outline btn-sm" data-ui-theme-set="dark">Dark</button>
+                  <button class="btn btn-outline btn-sm" data-ui-theme-set="system">System</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------- TYPOGRAPHY -------------------------- -->
+      <section class="section stack" id="typography" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">02</p>
+          <h2>Typography</h2>
+          <p class="muted">Geist variable for everything. <code>--font-ui-sans</code> and <code>--font-ui-mono</code> are the stacks.</p>
+        </div>
+        <div class="demo-grid">
+          <article class="card">
+            <div class="card-header"><p class="card-title">Geist Sans</p><p class="card-description">One variable file, weights 100–900</p></div>
+            <div class="card-content stack" style="gap:.75rem">
+              <h1 style="letter-spacing:-.035em">Display 48/800</h1>
+              <h2>Heading two 30/600</h2>
+              <h3>Heading three 24/600</h3>
+              <h4>Heading four 20/600</h4>
+              <p>Body copy at 14px with a 1.75rem line-height, which is what shadcn uses for paragraph text. It stays readable at long measure.</p>
+              <p class="lead">Lead paragraph — 20px, muted.</p>
+              <p class="small text-muted-foreground">Small muted caption</p>
+              <p style="font-weight:300">Light 300 &middot; <span style="font-weight:500">Medium 500</span> &middot; <strong>Semibold 600</strong> &middot; <span style="font-weight:800">Extrabold 800</span></p>
+              <p><em>Italic works too — Geist ships a real italic variable face.</em></p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-header"><p class="card-title">Geist Mono &amp; inline code</p><p class="card-description">Used by <code>code</code>, <code>pre</code> and <code>kbd</code></p></div>
+            <div class="card-content stack" style="gap:.75rem">
+              <p>Inline: run <code>python3 -m http.server 8080</code> and open the page.</p>
+<pre><code>&lt;script src="assets/ui/theme.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="assets/geist/geist.css"&gt;
+&lt;link rel="stylesheet" href="assets/ui/ui.css"&gt;</code></pre>
+              <div class="row wrap">
+                <kbd>⌘</kbd><kbd>K</kbd><span class="text-xs text-muted-foreground">command palette</span>
+                <kbd>Esc</kbd><span class="text-xs text-muted-foreground">close overlay</span>
+                <kbd>Tab</kbd><span class="text-xs text-muted-foreground">move focus</span>
+              </div>
+              <blockquote><p>Blockquote: border-left in <code>--border</code>, italic text.</p></blockquote>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- --------------------------- BUTTONS --------------------------- -->
+      <section class="section stack" id="buttons" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">03</p>
+          <h2>Buttons &amp; badges</h2>
+          <p class="muted">Six variants, three sizes, icon-only and loading states.</p>
+        </div>
+        <div class="demo-grid">
+          <article class="card">
+            <div class="card-header"><p class="card-title">Variants</p></div>
+            <div class="card-content stack" style="gap:1rem">
+              <div class="showcase">
+                <button class="btn">Default</button>
+                <button class="btn btn-secondary">Secondary</button>
+                <button class="btn btn-destructive">Destructive</button>
+                <button class="btn btn-outline">Outline</button>
+                <button class="btn btn-ghost">Ghost</button>
+                <button class="btn btn-link">Link</button>
+              </div>
+              <div class="showcase">
+                <button class="btn"><i class="fa-solid fa-plus"></i> With icon</button>
+                <button class="btn btn-outline">Continue <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn btn-icon" aria-label="Settings"><i class="fa-solid fa-gear"></i></button>
+                <button class="btn btn-icon btn-outline" aria-label="More"><i class="fa-solid fa-ellipsis"></i></button>
+                <button class="btn btn-icon btn-ghost" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+              </div>
+              <div class="showcase">
+                <button class="btn btn-sm">Small</button>
+                <button class="btn">Default</button>
+                <button class="btn btn-lg">Large</button>
+                <button class="btn" disabled>Disabled</button>
+                <button class="btn is-loading" id="load-demo" aria-busy="true">Saving</button>
+              </div>
+              <div class="btn-group" role="group" aria-label="View mode">
+                <button class="btn btn-outline"><i class="fa-solid fa-table-list"></i> List</button>
+                <button class="btn btn-outline"><i class="fa-solid fa-table-cells"></i> Grid</button>
+                <button class="btn btn-outline"><i class="fa-solid fa-chart-line"></i> Chart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header"><p class="card-title">Badges &amp; avatars</p></div>
+            <div class="card-content stack" style="gap:1rem">
+              <div class="showcase">
+                <span class="badge">Default</span>
+                <span class="badge badge-secondary">Secondary</span>
+                <span class="badge badge-destructive">Destructive</span>
+                <span class="badge badge-outline">Outline</span>
+              </div>
+              <div class="showcase">
+                <span class="badge badge-dot badge-secondary">Active</span>
+                <span class="badge badge-dot badge-outline">Pending</span>
+                <span class="badge badge-dot badge-destructive">Failed</span>
+                <span class="badge badge-outline"><i class="fa-solid fa-tag"></i> v5.3.8</span>
+              </div>
+              <div class="showcase">
+                <span class="avatar avatar-sm"><span class="avatar-fallback">SM</span></span>
+                <span class="avatar"><span class="avatar-fallback">MD</span></span>
+                <span class="avatar avatar-lg"><span class="avatar-fallback">LG</span></span>
+                <span class="avatar avatar-xl"><span class="avatar-fallback">XL</span></span>
+                <span class="avatar-group">
+                  <span class="avatar"><span class="avatar-fallback">A</span></span>
+                  <span class="avatar"><span class="avatar-fallback">B</span></span>
+                  <span class="avatar"><span class="avatar-fallback">C</span></span>
+                  <span class="avatar"><span class="avatar-fallback">+9</span></span>
+                </span>
+              </div>
+              <div class="showcase">
+                <button class="btn btn-outline btn-sm" data-ui-tooltip="Tooltips are pure CSS">
+                  <i class="fa-regular fa-comment"></i> Hover me
+                </button>
+                <span class="badge badge-outline" data-ui-tooltip="Works on badges too">Hover</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ---------------------------- FORMS ---------------------------- -->
+      <section class="section stack" id="forms" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">04</p>
+          <h2>Forms</h2>
+          <p class="muted">Native elements, styled — so they keep working without JS and stay accessible.</p>
+        </div>
+
+        <div class="card">
+          <form class="card-content" id="demo-form" novalidate>
+            <div class="grid grid-cols-1 md:grid-cols-2" style="gap:1.5rem">
+              <div class="stack" style="gap:1.25rem">
+                <div class="field">
+                  <label class="label label-required" for="f-name">Full name</label>
+                  <input class="input" id="f-name" name="name" placeholder="Ada Lovelace" autocomplete="name" required>
+                  <p class="field-description">Shown on your public profile.</p>
+                  <p class="field-message" data-slot="msg-name"></p>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="f-email">Email</label>
+                  <input class="input" id="f-email" name="email" type="email" placeholder="ada@example.com" autocomplete="email">
+                  <p class="field-message" data-slot="msg-email"></p>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="f-role">Role</label>
+                  <select class="select" id="f-role" name="role">
+                    <option>Owner</option>
+                    <option selected>Member</option>
+                    <option>Viewer</option>
+                    <option>Billing</option>
+                  </select>
+                  <p class="field-description">Native <code>&lt;select&gt;</code>, chevron drawn in CSS.</p>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="f-search">Search with addon</label>
+                  <div class="input-group">
+                    <span class="input-group-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input class="input" id="f-search" type="search" placeholder="Filter anything…">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="f-bio">Bio</label>
+                  <textarea class="textarea" id="f-bio" name="bio" rows="3" placeholder="Tell us a little about yourself"></textarea>
+                  <p class="field-description"><code>field-sizing: content</code> — it grows as you type.</p>
+                </div>
+
+                <div class="field">
+                  <label class="label" for="f-disabled">Disabled field</label>
+                  <input class="input" id="f-disabled" placeholder="Can't touch this" disabled>
+                </div>
+              </div>
+
+              <div class="stack" style="gap:1.5rem">
+                <fieldset class="fieldset">
+                  <legend>Notifications</legend>
+                  <div class="stack" style="gap:.75rem">
+                    <label class="check-row">
+                      <input class="checkbox" type="checkbox" name="notify" value="product" checked>
+                      <span class="check-row-text">
+                        <span>Product updates</span>
+                        <span class="check-row-desc">News about features and the roadmap.</span>
+                      </span>
+                    </label>
+                    <label class="check-row">
+                      <input class="checkbox" type="checkbox" name="notify" value="security">
+                      <span class="check-row-text">
+                        <span>Security alerts</span>
+                        <span class="check-row-desc">Only critical advisories.</span>
+                      </span>
+                    </label>
+                    <label class="check-row">
+                      <input class="checkbox" type="checkbox" id="f-indeterminate">
+                      <span class="check-row-text">
+                        <span>Indeterminate state</span>
+                        <span class="check-row-desc">Toggle this to see the dash.</span>
+                      </span>
+                    </label>
+                    <label class="check-row">
+                      <input class="checkbox" type="checkbox" disabled>
+                      <span class="check-row-text"><span>Disabled option</span></span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="fieldset">
+                  <legend>Plan</legend>
+                  <div class="radio-group">
+                    <label class="radio-row">
+                      <input class="radio" type="radio" name="plan" value="free" checked>
+                      <span class="radio-row-text"><span>Free</span><span class="check-row-desc">Static hosting, 1 project.</span></span>
+                    </label>
+                    <label class="radio-row">
+                      <input class="radio" type="radio" name="plan" value="pro">
+                      <span class="radio-row-text"><span>Pro</span><span class="check-row-desc">Unlimited projects, analytics.</span></span>
+                    </label>
+                    <label class="radio-row">
+                      <input class="radio" type="radio" name="plan" value="team" disabled>
+                      <span class="radio-row-text"><span>Team</span><span class="check-row-desc">Coming soon.</span></span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <div class="stack" style="gap:0">
+                  <div class="switch-row">
+                    <label class="stack" style="gap:.125rem" for="f-public">
+                      <span class="text-sm font-medium">Public profile</span>
+                      <span class="text-xs text-muted-foreground">Anyone can find you.</span>
+                    </label>
+                    <input class="switch" type="checkbox" id="f-public" role="switch" checked>
+                  </div>
+                  <div class="switch-row">
+                    <label class="stack" style="gap:.125rem" for="f-analytics">
+                      <span class="text-sm font-medium">Anonymous analytics</span>
+                      <span class="text-xs text-muted-foreground">Helps us improve the kit.</span>
+                    </label>
+                    <input class="switch" type="checkbox" id="f-analytics" role="switch">
+                  </div>
+                  <div class="switch-row">
+                    <label class="stack" style="gap:.125rem" for="f-locked">
+                      <span class="text-sm font-medium">Locked setting</span>
+                      <span class="text-xs text-muted-foreground">Requires the Team plan.</span>
+                    </label>
+                    <input class="switch" type="checkbox" id="f-locked" role="switch" disabled>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="field-row">
+                    <label class="label" for="f-range">Density</label>
+                    <span class="text-sm text-muted-foreground tabular-nums" id="range-out">6</span>
+                  </div>
+                  <input class="slider" type="range" id="f-range" min="0" max="12" value="6" step="1">
+                </div>
+              </div>
+            </div>
+
+            <div class="separator mt-8"></div>
+
+            <div class="row wrap between mt-6" style="gap:.75rem">
+              <p class="text-xs text-muted-foreground">Validation runs on submit — try it empty.</p>
+              <div class="row wrap" style="gap:.5rem">
+                <button type="reset" class="btn btn-ghost">Reset</button>
+                <button type="button" class="btn btn-outline" data-ui-open="confirm-dialog">Discard</button>
+                <button type="submit" class="btn"><i class="fa-solid fa-check"></i> Save changes</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ----------------------------- DATA ---------------------------- -->
+      <section class="section stack" id="data" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">05</p>
+          <h2>Data table</h2>
+          <p class="muted">Row selection, per-row action menu, pagination.</p>
+        </div>
+
+        <div class="card" style="gap:1rem">
+          <div class="card-header">
+            <div class="stack" style="gap:.25rem">
+              <p class="card-title">Team members</p>
+              <p class="card-description">Manage who has access to this project.</p>
+            </div>
+            <div class="card-action row" style="gap:.5rem">
+              <div class="input-group" style="width:14rem">
+                <span class="input-group-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input class="input" type="search" id="table-search" placeholder="Filter…" aria-label="Filter members">
+              </div>
+              <button class="btn btn-sm"><i class="fa-solid fa-user-plus"></i> <span class="hidden md:inline">Invite</span></button>
+            </div>
+          </div>
+
+          <div class="card-content" style="padding-inline:0">
+            <div class="table-container" style="border-width:1px 0; border-radius:0">
+              <table class="table" id="members">
+                <caption class="sr-only">Team members and their roles</caption>
+                <thead>
+                  <tr>
+                    <th style="width:2.5rem">
+                      <input class="checkbox" type="checkbox" id="select-all" aria-label="Select all members">
+                    </th>
+                    <th>Member</th>
+                    <th>Status</th>
+                    <th class="hidden md:table-cell">Role</th>
+                    <th class="hidden lg:table-cell">Last active</th>
+                    <th style="width:3rem"><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input class="checkbox row-check" type="checkbox" aria-label="Select Ada Lovelace"></td>
+                    <td>
+                      <div class="table-cell-main">
+                        <span class="avatar avatar-sm"><span class="avatar-fallback">AL</span></span>
+                        <span class="stack" style="gap:0"><span class="font-medium">Ada Lovelace</span><span class="table-cell-sub">ada@example.com</span></span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-dot badge-secondary">Active</span></td>
+                    <td class="hidden md:table-cell">Owner</td>
+                    <td class="hidden lg:table-cell text-muted-foreground">2 minutes ago</td>
+                    <td>
+                      <div data-ui-dropdown class="dropdown">
+                        <button class="btn btn-ghost btn-icon btn-sm" data-ui-dropdown-trigger aria-label="Actions for Ada Lovelace"><i class="fa-solid fa-ellipsis"></i></button>
+                        <div class="dropdown-content" data-ui-dropdown-content role="menu">
+                          <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+                          <button class="dropdown-item" role="menuitem"><i class="fa-solid fa-key"></i> Reset password</button>
+                          <div class="dropdown-separator"></div>
+                          <button class="dropdown-item dropdown-item-destructive" role="menuitem"><i class="fa-solid fa-user-minus"></i> Remove</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input class="checkbox row-check" type="checkbox" aria-label="Select Grace Hopper"></td>
+                    <td>
+                      <div class="table-cell-main">
+                        <span class="avatar avatar-sm"><span class="avatar-fallback">GH</span></span>
+                        <span class="stack" style="gap:0"><span class="font-medium">Grace Hopper</span><span class="table-cell-sub">grace@example.com</span></span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-dot badge-secondary">Active</span></td>
+                    <td class="hidden md:table-cell">Member</td>
+                    <td class="hidden lg:table-cell text-muted-foreground">14 minutes ago</td>
+                    <td>
+                      <div data-ui-dropdown class="dropdown">
+                        <button class="btn btn-ghost btn-icon btn-sm" data-ui-dropdown-trigger aria-label="Actions for Grace Hopper"><i class="fa-solid fa-ellipsis"></i></button>
+                        <div class="dropdown-content" data-ui-dropdown-content role="menu">
+                          <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+                          <button class="dropdown-item" role="menuitem"><i class="fa-solid fa-key"></i> Reset password</button>
+                          <div class="dropdown-separator"></div>
+                          <button class="dropdown-item dropdown-item-destructive" role="menuitem"><i class="fa-solid fa-user-minus"></i> Remove</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input class="checkbox row-check" type="checkbox" aria-label="Select Alan Turing"></td>
+                    <td>
+                      <div class="table-cell-main">
+                        <span class="avatar avatar-sm"><span class="avatar-fallback">AT</span></span>
+                        <span class="stack" style="gap:0"><span class="font-medium">Alan Turing</span><span class="table-cell-sub">alan@example.com</span></span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-dot badge-outline">Invited</span></td>
+                    <td class="hidden md:table-cell">Viewer</td>
+                    <td class="hidden lg:table-cell text-muted-foreground">Never</td>
+                    <td>
+                      <div data-ui-dropdown class="dropdown">
+                        <button class="btn btn-ghost btn-icon btn-sm" data-ui-dropdown-trigger aria-label="Actions for Alan Turing"><i class="fa-solid fa-ellipsis"></i></button>
+                        <div class="dropdown-content" data-ui-dropdown-content role="menu">
+                          <button class="dropdown-item" role="menuitem"><i class="fa-solid fa-paper-plane"></i> Resend invite</button>
+                          <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+                          <div class="dropdown-separator"></div>
+                          <button class="dropdown-item dropdown-item-destructive" role="menuitem"><i class="fa-solid fa-user-minus"></i> Remove</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input class="checkbox row-check" type="checkbox" aria-label="Select Katherine Johnson"></td>
+                    <td>
+                      <div class="table-cell-main">
+                        <span class="avatar avatar-sm"><span class="avatar-fallback">KJ</span></span>
+                        <span class="stack" style="gap:0"><span class="font-medium">Katherine Johnson</span><span class="table-cell-sub">katherine@example.com</span></span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-dot badge-destructive">Suspended</span></td>
+                    <td class="hidden md:table-cell">Member</td>
+                    <td class="hidden lg:table-cell text-muted-foreground">3 days ago</td>
+                    <td>
+                      <div data-ui-dropdown class="dropdown">
+                        <button class="btn btn-ghost btn-icon btn-sm" data-ui-dropdown-trigger aria-label="Actions for Katherine Johnson"><i class="fa-solid fa-ellipsis"></i></button>
+                        <div class="dropdown-content" data-ui-dropdown-content role="menu">
+                          <button class="dropdown-item" role="menuitem"><i class="fa-solid fa-unlock"></i> Reinstate</button>
+                          <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+                          <div class="dropdown-separator"></div>
+                          <button class="dropdown-item dropdown-item-destructive" role="menuitem"><i class="fa-solid fa-trash"></i> Delete</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2"><span id="selected-count">0 selected</span></td>
+                    <td colspan="4" class="table-right text-muted-foreground">4 of 4 members</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-footer is-bordered between" style="gap:1rem; flex-wrap:wrap">
+            <p class="text-sm text-muted-foreground">Rows per page</p>
+            <nav class="pagination" aria-label="Pagination" style="width:auto">
+              <button class="pagination-prev" disabled aria-label="Previous page"><i class="fa-solid fa-chevron-left"></i></button>
+              <div class="pagination-list">
+                <a class="pagination-link is-active" href="#data" aria-current="page">1</a>
+                <a class="pagination-link" href="#data">2</a>
+                <a class="pagination-link" href="#data">3</a>
+                <span class="pagination-ellipsis text-muted-foreground" aria-hidden="true">&hellip;</span>
+                <a class="pagination-link" href="#data">12</a>
+              </div>
+              <button class="pagination-next" aria-label="Next page"><i class="fa-solid fa-chevron-right"></i></button>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------- TABS/ACCORDION ---------------------- -->
+      <section class="section stack" id="tabs" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">06</p>
+          <h2>Tabs &amp; accordion</h2>
+          <p class="muted">Arrow keys, Home/End and roving tabindex work on both.</p>
+        </div>
+
+        <div class="demo-grid">
+          <article class="card">
+            <div class="card-header"><p class="card-title">Tabs</p><p class="card-description">Keyboard-navigable, ARIA-correct</p></div>
+            <div class="card-content">
+              <div data-ui-tabs class="tabs">
+                <div role="tablist" class="tabs-list" aria-label="Deployment settings">
+                  <button role="tab" class="tabs-trigger" id="tab-account" aria-controls="panel-account" aria-selected="true">Account</button>
+                  <button role="tab" class="tabs-trigger" id="tab-password" aria-controls="panel-password">Password</button>
+                  <button role="tab" class="tabs-trigger" id="tab-billing" aria-controls="panel-billing">Billing</button>
+                  <button role="tab" class="tabs-trigger" id="tab-notify" aria-controls="panel-notify">Notifications</button>
+                </div>
+                <div role="tabpanel" class="tabs-panel" id="panel-account" aria-labelledby="tab-account" tabindex="0">
+                  <div class="stack" style="gap:1rem; padding-top:1rem">
+                    <div class="field"><label class="label" for="t-name">Name</label><input class="input" id="t-name" value="Ada Lovelace"></div>
+                    <div class="field"><label class="label" for="t-user">Username</label><input class="input" id="t-user" value="@ada"></div>
+                  </div>
+                </div>
+                <div role="tabpanel" class="tabs-panel" id="panel-password" aria-labelledby="tab-password" tabindex="0" hidden>
+                  <div class="stack" style="gap:1rem; padding-top:1rem">
+                    <div class="field"><label class="label" for="t-cur">Current password</label><input class="input" id="t-cur" type="password" placeholder="••••••••"></div>
+                    <div class="field"><label class="label" for="t-new">New password</label><input class="input" id="t-new" type="password" placeholder="••••••••"><p class="field-description">At least 12 characters.</p></div>
+                  </div>
+                </div>
+                <div role="tabpanel" class="tabs-panel" id="panel-billing" aria-labelledby="tab-billing" tabindex="0" hidden>
+                  <div class="stack" style="gap:1rem; padding-top:1rem">
+                    <div class="card" style="background-color: var(--muted); border-style: dashed;">
+                      <div class="card-content row between" style="gap:1rem">
+                        <div class="stack" style="gap:.125rem">
+                          <span class="text-sm font-semibold">Pro plan</span>
+                          <span class="text-xs text-muted-foreground">Renews 1 December 2026</span>
+                        </div>
+                        <span class="badge">USD 20/mo</span>
+                      </div>
+                    </div>
+                    <div class="row" style="gap:.5rem"><button class="btn btn-outline btn-sm">Change plan</button><button class="btn btn-ghost btn-sm">View invoices</button></div>
+                  </div>
+                </div>
+                <div role="tabpanel" class="tabs-panel" id="panel-notify" aria-labelledby="tab-notify" tabindex="0" hidden>
+                  <div class="stack" style="gap:0; padding-top:1rem">
+                    <div class="switch-row">
+                      <label class="stack" style="gap:.125rem" for="n-email"><span class="text-sm font-medium">Email</span><span class="text-xs text-muted-foreground">Digests and alerts.</span></label>
+                      <input class="switch" type="checkbox" id="n-email" role="switch" checked>
+                    </div>
+                    <div class="switch-row">
+                      <label class="stack" style="gap:.125rem" for="n-push"><span class="text-sm font-medium">Push</span><span class="text-xs text-muted-foreground">Browser notifications.</span></label>
+                      <input class="switch" type="checkbox" id="n-push" role="switch">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header"><p class="card-title">Accordion</p><p class="card-description">Single-open mode, animated height</p></div>
+            <div class="card-content">
+              <div data-ui-accordion="single" class="accordion">
+                <div data-ui-accordion-item class="accordion-item">
+                  <button class="accordion-trigger" id="acc-1-t" data-ui-accordion-trigger aria-expanded="true" aria-controls="acc-1-c">
+                    Is this actually shadcn/ui?
+                    <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+                  </button>
+                  <div class="accordion-content" id="acc-1-c" data-ui-accordion-content>
+                    <div class="accordion-inner">
+                      <p>No — it's a standalone CSS implementation of the same design language. The <em>tokens</em> are copied verbatim from shadcn's neutral theme, and the component metrics (heights, radii, shadows, focus ring) match, but the markup is plain HTML and the behaviour is plain JS instead of React + Radix.</p>
+                    </div>
+                  </div>
+                </div>
+                <div data-ui-accordion-item class="accordion-item">
+                  <button class="accordion-trigger" id="acc-2-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="acc-2-c">
+                    Do I need Tailwind or a build step?
+                    <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+                  </button>
+                  <div class="accordion-content" id="acc-2-c" data-ui-accordion-content hidden>
+                    <div class="accordion-inner">
+                      <p>No. Link <code>assets/ui/ui.css</code> and you're done. The stylesheet ships a small Tailwind-compatible utility layer (<code>text-sm</code>, <code>gap-4</code>, <code>bg-muted</code>, <code>lg:flex</code>…) so you can compose layouts the same way you would with shadcn.</p>
+                    </div>
+                  </div>
+                </div>
+                <div data-ui-accordion-item class="accordion-item">
+                  <button class="accordion-trigger" id="acc-3-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="acc-3-c">
+                    How do I change the palette?
+                    <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+                  </button>
+                  <div class="accordion-content" id="acc-3-c" data-ui-accordion-content hidden>
+                    <div class="accordion-inner">
+                      <p>Swap the token block at the top of <code>ui.css</code>. shadcn publishes zinc, slate, stone, gray and neutral — drop in any of them and every component follows, because nothing is hard-coded to a colour.</p>
+                    </div>
+                  </div>
+                </div>
+                <div data-ui-accordion-item class="accordion-item">
+                  <button class="accordion-trigger" id="acc-4-t" data-ui-accordion-trigger aria-expanded="false" aria-controls="acc-4-c">
+                    What about accessibility?
+                    <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+                  </button>
+                  <div class="accordion-content" id="acc-4-c" data-ui-accordion-content hidden>
+                    <div class="accordion-inner">
+                      <p>Dialogs trap focus and restore it on close, <kbd>Esc</kbd> dismisses the topmost overlay, menus and tabs use roving tabindex with arrow-key navigation, switches expose <code>role="switch"</code>, and toasts announce via <code>role="status"</code>. Motion respects <code>prefers-reduced-motion</code>.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- --------------------------- OVERLAYS -------------------------- -->
+      <section class="section stack" id="overlays" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">07</p>
+          <h2>Overlays</h2>
+          <p class="muted">Dialog, sheet, dropdown, popover and toasts — all driven by <code>assets/ui/ui.js</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-content showcase">
+            <button class="btn" data-ui-open="upgrade-dialog"><i class="fa-solid fa-rocket"></i> Dialog</button>
+            <button class="btn btn-outline" data-ui-open="confirm-dialog"><i class="fa-solid fa-triangle-exclamation"></i> Confirm dialog</button>
+            <button class="btn btn-outline" data-ui-open="sidebar-sheet"><i class="fa-solid fa-table-columns"></i> Sheet</button>
+
+            <div data-ui-dropdown class="dropdown">
+              <button class="btn btn-outline" data-ui-dropdown-trigger aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i> Dropdown <i class="fa-solid fa-chevron-down" style="width:.625rem"></i>
+              </button>
+              <div class="dropdown-content w-menu" data-ui-dropdown-content role="menu">
+                <p class="dropdown-label">Actions</p>
+                <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-pen-to-square"></i> Edit <span class="dropdown-item-trailing">⌘E</span></button>
+                <button class="dropdown-item" role="menuitem"><i class="fa-regular fa-clone"></i> Duplicate</button>
+                <button class="dropdown-item" role="menuitem"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                <div class="dropdown-separator"></div>
+                <button class="dropdown-item" role="menuitemcheckbox" aria-checked="true"><span class="dropdown-indicator"><i class="fa-solid fa-check"></i></span> Pinned</button>
+                <button class="dropdown-item" role="menuitemcheckbox" aria-checked="false"><span class="dropdown-indicator"></span> Archived</button>
+                <div class="dropdown-separator"></div>
+                <button class="dropdown-item" role="menuitem" disabled><i class="fa-solid fa-lock"></i> Locked action</button>
+                <button class="dropdown-item dropdown-item-destructive" role="menuitem"><i class="fa-solid fa-trash"></i> Delete</button>
+              </div>
+            </div>
+
+            <div data-ui-dropdown class="dropdown">
+              <button class="btn btn-outline" data-ui-dropdown-trigger aria-label="Open popover">
+                <i class="fa-regular fa-comment-dots"></i> Popover
+              </button>
+              <div class="popover-content" data-ui-dropdown-content role="dialog" aria-label="Set width">
+                <div class="stack" style="gap:1rem">
+                  <div class="stack" style="gap:.25rem">
+                    <p class="text-sm font-semibold">Dimensions</p>
+                    <p class="text-xs text-muted-foreground">Adjust the panel width.</p>
+                  </div>
+                  <div class="grid grid-cols-2" style="gap:.75rem">
+                    <div class="field"><label class="label" for="pop-w">Width</label><input class="input" id="pop-w" value="100%"></div>
+                    <div class="field"><label class="label" for="pop-m">Max</label><input class="input" id="pop-m" value="300px"></div>
+                  </div>
+                  <div class="field">
+                    <div class="field-row"><label class="label" for="pop-lock">Lock ratio</label><input class="switch" type="checkbox" id="pop-lock" role="switch" checked></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-secondary" id="toast-success"><i class="fa-solid fa-circle-check"></i> Success toast</button>
+            <button class="btn btn-destructive" id="toast-error"><i class="fa-solid fa-circle-exclamation"></i> Error toast</button>
+            <button class="btn btn-ghost" id="toast-action"><i class="fa-solid fa-bolt"></i> Toast with action</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------- FEEDBACK -------------------------- -->
+      <section class="section stack" id="feedback" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">08</p>
+          <h2>Feedback &amp; state</h2>
+        </div>
+        <div class="demo-grid">
+          <article class="card">
+            <div class="card-header"><p class="card-title">Alerts</p></div>
+            <div class="card-content stack" style="gap:1rem">
+              <div class="alert" role="alert">
+                <i class="fa-solid fa-circle-check"></i>
+                <div>
+                  <p class="alert-title">Success! Your changes have been saved</p>
+                  <p class="alert-description">This is an alert with an icon, title and description.</p>
+                </div>
+              </div>
+              <div class="alert alert-destructive" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <div>
+                  <p class="alert-title">Unable to process your payment</p>
+                  <p class="alert-description">Please double-check your billing details and try again.</p>
+                </div>
+              </div>
+              <div class="alert">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                  <p class="alert-title">Heads up</p>
+                  <p class="alert-description">You can add docs to your site with <code>data-ui-*</code> attributes — see <code>assets/ui/README.md</code>.</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header"><p class="card-title">Progress &amp; skeletons</p></div>
+            <div class="card-content stack" style="gap:1.25rem">
+              <div class="stack" style="gap:.5rem">
+                <div class="field-row"><span class="text-sm font-medium">Upload progress</span><span class="text-sm text-muted-foreground tabular-nums" id="prog-out">0%</span></div>
+                <div class="progress" role="progressbar" aria-label="Upload progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                  <div class="progress-indicator" id="prog-bar" style="transform: scaleX(0)"></div>
+                </div>
+                <button class="btn btn-outline btn-sm" id="prog-run" style="align-self:flex-start"><i class="fa-solid fa-play"></i> Run upload</button>
+              </div>
+              <div class="separator"></div>
+              <div class="stack" style="gap:.75rem">
+                <p class="text-sm font-medium">Loading skeleton</p>
+                <div class="row" style="gap:.75rem; align-items:flex-start">
+                  <span class="skeleton" style="width:2.5rem; height:2.5rem; border-radius:var(--radius-full); flex-shrink:0"></span>
+                  <div class="stack grow" style="gap:.5rem">
+                    <span class="skeleton" style="height:.875rem; width:60%"></span>
+                    <span class="skeleton" style="height:.875rem; width:90%"></span>
+                    <span class="skeleton" style="height:.875rem; width:40%"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="separator"></div>
+              <div class="empty">
+                <span class="empty-icon"><i class="fa-regular fa-folder-open"></i></span>
+                <p class="empty-title">No results found</p>
+                <p class="empty-description">Try adjusting your search or filters to find what you're looking for.</p>
+                <button class="btn btn-outline btn-sm mt-2"><i class="fa-solid fa-rotate-left"></i> Clear filters</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ---------------------------- USAGE ---------------------------- -->
+      <section class="section stack" id="usage" style="gap:1rem">
+        <div class="stack" style="gap:.25rem">
+          <p class="section-label">09</p>
+          <h2>Usage</h2>
+          <p class="muted">Four tags in <code>&lt;head&gt;</code>, two before <code>&lt;/body&gt;</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="stack" style="gap:.25rem">
+              <p class="card-title">Copy this into any page</p>
+              <p class="card-description">Paths are relative to the repo root — prefix with <code>../</code> if your page is nested.</p>
+            </div>
+            <div class="card-action">
+              <button class="btn btn-outline btn-sm" data-ui-copy-target="#usage-snippet">
+                <i class="fa-regular fa-copy"></i> <span data-ui-copy-label>Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="card-content">
+<pre id="usage-snippet" style="margin:0"><code>&lt;!-- head: theme.js FIRST so there is no flash of the wrong theme --&gt;
+&lt;script src="assets/ui/theme.js"&gt;&lt;/script&gt;
+
+&lt;link rel="stylesheet" href="assets/geist/geist.css"&gt;
+&lt;link rel="stylesheet" href="assets/ui/ui.css"&gt;
+&lt;link rel="stylesheet" href="assets/fontawesome/css/all.min.css"&gt;
+&lt;meta name="color-scheme" content="light dark"&gt;
+
+&lt;!-- end of body --&gt;
+&lt;script src="assets/ui/ui.js"&gt;&lt;/script&gt;
+
+&lt;!-- theme API --&gt;
+&lt;button data-ui-theme-toggle&gt;Toggle&lt;/button&gt;
+UITheme.set('dark');   UITheme.getMode();   UITheme.cycle();
+
+&lt;!-- toast API --&gt;
+&lt;script&gt;UI.toast({ title: 'Saved', variant: 'success' });&lt;/script&gt;</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <footer class="stack" style="gap:.5rem; padding-block:2.5rem; border-top:1px solid var(--border)">
+        <div class="row wrap between" style="gap:.75rem">
+          <p class="text-sm text-muted-foreground">
+            <i class="fa-solid fa-database"></i> Served entirely from this repository — no CDN, no build step.
+          </p>
+          <div class="row" style="gap:.375rem">
+            <span class="badge badge-outline">Geist 1.9.0</span>
+            <span class="badge badge-outline">FA 7.3.1</span>
+            <span class="badge badge-outline">GSAP 3.15.0</span>
+          </div>
+        </div>
+        <p class="text-xs text-muted-foreground">
+          Design language and tokens from <a class="underline" href="https://github.com/shadcn-ui/ui" rel="noopener">shadcn/ui</a> (MIT).
+          Implementation in this repo is original CSS/JS.
+          <a class="underline" href="index.html">Asset self-check &rarr;</a>
+        </p>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<!-- ============================ DIALOGS ============================ -->
+
+<div data-ui-dialog="upgrade-dialog" hidden>
+  <div data-ui-dialog-overlay class="dialog-overlay"></div>
+  <div data-ui-dialog-content class="dialog" role="dialog" aria-modal="true" aria-labelledby="up-title" aria-describedby="up-desc">
+    <button type="button" class="dialog-close" data-ui-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="up-title">Upgrade to Pro</h2>
+      <p class="dialog-description" id="up-desc">Unlimited projects, analytics and priority support. This dialog traps focus and closes on <kbd>Esc</kbd> or a backdrop click.</p>
+    </div>
+    <div class="stack" style="gap:1rem">
+      <div class="radio-group">
+        <label class="radio-row"><input class="radio" type="radio" name="up-plan" value="monthly" checked><span class="radio-row-text"><span>Monthly — USD 20</span><span class="check-row-desc">Billed every month, cancel anytime.</span></span></label>
+        <label class="radio-row"><input class="radio" type="radio" name="up-plan" value="yearly"><span class="radio-row-text"><span>Yearly — USD 200</span><span class="check-row-desc">Two months free.</span></span></label>
+      </div>
+      <div class="field">
+        <label class="label" for="up-card">Card number</label>
+        <input class="input" id="up-card" inputmode="numeric" placeholder="4242 4242 4242 4242" data-ui-dialog-autofocus>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-ghost" data-ui-close>Cancel</button>
+      <button type="button" class="btn" id="up-confirm"><i class="fa-solid fa-lock"></i> Upgrade</button>
+    </div>
+  </div>
+</div>
+
+<div data-ui-dialog="confirm-dialog" hidden>
+  <div data-ui-dialog-overlay class="dialog-overlay"></div>
+  <div data-ui-dialog-content class="dialog dialog-sm" role="alertdialog" aria-modal="true" aria-labelledby="cf-title" aria-describedby="cf-desc">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="cf-title">Discard changes?</h2>
+      <p class="dialog-description" id="cf-desc">This will permanently discard the edits on this form. You can't undo this.</p>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-outline" data-ui-close>Keep editing</button>
+      <button type="button" class="btn btn-destructive" id="cf-confirm">Discard</button>
+    </div>
+  </div>
+</div>
+
+<div data-ui-dialog="sidebar-sheet" hidden>
+  <div data-ui-dialog-overlay class="dialog-overlay"></div>
+  <div data-ui-dialog-content class="dialog dialog-sheet-left" role="dialog" aria-modal="true" aria-labelledby="sheet-title" style="padding:1rem">
+    <p class="sr-only" id="sheet-title">Navigation</p>
+    <div class="sidebar" style="display:flex; width:auto; height:auto; padding:0; border:0; background:none; position:static">
+      <div class="sidebar-header">
+        <span class="avatar avatar-sm" style="background-color: var(--primary); color: var(--primary-foreground); border-radius: var(--radius-md);"><i class="fa-solid fa-cube"></i></span>
+        <div class="stack" style="gap:.125rem">
+          <span class="text-sm font-semibold" style="line-height:1">static-alify</span>
+          <span class="text-xs text-muted-foreground">UI Kit</span>
+        </div>
+      </div>
+      <div class="sidebar-content">
+        <div>
+          <p class="sidebar-group-label">Overview</p>
+          <div class="sidebar-menu">
+            <a class="sidebar-item" href="#top" data-ui-close><i class="fa-solid fa-house"></i> Dashboard</a>
+            <a class="sidebar-item" href="#tokens" data-ui-close><i class="fa-solid fa-palette"></i> Tokens</a>
+            <a class="sidebar-item" href="#typography" data-ui-close><i class="fa-solid fa-font"></i> Typography</a>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-group-label">Components</p>
+          <div class="sidebar-menu">
+            <a class="sidebar-item" href="#buttons" data-ui-close><i class="fa-solid fa-square"></i> Buttons</a>
+            <a class="sidebar-item" href="#forms" data-ui-close><i class="fa-solid fa-input-text"></i> Forms</a>
+            <a class="sidebar-item" href="#data" data-ui-close><i class="fa-solid fa-table"></i> Data table</a>
+            <a class="sidebar-item" href="#tabs" data-ui-close><i class="fa-solid fa-layer-group"></i> Tabs &amp; accordion</a>
+            <a class="sidebar-item" href="#overlays" data-ui-close><i class="fa-solid fa-clone"></i> Overlays</a>
+            <a class="sidebar-item" href="#feedback" data-ui-close><i class="fa-solid fa-bell"></i> Feedback</a>
+          </div>
+        </div>
+        <div>
+          <p class="sidebar-group-label">Resources</p>
+          <div class="sidebar-menu">
+            <a class="sidebar-item" href="#usage" data-ui-close><i class="fa-solid fa-code"></i> Usage</a>
+            <a class="sidebar-item" href="index.html"><i class="fa-solid fa-circle-check"></i> Asset self-check</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS: all local -->
+<script src="assets/gsap/js/gsap.min.js"></script>
+<script src="assets/gsap/js/ScrollTrigger.min.js"></script>
+<script src="assets/ui/ui.js"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- theme chip follows the live mode ---------- */
+  function syncMode() {
+    var el = document.getElementById("token-mode");
+    if (el && window.UITheme) {
+      el.textContent = UITheme.getMode();
+      el.className = "badge " + (UITheme.getTheme() === "dark" ? "badge-secondary" : "badge-outline");
+    }
+  }
+  syncMode();
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("[data-ui-theme-toggle], [data-ui-theme-set], [data-ui-theme-menu]")) {
+      setTimeout(syncMode, 0);
+    }
+  });
+
+  /* ---------- toasts ---------- */
+  function t(opts) { if (window.UI) { UI.toast(opts); } }
+  var heroToast = document.getElementById("hero-toast");
+  if (heroToast) {
+    heroToast.addEventListener("click", function () {
+      t({ title: "Heads up!", description: "This toast came from UI.toast() in assets/ui/ui.js.", variant: "info" });
+    });
+  }
+  var ts = document.getElementById("toast-success");
+  if (ts) {
+    ts.addEventListener("click", function () {
+      t({ title: "Scheduled: Action Scheduler", description: "Your deploy has been scheduled for 14:30 PKT.", variant: "success" });
+    });
+  }
+  var te = document.getElementById("toast-error");
+  if (te) {
+    te.addEventListener("click", function () {
+      t({ title: "Uh oh! Something went wrong.", description: "Try again later — the build exited with code 1.", variant: "destructive", duration: 8000 });
+    });
+  }
+  var ta = document.getElementById("toast-action");
+  if (ta) {
+    ta.addEventListener("click", function () {
+      t({
+        title: "File deleted", description: "assets/legacy.css was removed.", variant: "warning", duration: 6000,
+        action: { label: "Undo", onClick: function () { t({ title: "Restored", variant: "success", duration: 2000 }); } }
+      });
+    });
+  }
+
+  /* ---------- loading button ---------- */
+  var ld = document.getElementById("load-demo");
+  if (ld) {
+    ld.addEventListener("click", function () {
+      ld.classList.add("is-loading"); ld.setAttribute("aria-busy", "true");
+      setTimeout(function () { ld.classList.remove("is-loading"); ld.removeAttribute("aria-busy"); }, 1800);
+    });
+    ld.classList.remove("is-loading");          // start idle, not spinning
+    ld.removeAttribute("aria-busy");
+  }
+
+  /* ---------- form validation ---------- */
+  var form = document.getElementById("demo-form");
+  if (form) {
+    function setMsg(slot, text, isError) {
+      var el = form.querySelector('[data-slot="' + slot + '"]');
+      if (!el) { return; }
+      el.textContent = text || "";
+      el.classList.toggle("is-error", !!isError);
+      if (isError) { el.setAttribute("data-error", ""); } else { el.removeAttribute("data-error"); }
+    }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var name = form.querySelector("#f-name"), email = form.querySelector("#f-email");
+      var ok = true;
+
+      if (!name.value.trim()) {
+        name.setAttribute("aria-invalid", "true"); setMsg("msg-name", "Name is required.", true); ok = false;
+      } else {
+        name.removeAttribute("aria-invalid"); setMsg("msg-name", "", false);
+      }
+
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) {
+        email.setAttribute("aria-invalid", "true"); setMsg("msg-email", "Enter a valid email address.", true); ok = false;
+      } else {
+        email.removeAttribute("aria-invalid"); setMsg("msg-email", "Looks good.", false);
+      }
+
+      if (ok) {
+        t({ title: "Saved", description: "Your changes were committed — no server involved, this is a demo.", variant: "success" });
+      } else {
+        t({ title: "Check the form", description: "Two fields need attention.", variant: "destructive" });
+        var bad = form.querySelector('[aria-invalid="true"]');
+        if (bad) { bad.focus(); }
+      }
+    });
+    form.addEventListener("reset", function () {
+      ["#f-name", "#f-email"].forEach(function (s) {
+        var el = form.querySelector(s); if (el) { el.removeAttribute("aria-invalid"); }
+      });
+      setTimeout(function () { setMsg("msg-name", "", false); setMsg("msg-email", "", false); }, 0);
+    });
+  }
+
+  /* ---------- indeterminate checkbox ---------- */
+  var ind = document.getElementById("f-indeterminate");
+  if (ind) { ind.indeterminate = true; }
+
+  /* ---------- slider readout ---------- */
+  var range = document.getElementById("f-range"), rangeOut = document.getElementById("range-out");
+  if (range && rangeOut) {
+    range.addEventListener("input", function () { rangeOut.textContent = range.value; });
+  }
+
+  /* ---------- table: select-all, row checks, filter ---------- */
+  var selectAll = document.getElementById("select-all");
+  var checks = Array.prototype.slice.call(document.querySelectorAll(".row-check"));
+  var countEl = document.getElementById("selected-count");
+  function syncCount() {
+    var n = checks.filter(function (c) { return c.checked; }).length;
+    if (countEl) { countEl.textContent = n + " selected"; }
+    if (selectAll) {
+      selectAll.checked = n === checks.length && n > 0;
+      selectAll.indeterminate = n > 0 && n < checks.length;
+    }
+    checks.forEach(function (c) {
+      var tr = c.closest("tr"); if (tr) { tr.setAttribute("data-state", c.checked ? "selected" : ""); }
+    });
+  }
+  if (selectAll) {
+    selectAll.addEventListener("change", function () {
+      checks.forEach(function (c) { c.checked = selectAll.checked; });
+      syncCount();
+    });
+  }
+  checks.forEach(function (c) { c.addEventListener("change", syncCount); });
+  syncCount();
+
+  var search = document.getElementById("table-search");
+  if (search) {
+    search.addEventListener("input", function () {
+      var q = search.value.trim().toLowerCase(), shown = 0;
+      checks.forEach(function (c) {
+        var tr = c.closest("tr");
+        if (!tr) { return; }
+        var hit = !q || tr.textContent.toLowerCase().indexOf(q) !== -1;
+        tr.style.display = hit ? "" : "none";
+        if (hit) { shown++; }
+      });
+      var cap = document.querySelector("#members tfoot td:last-child");
+      if (cap) { cap.textContent = shown + " of 4 members"; }
+    });
+  }
+
+  /* ---------- progress demo ---------- */
+  var run = document.getElementById("prog-run"), bar = document.getElementById("prog-bar"),
+      out = document.getElementById("prog-out"), prog = bar && bar.closest(".progress");
+  if (run && bar && out) {
+    run.addEventListener("click", function () {
+      if (window.gsap) {
+        gsap.fromTo(bar, { scaleX: 0 }, {
+          scaleX: 1, duration: 2, ease: "power2.inOut",
+          onUpdate: function () {
+            var p = Math.round(this.progress() * 100);
+            out.textContent = p + "%";
+            if (prog) { prog.setAttribute("aria-valuenow", p); }
+          },
+          onComplete: function () { t({ title: "Upload complete", variant: "success", duration: 2500 }); }
+        });
+      } else {
+        bar.style.transform = "scaleX(1)"; out.textContent = "100%";
+      }
+    });
+  }
+
+  /* ---------- dialog confirmations ---------- */
+  var up = document.getElementById("up-confirm");
+  if (up) {
+    up.addEventListener("click", function () {
+      UI.closeDialog("upgrade-dialog");
+      t({ title: "Welcome to Pro", description: "Nothing was charged — this is a static demo.", variant: "success" });
+    });
+  }
+  var cf = document.getElementById("cf-confirm");
+  if (cf) {
+    cf.addEventListener("click", function () {
+      UI.closeDialog("confirm-dialog");
+      if (form) { form.reset(); }
+      t({ title: "Changes discarded", variant: "warning", duration: 2500 });
+    });
+  }
+
+  /* ---------- sidebar: mark the section you're in ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#sidebar-desktop .sidebar-item[href^='#']"));
+  var sections = links
+    .map(function (a) { return document.querySelector(a.getAttribute("href")); })
+    .filter(Boolean);
+  if (window.ScrollTrigger && sections.length) {
+    gsap.registerPlugin(ScrollTrigger);
+    sections.forEach(function (sec) {
+      ScrollTrigger.create({
+        trigger: sec, start: "top 40%", end: "bottom 40%",
+        onToggle: function (self) {
+          if (!self.isActive) { return; }
+          links.forEach(function (a) {
+            a.toggleAttribute("aria-current", a.getAttribute("href") === "#" + sec.id);
+            a.classList.toggle("is-active", a.getAttribute("href") === "#" + sec.id);
+          });
+        }
+      });
+    });
+  }
+
+  /* ---------- GSAP reveal (graceful: content is visible without it) ---------- */
+  if (window.gsap) {
+    gsap.utils.toArray("section .card, section article.card").forEach(function (card) {
+      gsap.fromTo(card, { opacity: 0, y: 16 }, {
+        opacity: 1, y: 0, duration: .55, ease: "power2.out",
+        scrollTrigger: window.ScrollTrigger
+          ? { trigger: card, start: "top 92%", once: true }
+          : undefined
+      });
+    });
+  }
+
+  /* ---------- Cmd/Ctrl+K focuses search ---------- */
+  document.addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      var s = document.querySelector('.topbar input[type="search"]');
+      if (s) { s.focus(); }
+    }
+  });
+})();
+</script>
+</body>
+</html>

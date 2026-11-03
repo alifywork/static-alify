@@ -15,6 +15,13 @@ Machine-readable version/source list: [`vendor.json`](vendor.json).
 Licence texts live next to each library (`bootstrap/LICENSE`,
 `fontawesome/LICENSE.txt`, `geist/LICENSE.txt`, `gsap/LICENSE-NOTICE.txt`).
 
+> **`ui/` is the exception.** It is *not* a vendored third-party package — it's
+> original CSS/JS written for this repo that reproduces shadcn/ui's design
+> language. Its design **tokens** are copied verbatim from the shadcn registry
+> (shadcn/ui is MIT), but the stylesheet, theme switcher and component runtime
+> are ours, so there is no upstream package to update. See
+> [`ui/README.md`](ui/README.md).
+
 ---
 
 ## Folder layout
@@ -37,6 +44,11 @@ assets/
 │   ├── geist.css         ← variable build (recommended, 4 faces)
 │   ├── geist-static.css  ← one face per weight/style (36 faces)
 │   └── LICENSE.txt
+├── ui/                    ← standalone shadcn/ui-style design system (see ui/README.md)
+│   ├── ui.css             tokens + base + 24 components + utility layer
+│   ├── theme.js           light/dark switch, no flash of wrong theme
+│   ├── ui.js              dialog / dropdown / tabs / accordion / toast + a11y
+│   └── README.md
 ├── vendor.json
 └── README.md   (this file)
 ```
