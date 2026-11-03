@@ -1,0 +1,77 @@
+{
+  "_comment": "Locally vendored front-end libraries, plus the in-repo UI kit. Paths below are relative to the repo root.",
+  "generated": "2026-11-03",
+  "libraries": [
+    {
+      "name": "Bootstrap",
+      "version": "5.3.8",
+      "license": "MIT",
+      "npm": "bootstrap",
+      "source": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.8.tgz",
+      "homepage": "https://getbootstrap.com",
+      "css": "assets/bootstrap/css/bootstrap.min.css",
+      "js": "assets/bootstrap/js/bootstrap.bundle.min.js"
+    },
+    {
+      "name": "GSAP",
+      "version": "3.15.0",
+      "license": "Standard 'no charge' license (https://gsap.com/standard-license)",
+      "npm": "gsap",
+      "source": "https://registry.npmjs.org/gsap/-/gsap-3.15.0.tgz",
+      "homepage": "https://gsap.com",
+      "js": "assets/gsap/js/gsap.min.js",
+      "plugins": [
+        "ScrollTrigger",
+        "Observer",
+        "Flip",
+        "ScrollToPlugin"
+      ]
+    },
+    {
+      "name": "Font Awesome Free",
+      "version": "7.3.1",
+      "license": "CC-BY-4.0 (icons) + OFL-1.1 (fonts) + MIT (code)",
+      "npm": "@fortawesome/fontawesome-free",
+      "source": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-7.3.1.tgz",
+      "homepage": "https://fontawesome.com",
+      "css": "assets/fontawesome/css/all.min.css",
+      "webfonts": "assets/fontawesome/webfonts/"
+    },
+    {
+      "name": "Geist Font (Sans + Mono)",
+      "version": "1.9.0",
+      "license": "SIL Open Font License 1.1",
+      "npm": "geist",
+      "source": "https://registry.npmjs.org/geist/-/geist-1.9.0.tgz",
+      "homepage": "https://github.com/vercel/geist-font",
+      "css": "assets/geist/geist.css",
+      "css_static": "assets/geist/geist-static.css",
+      "fonts": "assets/geist/fonts/{sans,mono}/",
+      "note": "Geist Pixel and Geist Serif from the same package were NOT vendored - say the word if you want them."
+    },
+    {
+      "name": "UI Kit (shadcn/ui-style)",
+      "version": "1.0.0",
+      "license": "MIT (implementation in this repo); design tokens from shadcn/ui, also MIT",
+      "npm": null,
+      "vendored_from_npm": false,
+      "note": "Original CSS/JS written for this repo. NOT an npm package, so there is nothing to re-fetch when updating. The design tokens ARE copied verbatim from the shadcn registry - see tokenSource below.",
+      "tokenSource": "https://github.com/shadcn-ui/ui/blob/main/apps/v4/public/r/colors/neutral.json",
+      "tokenSourceKey": "cssVarsV4",
+      "css": "assets/ui/ui.css",
+      "js": [
+        "assets/ui/theme.js",
+        "assets/ui/ui.js"
+      ],
+      "docs": "assets/ui/README.md",
+      "showcase": "ui.html",
+      "requires": [
+        "assets/geist/geist.css"
+      ],
+      "optional": [
+        "assets/fontawesome/css/all.min.css",
+        "assets/gsap/js/gsap.min.js"
+      ]
+    }
+  ]
+}

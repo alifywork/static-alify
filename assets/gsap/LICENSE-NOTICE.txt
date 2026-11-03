@@ -1,0 +1,20 @@
+GSAP (GreenSock Animation Platform) v3.15.0
+https://gsap.com
+
+The gsap npm package does not ship a LICENSE file. Per its package.json
+metadata, this build is distributed under:
+
+  "Standard 'no charge' license: https://gsap.com/standard-license"
+
+As of 2025 GSAP and all of its plugins (including the former "Club GSAP"
+paid plugins) are free to use, including for commercial work, under that
+standard license. Read the full terms before shipping:
+
+  https://gsap.com/standard-license
+
+Files vendored here (from dist/, minified + source maps):
+  gsap.min.js            - core (includes CSSPlugin)
+  ScrollTrigger.min.js   - scroll-driven animation
+  Observer.min.js        - unified pointer/touch/wheel events
+  Flip.min.js            - FLIP layout transitions
+  ScrollToPlugin.min.js  - smooth scrolling to positions/elements

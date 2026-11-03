@@ -1,0 +1,180 @@
+/* ==========================================================================
+   header.css - GLOBAL sticky header: logo | menu | CTAs | about | burger
+   --------------------------------------------------------------------------
+   Transparent over the hero, then condenses into a blurred solid bar with a
+   hairline (header.js adds .is-scrolled past 8px) plus a 2px scroll-progress
+   line. The wordmark swaps between the black and white logo files with the
+   theme; nav links are mono micro-labels with a hairline that wipes in.
+   ========================================================================== */
+
+.site-header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: var(--z-header);
+  border-bottom: 1px solid transparent;
+  transition: background-color .35s ease, border-color .35s ease, backdrop-filter .35s ease;
+}
+
+.site-header.is-scrolled {
+  background-color: rgba(10, 10, 10, .72);
+  background-color: color-mix(in oklab, var(--background) 76%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border-bottom-color: var(--hair);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(.5rem, 1.6vw, 1.25rem);
+  height: var(--header-h);
+}
+
+/* ---- logo --------------------------------------------------------------- */
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  text-decoration: none;
+}
+
+.site-logo__img {
+  display: block;
+  height: 1.375rem;
+  width: auto;
+}
+
+/* black wordmark on light theme, white wordmark on dark theme */
+.site-logo__img--light { display: none; }
+:root[data-theme="dark"] .site-logo__img--dark { display: none; }
+:root[data-theme="dark"] .site-logo__img--light { display: block; }
+
+/* ---- primary nav (centred between logo and actions) --------------------- */
+.site-nav { margin-inline: auto; }
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(.5rem, 1.6vw, 1.75rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav__link {
+  position: relative;
+  display: inline-block;
+  padding: .375rem 0;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .4s cubic-bezier(.2, .7, .2, 1);
+}
+
+.site-nav__link:hover { color: var(--foreground); }
+.site-nav__link:hover::after,
+.site-nav__link[aria-current]::after { transform: scaleX(1); }
+.site-nav__link[aria-current] { color: var(--foreground); }
+
+/* ---- actions ------------------------------------------------------------ */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  flex: none;
+}
+
+.site-header__about {
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--muted-foreground);
+}
+
+.site-header__about:hover { color: var(--foreground); }
+
+.site-header__cta { flex: none; }
+
+.site-header__cta-label {
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+}
+
+.site-header__burger { display: none; }
+
+/* ---- theme toggle: the two icons cross-fade/slide ----------------------- */
+/* By default only the relevant icon shows (drawers, inline toggles)... */
+:root[data-theme="dark"] .icon-sun,
+:root[data-theme="light"] .icon-moon { display: none; }
+
+/* ...but the header toggle keeps both so it can animate between them. */
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition: transform .45s cubic-bezier(.2, .7, .2, 1), opacity .3s ease;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun { transform: translateY(115%); opacity: 0; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { transform: none; opacity: 1; }
+:root[data-theme="light"] .theme-toggle .icon-moon { transform: translateY(-115%); opacity: 0; }
+:root[data-theme="light"] .theme-toggle .icon-sun { transform: none; opacity: 1; }
+
+/* ---- scroll progress hairline ------------------------------------------- */
+.site-header__progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 2px;
+  overflow: hidden;
+}
+
+.site-header__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background-color: var(--foreground);
+}
+
+/* ---- mobile ------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .site-header__about { display: none; }   /* About lives in the drawer below lg */
+}
+
+@media (max-width: 991.98px) {
+  .site-nav { display: none; }
+  .site-header__actions { margin-left: auto; }
+  .site-header__burger { display: inline-flex; }
+  .site-header__cta-label { display: none; }  /* icon-only CTA to save room */
+  .site-header__cta { padding-inline: .875rem; }
+}
+
+@media (max-width: 575.98px) {
+  .theme-toggle { display: none; }   /* theme switch lives in the nav drawer */
+}

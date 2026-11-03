@@ -1,0 +1,90 @@
+/* ==========================================================================
+   ticker.css - REUSABLE infinite marquee (the technology band)
+   --------------------------------------------------------------------------
+   Markup:
+     <div class="ticker" data-ticker='{"speed":80}'>
+       <div class="ticker__track">
+         <div class="ticker__group">
+           <span class="ticker__item">React</span>
+           ...
+         </div>
+       </div>
+     </div>
+
+   js/components/ticker.js duplicates .ticker__group until the track covers
+   twice the viewport - always an EVEN number of groups - and writes
+   --ticker-duration so the px/sec speed is constant at any content width.
+   The CSS loop therefore translates exactly -50% and lands on a seam.
+   ========================================================================== */
+
+.ticker {
+  position: relative;
+  overflow: hidden;
+  /* fade the band out at both edges instead of hard-clipping the text */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker-slide var(--ticker-duration, 40s) linear infinite;
+}
+
+/* pause on hover, on keyboard focus, and when a section marks it off-screen */
+.ticker:hover .ticker__track,
+.ticker:focus-within .ticker__track,
+.ticker__track.is-paused {
+  animation-play-state: paused;
+}
+
+.ticker--reverse .ticker__track { animation-direction: reverse; }
+
+.ticker__group {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+/* ---- items: mono micro-labels separated by a hard little square --------- */
+.ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-inline: clamp(.75rem, 2vw, 1.5rem);
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+
+.ticker__item::after {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 4px;
+  background-color: var(--hair-strong);
+}
+
+.ticker__item:hover { color: var(--foreground); }
+
+/* larger variant for a statement band */
+.ticker--lg .ticker__item {
+  font-size: clamp(.9375rem, 1.6vw, 1.25rem);
+  letter-spacing: .06em;
+  color: var(--foreground);
+}
+
+.ticker--lg .ticker__item::after { width: 5px; height: 5px; }
+
+@keyframes ticker-slide {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track { animation: none; }
+  .ticker { overflow-x: auto; }
+}

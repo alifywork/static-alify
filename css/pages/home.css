@@ -1,0 +1,45 @@
+/* ==========================================================================
+   home.css - PAGE: home
+   --------------------------------------------------------------------------
+   Page-level concerns only: the full-height hero, horizontal overflow guards,
+   and the seam between bands. Every visual detail lives in the section,
+   component and global files - this sheet just tunes them for this page.
+
+   Its JS partner (js/pages/home.js) defines the shared window.Reveal helper,
+   so it must be loaded BEFORE the section scripts.
+   ========================================================================== */
+
+/* Nothing on this page may cause sideways scroll (sliders, ticker, panels) */
+.home { overflow-x: clip; }
+
+.home main { position: relative; }
+
+/* ---- hero: a full viewport on desktop, content-led on small screens ----- */
+@media (min-width: 992px) {
+  .home .hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.home .hero > .container { width: 100%; }
+
+.home .hero {
+  padding-top: calc(var(--header-h) + clamp(2.5rem, 7vw, 5.5rem));
+  padding-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* ---- band rhythm -------------------------------------------------------- */
+/* The tech ticker sits tight under the hero so the two read as one moment. */
+.home .tech { padding-block: 0; }
+
+/* Tighten the gap when a tinted band follows another bordered section */
+.home .section--tint + .section { padding-top: var(--section-gap); }
+
+/* Give the last section a little more air before the footer */
+.home .contact { padding-bottom: calc(var(--section-gap) * 1.05); }
+
+@media (prefers-reduced-motion: reduce) {
+  .home .hero { min-height: 0; }
+}

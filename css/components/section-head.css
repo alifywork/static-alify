@@ -1,0 +1,96 @@
+/* ==========================================================================
+   section-head.css - REUSABLE section heading block (CSS only, no JS)
+   --------------------------------------------------------------------------
+   Markup:
+     <div class="section-head">                  (add --center or --wide)
+       <p class="section-head__eyebrow"><span class="section-head__dot"></span> Label</p>
+       <h2 class="section-head__title">Title</h2>
+       <p class="section-head__desc">Supporting copy</p>
+     </div>
+
+   Row variant - title block plus an action, sitting under a hairline:
+     <div class="section-head section-head__row">
+       <div class="section-head">...</div>
+       <a class="btn btn-outline" href="#contact">...</a>
+     </div>
+   ========================================================================== */
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(.875rem, 1.5vw, 1.125rem);
+  max-width: 44rem;
+}
+
+/* ---- eyebrow: mono, uppercase, wide-tracked, led by a hard little square -- */
+.section-head__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  margin: 0;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+.section-head__dot {
+  flex: none;
+  width: 5px;
+  height: 5px;
+  background-color: var(--foreground);
+}
+
+/* ---- title + description ------------------------------------------------ */
+.section-head__title {
+  margin: 0;
+  font-size: var(--t-h2);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: var(--track-tight);
+}
+
+.section-head__desc {
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--t-lead);
+  line-height: 1.65;
+  color: var(--muted-foreground);
+}
+
+/* ---- variants ----------------------------------------------------------- */
+.section-head--center {
+  align-items: center;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-head--center .section-head__desc { margin-inline: auto; }
+
+.section-head--wide { max-width: 60rem; }
+
+/* Title block + action on one line, separated from the section above by a
+   hairline. Needs flex-direction:row because .section-head sets column. */
+.section-head__row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  max-width: none;
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--hair);
+}
+
+.section-head__row .section-head {
+  margin-bottom: 0;
+  max-width: 38rem;
+}
+
+.section-head__row .section-head__title { max-width: 22ch; }
+
+@media (max-width: 767.98px) {
+  .section-head__row { align-items: flex-start; }
+  .section-head__row .btn { width: 100%; justify-content: center; }
+}

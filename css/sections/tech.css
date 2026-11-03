@@ -1,0 +1,41 @@
+/* ==========================================================================
+   tech.css - SECTION: technology ticker band
+   --------------------------------------------------------------------------
+   A hairline band that sits tight under the hero: a centred mono label, then
+   the marquee. js/sections/tech.js pauses the track while the band is
+   off-screen by toggling .is-paused on .ticker__track.
+
+   home.css zeroes this section's padding so the band reads as part of the
+   hero moment - the spacing below lives on the inner elements.
+   ========================================================================== */
+
+.tech {
+  position: relative;
+  background-color: var(--panel);
+  border-block: 1px solid var(--hair);
+}
+
+.tech .container { padding-block: 1.5rem 0; }
+
+.tech__label {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* the marquee gets its own rule above so the label never crowds it */
+.tech .ticker {
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--hair);
+}
+
+.tech .ticker__track.is-paused { animation-play-state: paused; }
+
+@media (max-width: 575.98px) {
+  .tech .container { padding-block: 1.125rem 0; }
+  .tech .ticker { padding-block: 1rem; }
+}

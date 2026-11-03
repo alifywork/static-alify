@@ -1,0 +1,200 @@
+/* ==========================================================================
+   drawer.css - REUSABLE off-canvas drawer (slides in from the LEFT)
+   --------------------------------------------------------------------------
+   Markup:
+     <div class="drawer" id="nav-drawer" data-drawer aria-hidden="true">
+       <div class="drawer__backdrop" data-drawer-close></div>
+       <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+         <div class="drawer__head">...</div>
+         <div class="drawer__body">...</div>
+         <div class="drawer__foot">...</div>
+       </aside>
+     </div>
+
+   js/components/drawer.js toggles the data-open attribute (and aria-hidden),
+   so the visibility rules below key off both. Nav links are set big and tight
+   with a hairline between them - the drawer is a statement, not a list.
+   ========================================================================== */
+
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.drawer[data-open],
+.drawer[aria-hidden="false"] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ---- backdrop ----------------------------------------------------------- */
+.drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, .62);
+  opacity: 0;
+  transition: opacity .4s ease;
+  cursor: pointer;
+}
+
+:root[data-theme="light"] .drawer__backdrop { background-color: rgba(0, 0, 0, .45); }
+
+.drawer[data-open] .drawer__backdrop,
+.drawer[aria-hidden="false"] .drawer__backdrop { opacity: 1; }
+
+/* ---- panel -------------------------------------------------------------- */
+.drawer__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(25rem, 88vw);
+  max-width: 88vw;
+  background-color: var(--background);
+  border-right: 1px solid var(--hair);
+  transform: translateX(-101%);
+  transition: transform .48s cubic-bezier(.22, .8, .2, 1);
+  box-shadow: 0 0 6rem rgba(0, 0, 0, .5);
+}
+
+.drawer[data-open] .drawer__panel,
+.drawer[aria-hidden="false"] .drawer__panel { transform: none; }
+
+/* mirrored variant, kept for reuse on other pages */
+.drawer--right .drawer__panel {
+  left: auto;
+  right: 0;
+  border-right: 0;
+  border-left: 1px solid var(--hair);
+  transform: translateX(101%);
+}
+
+/* ---- head / body / foot ------------------------------------------------- */
+.drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex: none;
+  min-height: var(--header-h);
+  padding: 1rem clamp(1.25rem, 4vw, 1.75rem);
+  border-bottom: 1px solid var(--hair);
+}
+
+.drawer__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 2.25rem);
+  padding: clamp(1.5rem, 4vw, 2rem) clamp(1.25rem, 4vw, 1.75rem);
+  overscroll-behavior: contain;
+}
+
+.drawer__foot {
+  flex: none;
+  padding: 1.25rem clamp(1.25rem, 4vw, 1.75rem);
+  border-top: 1px solid var(--hair);
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--muted-foreground);
+}
+
+/* ---- drawer nav: big, tight, hairline-separated ------------------------- */
+.drawer-nav {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+.drawer-nav__label {
+  margin: 0 0 .75rem;
+  padding: 0 .5rem;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+.drawer-nav__label:not(:first-child) { margin-top: 1.75rem; }
+
+.drawer-nav__link {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+  padding: .75rem .5rem;
+  border-bottom: 1px solid var(--hair);
+  font-size: clamp(1.375rem, 4.4vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: color .2s ease, padding-left .3s cubic-bezier(.2, .7, .2, 1),
+              background-color .2s ease;
+}
+
+.drawer-nav__link:first-of-type { border-top: 1px solid var(--hair); }
+
+.drawer-nav__link > i {
+  flex: none;
+  width: 1.25rem;
+  font-size: .875rem;
+  text-align: center;
+  color: var(--muted-foreground);
+  transition: color .2s ease, transform .3s cubic-bezier(.2, .7, .2, 1);
+}
+
+.drawer-nav__link:hover,
+.drawer-nav__link:focus-visible {
+  padding-left: 1rem;
+  color: var(--foreground);
+}
+
+.drawer-nav__link:hover > i { color: var(--foreground); transform: translateX(2px); }
+
+.drawer-nav__link[aria-current="page"] {
+  background-color: var(--panel);
+  font-weight: 700;
+}
+
+.drawer-nav__link[aria-current="page"] > i { color: var(--foreground); }
+
+/* a drawer-nav row can also be a <button> (e.g. opening a stacked drawer) */
+button.drawer-nav__link {
+  width: 100%;
+  background: none;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.drawer-nav__link-arrow {
+  margin-left: auto;
+  font-size: .75rem;
+  opacity: .45;
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1), opacity .2s ease;
+}
+
+.drawer-nav__link:hover .drawer-nav__link-arrow { transform: translateX(4px); opacity: 1; }
+
+/* ---- drawer utilities --------------------------------------------------- */
+.drawer .btn-block { width: 100%; justify-content: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer, .drawer__panel, .drawer__backdrop { transition-duration: .01ms !important; }
+  .drawer-nav__link, .drawer-nav__link > i { transition-duration: .01ms !important; }
+}

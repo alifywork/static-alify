@@ -1,0 +1,55 @@
+/* Geist Font v1.9.0 (https://github.com/vercel/geist-font)
+   Licensed under the SIL Open Font License 1.1 - see LICENSE.txt
+   VARIABLE build (recommended): one file per family covers the whole
+   100-900 weight range. Weight ranges read from each file's fvar axis.
+   Prefer one file per weight instead? Use geist-static.css.
+   Paths are relative to this file, so link it as:
+     <link rel="stylesheet" href="assets/geist/geist.css">
+*/
+
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/sans/Geist-Variable.woff2') format('woff2'),
+       url('fonts/sans/Geist-Variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/sans/Geist-ItalicVariable.woff2') format('woff2'),
+       url('fonts/sans/Geist-ItalicVariable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/mono/GeistMono-Variable.woff2') format('woff2'),
+       url('fonts/mono/GeistMono-Variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/mono/GeistMono-ItalicVariable.woff2') format('woff2'),
+       url('fonts/mono/GeistMono-ItalicVariable.ttf') format('truetype');
+}
+
+/* Optional font stacks - apply them in your own stylesheet, e.g.
+     body { font-family: var(--font-geist-sans); }
+     code, pre { font-family: var(--font-geist-mono); }
+*/
+:root {
+  --font-geist-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+                     Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-geist-mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+                     Consolas, 'Liberation Mono', monospace;
+}

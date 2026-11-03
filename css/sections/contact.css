@@ -1,0 +1,241 @@
+/* ==========================================================================
+   contact.css - SECTION: contact form
+   --------------------------------------------------------------------------
+   Left: the direct channels as ruled rows, square social tiles and a mono
+   privacy note. Right: a hairline panel holding the form - mono labels,
+   transparent sharp fields that light up on focus, mono error slots, and an
+   inverted submit button whose icon spins while the fake request runs.
+
+   js/sections/contact.js does the validation (aria-invalid + [data-msg]
+   slots), the loading state and the success toast.
+   ========================================================================== */
+
+.contact__info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+/* ---- channels ---------------------------------------------------------- */
+.contact__channels {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--hair);
+}
+
+.contact__channel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.125rem 0;
+  border-bottom: 1px solid var(--hair);
+  color: inherit;
+  text-decoration: none;
+  transition: padding-left .35s cubic-bezier(.2, .7, .2, 1);
+}
+
+a.contact__channel:hover { padding-left: .5rem; }
+
+.contact__channel-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--hair-strong);
+  font-size: .875rem;
+  color: var(--foreground);
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+}
+
+.contact__channel:hover .contact__channel-icon {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--on-invert);
+}
+
+.contact__channel-label {
+  display: block;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+.contact__channel-value {
+  display: block;
+  margin-top: .375rem;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  color: var(--foreground);
+}
+
+.contact__channel-value.break-any { overflow-wrap: anywhere; }
+
+/* ---- socials + note ---------------------------------------------------- */
+.contact__socials { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.contact__social {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--hair-strong);
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: background-color .25s ease, color .25s ease,
+              border-color .25s ease, transform .25s ease;
+}
+
+.contact__social:hover {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--on-invert);
+  transform: translateY(-2px);
+}
+
+.contact__note {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--muted-foreground);
+}
+
+/* ---- form panel -------------------------------------------------------- */
+.contact__form-card {
+  padding: clamp(1.5rem, 3.5vw, 2.75rem);
+  border: 1px solid var(--hair-strong);
+  background-color: var(--panel);
+}
+
+.contact__form-title {
+  font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.035em;
+}
+
+.contact__form-desc {
+  margin-top: .75rem;
+  font-size: .9375rem;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+/* ---- fields ----------------------------------------------------------- */
+.field { display: flex; flex-direction: column; gap: .5rem; }
+
+.field > .label {
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--muted-foreground);
+}
+
+.field > .label-required::after {
+  content: " *";
+  color: var(--foreground);
+}
+
+.field .input,
+.field .select,
+.field .textarea {
+  width: 100%;
+  padding: .8125rem .875rem;
+  border: 1px solid var(--hair-strong);
+  background-color: transparent;
+  font-size: .9375rem;
+  color: var(--foreground);
+}
+
+.field .textarea { min-height: 8rem; resize: vertical; line-height: 1.65; }
+
+.field .select { appearance: none; padding-right: 2.25rem; }
+
+.field .input:focus,
+.field .select:focus,
+.field .textarea:focus {
+  border-color: var(--foreground);
+  background-color: color-mix(in oklab, var(--foreground) 3%, transparent);
+}
+
+.field [aria-invalid="true"] { border-color: var(--destructive); }
+
+/* error / hint slot: mono micro-type, reserved height so nothing jumps */
+.field-message {
+  min-height: .875rem;
+  margin: 0;
+  font-family: var(--font-ui-mono);
+  font-size: .625rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--muted-foreground);
+}
+
+.field-message[data-error] { color: var(--destructive); }
+
+/* ---- consent + submit ------------------------------------------------- */
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  cursor: pointer;
+}
+
+.check-row .checkbox { flex: none; margin-top: .1875rem; }
+
+.contact__consent {
+  font-size: .8125rem;
+  line-height: 1.65;
+  color: var(--muted-foreground);
+}
+
+.contact__submit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--hair);
+}
+
+.contact__submit-row .btn { min-width: 12rem; justify-content: center; }
+
+/* fake-submit loading state: the icon spins, the button stops responding */
+.contact .btn.is-loading { pointer-events: none; opacity: .72; }
+
+.contact .btn.is-loading > i { animation: contact-spin .8s linear infinite; }
+
+@keyframes contact-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- responsive ------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .contact__info { margin-bottom: clamp(2.25rem, 6vw, 3rem); }
+}
+
+@media (max-width: 575.98px) {
+  .contact__submit-row { flex-direction: column; align-items: stretch; }
+  .contact__submit-row .btn { width: 100%; min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact .btn.is-loading > i { animation-duration: 1.6s; }
+  .contact__channel { transition: none; }
+}

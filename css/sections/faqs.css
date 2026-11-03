@@ -1,0 +1,127 @@
+/* ==========================================================================
+   faqs.css - SECTION: FAQs
+   --------------------------------------------------------------------------
+   Sticky intro column with a hairline support card, beside a ruled accordion.
+   The accordion behaviour (single-open, animated height, ARIA) comes from
+   assets/ui/ui.js; this sheet only restyles it for the site - big tight
+   questions, muted answers, and a square chevron that inverts when open.
+
+   js/sections/faqs.js also opens #faq-N-t when the page loads with #faq-N.
+   ========================================================================== */
+
+.faqs__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+/* ---- support card ------------------------------------------------------ */
+.faqs__support {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--hair);
+  background-color: var(--panel);
+}
+
+.faqs__support > .avatar {
+  flex: none;
+  border: 1px solid var(--hair-strong);
+}
+
+.faqs__support-body {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.faqs__support-title {
+  font-size: .9375rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.faqs__support-desc {
+  font-size: .8125rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.faqs__support .btn { flex: none; margin-left: auto; }
+
+/* ---- accordion --------------------------------------------------------- */
+.faqs .accordion { border-top: 1px solid var(--hair); }
+
+.faqs .accordion-item { border-bottom: 1px solid var(--hair); }
+
+.faqs .accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  padding: clamp(1.125rem, 2.2vw, 1.5rem) 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -.02em;
+  text-align: left;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color .25s ease;
+}
+
+.faqs .accordion-trigger:hover,
+.faqs .accordion-trigger[aria-expanded="true"] { color: var(--foreground); }
+
+.faqs .accordion-chevron {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--hair-strong);
+  font-size: .625rem;
+  color: var(--foreground);
+  transition: transform .4s cubic-bezier(.22, .8, .2, 1),
+              background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+
+.faqs .accordion-trigger[aria-expanded="true"] .accordion-chevron {
+  transform: rotate(180deg);
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--on-invert);
+}
+
+.faqs .accordion-content {
+  overflow: hidden;
+  color: var(--muted-foreground);
+}
+
+.faqs .accordion-inner {
+  max-width: 62ch;
+  padding: 0 0 clamp(1.25rem, 2.4vw, 1.75rem);
+  font-size: .9375rem;
+  line-height: 1.75;
+}
+
+/* ---- responsive -------------------------------------------------------- */
+@media (min-width: 992px) {
+  .faqs__intro {
+    position: sticky;
+    top: calc(var(--header-h) + 2.5rem);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .faqs__support { flex-wrap: wrap; }
+  .faqs__support .btn { width: 100%; margin-left: 0; justify-content: center; }
+}

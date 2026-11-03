@@ -1,0 +1,150 @@
+/* ==========================================================================
+   testimonials.css - SECTION: testimonials slider
+   --------------------------------------------------------------------------
+   A giant quote mark bleeds behind the band as a watermark; the cards
+   themselves stay quiet - hairline panels, monochrome stars, generous quote
+   type, and the client row with a square avatar plus a ruled metric.
+
+   js/sections/testimonials.js starts/stops the slider's autoplay with an
+   IntersectionObserver so it doesn't advance past quotes nobody is watching.
+   ========================================================================== */
+
+/* overflow: clip keeps the oversized watermark inside this band instead of
+   bleeding over the sections above and below it */
+.testimonials {
+  position: relative;
+  overflow: clip;
+}
+
+/* watermark: never interactive, never in the way of the cards */
+.testimonials::before {
+  content: "\201C";
+  position: absolute;
+  top: clamp(0rem, 2vw, 2rem);
+  left: 50%;
+  translate: -50% 0;
+  z-index: 0;
+  font-family: var(--font-ui-sans);
+  font-size: clamp(14rem, 34vw, 30rem);
+  font-weight: 700;
+  line-height: .7;
+  color: var(--foreground);
+  opacity: .045;
+  pointer-events: none;
+}
+
+.testimonials > .container { position: relative; z-index: 1; }
+
+.testimonials .section-head { margin-bottom: clamp(2.25rem, 4.5vw, 3.5rem); }
+
+/* ---- card --------------------------------------------------------------- */
+.testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  height: 100%;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--hair);
+  background-color: var(--background);
+  transition: border-color .35s ease;
+}
+
+.testimonial-card:hover { border-color: var(--hair-strong); }
+
+/* monochrome stars: no gold on a neutral site */
+.testimonial-card__stars {
+  display: flex;
+  gap: 3px;
+  font-size: .6875rem;
+  color: var(--foreground);
+}
+
+.testimonial-card__quote {
+  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -.015em;
+  color: var(--foreground);
+}
+
+.testimonial-card__quote > strong { font-weight: 600; }
+
+/* ---- client row --------------------------------------------------------- */
+.testimonial-card__who {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+  margin-top: auto;
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--hair);
+}
+
+.testimonial-card__who > .avatar {
+  flex: none;
+  border: 1px solid var(--hair-strong);
+  font-family: var(--font-ui-mono);
+  font-size: .75rem;
+  letter-spacing: .04em;
+}
+
+.testimonial-card__name {
+  display: block;
+  font-size: .9375rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.testimonial-card__role {
+  display: block;
+  margin-top: .25rem;
+  font-family: var(--font-ui-mono);
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: var(--label-track);
+  color: var(--muted-foreground);
+}
+
+/* the result they got, ruled off to the right */
+.testimonial-card__metric {
+  margin-left: auto;
+  padding-left: clamp(.875rem, 2vw, 1.25rem);
+  border-left: 1px solid var(--hair);
+  text-align: right;
+}
+
+.testimonial-card__metric-value {
+  display: block;
+  font-family: var(--font-ui-mono);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.testimonial-card__metric-label {
+  display: block;
+  margin-top: .375rem;
+  font-family: var(--font-ui-mono);
+  font-size: .625rem;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--muted-foreground);
+}
+
+@media (max-width: 575.98px) {
+  .testimonial-card__who { flex-wrap: wrap; }
+  .testimonial-card__metric {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
+    text-align: left;
+    width: 100%;
+    padding-top: .875rem;
+    border-top: 1px solid var(--hair);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card { transition: none; }
+}
