@@ -21,30 +21,19 @@
 }
 
 .service-card:hover,
-.service-card:focus-within {
-  border-color: var(--hair-strong);
-  background-color: var(--panel);
-}
+.service-card:focus-within { border-color: var(--hair-strong); }
 
 /* ---- icon: square, hairline, inverts on hover -------------------------- */
 .service-card__icon {
-  display: grid;
-  place-items: center;
   flex: none;
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 1px solid var(--hair-strong);
-  font-size: 1rem;
-  color: var(--foreground);
-  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+  font-size: 1.375rem;
+  line-height: 1;
+  color: var(--muted-foreground);
+  transition: color .3s ease;
 }
 
 .service-card:hover .service-card__icon,
-.service-card:focus-within .service-card__icon {
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--on-invert);
-}
+.service-card:focus-within .service-card__icon { color: var(--foreground); }
 
 /* ---- copy --------------------------------------------------------------- */
 .service-card__title {

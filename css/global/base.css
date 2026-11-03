@@ -46,11 +46,11 @@
 
   /* ---- mono micro-labels -------------------------------------------------- */
   --label-size: .6875rem;
-  --label-track: .2em;
+  --label-track: .16em;
 
   /* ---- rhythm and layers -------------------------------------------------- */
   --header-h: 4.5rem;
-  --section-gap: clamp(4.5rem, 9.5vw, 8.5rem);
+  --section-gap: clamp(5.5rem, 11vw, 10rem);
   --z-header: 60;
   --z-drawer: 80;
   --z-grain: 9999;
@@ -59,7 +59,7 @@
 @media (max-width: 991.98px) {
   :root {
     --header-h: 3.75rem;
-    --section-gap: clamp(3.5rem, 12vw, 5.5rem);
+    --section-gap: clamp(4rem, 13vw, 6.5rem);
   }
 }
 
@@ -90,24 +90,6 @@ body {
   border: 2px solid var(--background);
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--foreground); }
-
-/* Film grain: a fixed, click-through texture so flat black never looks flat. */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-grain);
-  pointer-events: none;
-  opacity: .04;
-  mix-blend-mode: overlay;
-  background-size: 180px 180px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-:root[data-theme="light"] body::after {
-  opacity: .05;
-  mix-blend-mode: multiply;
-}
 
 /* --------------------------------------------------------------------------
    Type

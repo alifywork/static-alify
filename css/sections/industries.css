@@ -18,10 +18,7 @@
 }
 
 .industry-card:hover,
-.industry-card:focus-within {
-  border-color: var(--hair-strong);
-  background-color: var(--panel);
-}
+.industry-card:focus-within { border-color: var(--hair-strong); }
 
 /* ---- top row: icon + count --------------------------------------------- */
 .industry-card__top {
@@ -34,23 +31,15 @@
 }
 
 .industry-card__icon {
-  display: grid;
-  place-items: center;
   flex: none;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--hair-strong);
-  font-size: .9375rem;
-  color: var(--foreground);
-  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--muted-foreground);
+  transition: color .3s ease;
 }
 
 .industry-card:hover .industry-card__icon,
-.industry-card:focus-within .industry-card__icon {
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--on-invert);
-}
+.industry-card:focus-within .industry-card__icon { color: var(--foreground); }
 
 .industry-card__count {
   font-family: var(--font-ui-mono);

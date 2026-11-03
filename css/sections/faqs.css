@@ -82,23 +82,17 @@
 .faqs .accordion-trigger[aria-expanded="true"] { color: var(--foreground); }
 
 .faqs .accordion-chevron {
-  display: grid;
-  place-items: center;
   flex: none;
-  width: 1.75rem;
-  height: 1.75rem;
-  border: 1px solid var(--hair-strong);
-  font-size: .625rem;
-  color: var(--foreground);
-  transition: transform .4s cubic-bezier(.22, .8, .2, 1),
-              background-color .25s ease, color .25s ease, border-color .25s ease;
+  font-size: .75rem;
+  color: var(--muted-foreground);
+  transition: transform .4s cubic-bezier(.22, .8, .2, 1), color .25s ease;
 }
+
+.faqs .accordion-trigger:hover .accordion-chevron { color: var(--foreground); }
 
 .faqs .accordion-trigger[aria-expanded="true"] .accordion-chevron {
   transform: rotate(180deg);
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--on-invert);
+  color: var(--foreground);
 }
 
 .faqs .accordion-content {

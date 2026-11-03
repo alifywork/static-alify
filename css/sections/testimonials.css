@@ -9,31 +9,7 @@
    IntersectionObserver so it doesn't advance past quotes nobody is watching.
    ========================================================================== */
 
-/* overflow: clip keeps the oversized watermark inside this band instead of
-   bleeding over the sections above and below it */
-.testimonials {
-  position: relative;
-  overflow: clip;
-}
-
-/* watermark: never interactive, never in the way of the cards */
-.testimonials::before {
-  content: "\201C";
-  position: absolute;
-  top: clamp(0rem, 2vw, 2rem);
-  left: 50%;
-  translate: -50% 0;
-  z-index: 0;
-  font-family: var(--font-ui-sans);
-  font-size: clamp(14rem, 34vw, 30rem);
-  font-weight: 700;
-  line-height: .7;
-  color: var(--foreground);
-  opacity: .045;
-  pointer-events: none;
-}
-
-.testimonials > .container { position: relative; z-index: 1; }
+.testimonials { position: relative; }
 
 .testimonials .section-head { margin-bottom: clamp(2.25rem, 4.5vw, 3.5rem); }
 

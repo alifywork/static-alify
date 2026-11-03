@@ -73,10 +73,9 @@
   position: relative;
   display: inline-block;
   padding: .375rem 0;
-  font-family: var(--font-ui-mono);
-  font-size: var(--label-size);
-  text-transform: uppercase;
-  letter-spacing: .16em;
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: -.01em;
   color: var(--muted-foreground);
   text-decoration: none;
   transition: color .2s ease;
@@ -108,10 +107,9 @@
 }
 
 .site-header__about {
-  font-family: var(--font-ui-mono);
-  font-size: var(--label-size);
-  text-transform: uppercase;
-  letter-spacing: .16em;
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: -.01em;
   color: var(--muted-foreground);
 }
 
@@ -119,12 +117,7 @@
 
 .site-header__cta { flex: none; }
 
-.site-header__cta-label {
-  font-family: var(--font-ui-mono);
-  font-size: var(--label-size);
-  text-transform: uppercase;
-  letter-spacing: .16em;
-}
+.site-header__cta-label { font-weight: 600; letter-spacing: -.01em; }
 
 .site-header__burger { display: none; }
 

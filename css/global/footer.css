@@ -45,19 +45,16 @@
 .site-footer__social {
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--hair-strong);
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1rem;
   color: var(--muted-foreground);
   text-decoration: none;
-  transition: background-color .25s ease, color .25s ease,
-              border-color .25s ease, transform .25s ease;
+  transition: color .25s ease, transform .25s ease;
 }
 
 .site-footer__social:hover {
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--on-invert);
+  color: var(--foreground);
   transform: translateY(-2px);
 }
 

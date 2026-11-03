@@ -37,22 +37,16 @@
 a.contact__channel:hover { padding-left: .5rem; }
 
 .contact__channel-icon {
-  display: grid;
-  place-items: center;
   flex: none;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--hair-strong);
-  font-size: .875rem;
-  color: var(--foreground);
-  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+  width: 1.5rem;
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+  color: var(--muted-foreground);
+  transition: color .3s ease;
 }
 
-.contact__channel:hover .contact__channel-icon {
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--on-invert);
-}
+.contact__channel:hover .contact__channel-icon { color: var(--foreground); }
 
 .contact__channel-label {
   display: block;
@@ -80,19 +74,16 @@ a.contact__channel:hover { padding-left: .5rem; }
 .contact__social {
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--hair-strong);
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1rem;
   color: var(--muted-foreground);
   text-decoration: none;
-  transition: background-color .25s ease, color .25s ease,
-              border-color .25s ease, transform .25s ease;
+  transition: color .25s ease, transform .25s ease;
 }
 
 .contact__social:hover {
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  color: var(--on-invert);
+  color: var(--foreground);
   transform: translateY(-2px);
 }
 
