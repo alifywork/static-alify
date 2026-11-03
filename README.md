@@ -38,6 +38,16 @@ img/            logos + generated imagery
   is that grid extracted on its own, so nothing from Bootstrap's reboot,
   `.btn`, forms or utilities can collide with the design system. Every other
   piece of UI is built from [`assets/ui/ui.css`](assets/ui/ui.css).
+- **Visual direction: premium dark agency.** [`css/global/base.css`](css/global/base.css)
+  retunes the design system for the site — radius scale collapsed to `0` (sharp
+  edges), a display type scale up to `clamp(7rem)`, Geist Mono
+  (`--font-ui-mono`) for eyebrows / nav / counters / meta, hairlines and layered
+  panels instead of drop shadows, invert-on-hover interactions, inverted text
+  selection, and a fixed film-grain overlay. Dark is the **default theme**:
+  `index.html` declares `<html data-ui-theme-default="dark">`, which
+  `assets/ui/theme.js` honours only while the visitor has no stored choice — so
+  `ui.html` still follows the OS. Light remains available from the toggle,
+  because every surface is token-driven rather than hard-coded black.
 - **Load order matters.** `assets/ui/theme.js` runs synchronously in `<head>`
   (no flash of the wrong theme); `js/pages/home.js` defines the shared
   `window.Reveal` helper, so it must load *before* the section scripts.
@@ -45,6 +55,9 @@ img/            logos + generated imagery
   hero parallax, count-ups. Everything is skipped under
   `prefers-reduced-motion`, and content is visible by default — reveal-hiding is
   gated behind a `.js` class so a script failure can never leave the page blank.
+  Where GSAP writes inline transforms (`.hero__bg`, `.hero__frame`,
+  `.hero__float`) the CSS deliberately animates nothing on `transform`, so the
+  two never fight.
 - **Imagery** in `img/` is generated and committed, optimised for the web
   (~670 KB total). `logo-dark.png` is the black wordmark (light theme),
   `logo-light.png` the white one (dark theme); CSS swaps them with the theme.
